@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>4. Custom Hot Stamping & Patterns</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 750px; margin: 0 auto; }
+    .title { font-size: 20px; font-weight: bold; margin: 20px 0; }
+    .section { margin: 25px 0; padding: 15px; border: 1px solid #f0f0f0; border-radius: 6px; }
+    .section-title { font-size: 18px; font-weight: bold; margin-bottom: 15px; color: #333; }
+    .option-group { margin: 15px 0; }
+    .option-label { font-weight: 500; margin-bottom: 8px; display: block; }
+    .radio-group { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 10px; }
+    .radio-item { display: flex; align-items: center; gap: 5px; }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin: 5px 0 15px;
+      box-sizing: border-box;
+    }
+    .note { font-size: 14px; color: #999; margin: 5px 0 15px; padding-left: 5px; }
+    .price-tag { color: #e4393c; font-size: 14px; }
+    .current-price {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #eee;
+      border-radius: 6px;
+    }
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .prev-btn, .next-btn {
+      flex: 1;
+      padding: 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .prev-btn {
+      background: #f5f5f5;
+      color: #333;
+      border: 1px solid #ddd;
+    }
+    .next-btn {
+      background: #07c160;
+      color: #fff;
+      border: none;
+    }
+    .warning {
+      color: #ff4d4f;
+      font-size: 14px;
+      margin: 10px 0;
+      padding: 8px;
+      border: 1px solid #ffccc7;
+      border-radius: 4px;
+      background-color: #fff2f0;
+      display: none;
+    }
+    .annotation {
+      font-size: 12px;
+      color: #666;
+      margin-left: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="title">Custom Hot Stamping & Patterns</div>
+  
+  <div class="current-price">Current Price: $<span id="currentPrice">0</span> / £<span id="currentPriceGBP">0</span></div>
+
+  <!-- Logo Color Selection -->
+  <div class="section">
+    <div class="section-title">1. Logo Color</div>
+    <div class="radio-group" id="logoColorGroup">
+      <div class="radio-item">
+        <input type="radio" name="logoColor" id="logoDefault" value="logoDefault" checked>
+        <label for="logoDefault">Original Color Logo (Default)</label>
+      </div>
+      <div class="radio-item">
+        <input type="radio" name="logoColor" id="logoContrast" value="logoContrast">
+        <label for="logoContrast">Contrast Color Logo (Matches Back-of-Hand Color)</label>
+      </div>
+      <div class="radio-item">
+        <input type="radio" name="logoColor" id="logoTextGold" value="logoTextGold">
+        <label for="logoTextGold">Text Logo (Gold Hot Stamping)
+          <span class="annotation">【Mandatory for Exotic Leathers (except Wild Cowhide), Text-only, e.g. Darwin 12 ounce】</span>
+        </label>
+      </div>
+      <div class="radio-item">
+        <input type="radio" name="logoColor" id="logoTextSilver" value="logoTextSilver">
+        <label for="logoTextSilver">Text Logo (Silver Hot Stamping)
+          <span class="annotation">【Mandatory for Exotic Leathers (except Wild Cowhide), Text-only, e.g. Darwin 12 ounce】</span>
+        </label>
+      </div>
+    </div>
+    <div class="warning" id="rareLeatherWarning">Exotic leathers only support text logo hot stamping, no embroidery available.</div>
+  </div>
+
+  <!-- Logo Stitching Method -->
+  <div class="section">
+    <div class="section-title">2. Logo Stitching Method</div>
+    <div class="radio-group" id="logoStitchGroup">
+      <div class="radio-item">
+        <input type="radio" name="logoStitch" id="stitchOuter" value="stitchOuter" checked>
+        <label for="stitchOuter">Outer Stitch (Default, stitched directly on wrist leather)</label>
+      </div>
+      <div class="radio-item">
+        <input type="radio" name="logoStitch" id="stitchInner" value="stitchInner">
+        <label for="stitchInner">Inner Stitch (stitched under cut wrist leather)</label>
+      </div>
+      <div class="radio-item">
+        <input type="radio" name="logoStitch" id="stitchPrintOnly" value="stitchPrintOnly">
+        <label for="stitchPrintOnly">Hot Stamping Only (Text logo, no stitching)</label>
+      </div>
+    </div>
+    <div class="warning" id="textLogoWarning">Text logo has no stitching option</div>
+  </div>
+
+  <!-- Left Hand Stamping -->
+  <div class="section">
+    <div class="section-title">3. Left Hand Inner Wrist Stamping</div>
+    <div class="option-label">English/Numbers (Free)</div>
+    <input type="text" id="leftEngText" placeholder="Enter English, numbers or punctuation (max 25 characters, punctuation: , . ? ! only)">
+    <div class="radio-group">
+      <div class="radio-item">
+        <input type="radio" name="leftEngFont" id="leftEngNormal" value="normal" checked>
+        <label for="leftEngNormal">Regular Font</label>
+      </div>
+      <div class="radio-item">
+        <input type="radio" name="leftEngFont" id="leftEngCursive" value="cursive">
+        <label for="leftEngCursive">Cursive Font</label>
+      </div>
+    </div>
+
+    <div class="option-label">Chinese Characters (<span class="price-tag">+$5 / £4</span>)</div>
+    <input type="text" id="leftChText" placeholder="Enter Chinese characters (max 10 characters)">
+    <div class="radio-group">
+      <div class="radio-item">
+        <input type="radio" name="leftChFont" id="leftChNormal" value="normal" checked>
+        <label for="leftChNormal">Handwritten Font</label>
+      </div>
+      <div class="radio-item">
+        <input type="radio" name="leftChFont" id="leftChSong" value="song">
+        <label for="leftChSong">Song Font</label>
+      </div>
+    </div>
+
+    <div class="option-label">Stamping Color</div>
+    <div class="radio-group">
+      <div class="radio-item">
+        <input type="radio" name="leftPrintColor" id="leftGold" value="leftGold" checked>
+        <label for="leftGold">Gold Hot Stamping</label>
+      </div>
+      <div class="radio-item">
+        <input type="radio" name="leftPrintColor" id="leftSilver" value="leftSilver">
+        <label for="leftSilver">Silver Hot Stamping</label>
+      </div>
+      <div class="radio-item">
+        <input type="radio" name="leftPrintColor" id="leftOriginal" value="leftOriginal">
+        <label for="leftOriginal">Original Color (Mandatory for Wild Cowhide)</label>
+      </div>
+    </div>
+    <div class="warning" id="leftHandWarning">Cannot stamp both English and Chinese on one hand</div>
+    <div class="warning" id="leftCowhideWarning">Wild cowhide only supports original color, no gold/silver stamping</div>
+    <div class="note">Note: Only one option (English/Numbers OR Chinese) can be selected per hand</div>
+  </div>
+
+  <!-- Right Hand Stamping -->
+  <div class="section">
+    <div class="section-title">4. Right Hand Inner Wrist Stamping</div>
+    <div class="option-label">English/Numbers (Free)</div>
+    <input type="text" id="rightEngText" placeholder="Enter English, numbers or punctuation (max 25 characters, punctuation: , . ? ! only)">
+    <div class="radio-group">
+      <div class="radio-item">
+        <input type="radio" name="rightEngFont" id="rightEngNormal" value="normal" checked>
+        <label for="rightEngNormal">Regular Font</label>
+      </div>
+      <div class="radio-item">
+        <input type="radio" name="rightEngFont" id="rightEngCursive" value="cursive">
+        <label for="rightEngCursive">Cursive Font</label>
+      </div>
+    </div>
+
+    <div class="option-label">Chinese Characters (<span class="price-tag">+$5 / £4</span>)</div>
+    <input type="text" id="rightChText" placeholder="Enter Chinese characters (max 10 characters)">
+    <div class="radio-group">
+      <div class="radio-item">
+        <input type="radio" name="rightChFont" id="rightChNormal" value="normal" checked>
+        <label for="rightChNormal">Handwritten Font</label>
+      </div>
+      <div class="radio-item">
+        <input type="radio" name="rightChFont" id="rightChSong" value="song">
+        <label for="rightChSong">Song Font</label>
+      </div>
+    </div>
+
+    <div class="option-label">Stamping Color</div>
+    <div class="radio-group">
+      <div class="radio-item">
+        <input type="radio" name="rightPrintColor" id="rightGold" value="rightGold" checked>
+        <label for="rightGold">Gold Hot Stamping</label>
+      </div>
+      <div class="radio-item">
+        <input type="radio" name="rightPrintColor" id="rightSilver" value="rightSilver">
+        <label for="rightSilver">Silver Hot Stamping</label>
+      </div>
+      <div class="radio-item">
+        <input type="radio" name="rightPrintColor" id="rightOriginal" value="rightOriginal">
+        <label for="rightOriginal">Original Color (Mandatory for Wild Cowhide)</label>
+      </div>
+    </div>
+    <div class="warning" id="rightHandWarning">Cannot stamp both English and Chinese on one hand</div>
+    <div class="warning" id="rightCowhideWarning">Wild cowhide only supports original color, no gold/silver stamping</div>
+    <div class="note">Note: Only one option (English/Numbers OR Chinese) can be selected per hand</div>
+  </div>
+
+  <!-- Wrist Pattern -->
+  <div class="section">
+    <div class="section-title">5. Inner Wrist Pattern</div>
+    <div class="option-group">
+      <div class="option-label">Left Hand Pattern (<span class="price-tag">+$5 / £4</span>)</div>
+      <div class="radio-group">
+        <div class="radio-item">
+          <input type="radio" name="leftWristPattern" id="leftPatternYes" value="yes">
+          <label for="leftPatternYes">Add Pattern</label>
+        </div>
+        <div class="radio-item">
+          <input type="radio" name="leftWristPattern" id="leftPatternNo" value="no" checked>
+          <label for="leftPatternNo">No Pattern</label>
+        </div>
+      </div>
+      <div class="note">(If needed, check this option and contact customer service to provide line art)</div>
+      <div class="radio-group" id="leftPatternColorGroup" style="display: none;">
+        <div class="radio-item">
+          <input type="radio" name="leftPatternColor" id="leftPatternGold" value="leftPatternGold" checked>
+          <label for="leftPatternGold">Gold Hot Stamping</label>
+        </div>
+        <div class="radio-item">
+          <input type="radio" name="leftPatternColor" id="leftPatternSilver" value="leftPatternSilver">
+          <label for="leftPatternSilver">Silver Hot Stamping</label>
+        </div>
+        <div class="radio-item">
+          <input type="radio" name="leftPatternColor" id="leftPatternOriginal" value="leftPatternOriginal">
+          <label for="leftPatternOriginal">Original Color (Mandatory for Wild Cowhide)</label>
+        </div>
+      </div>
+      <div class="warning" id="leftPatternCowhideWarning">Wild cowhide only supports original color, no gold/silver stamping.</div>
+    </div>
+
+    <div class="option-group">
+      <div class="option-label">Right Hand Pattern (<span class="price-tag">+$5 / £4</span>)</div>
+      <div class="radio-group">
+        <div class="radio-item">
+          <input type="radio" name="rightWristPattern" id="rightPatternYes" value="yes">
+          <label for="rightPatternYes">Add Pattern</label>
+        </div>
+        <div class="radio-item">
+          <input type="radio" name="rightWristPattern" id="rightPatternNo" value="no" checked>
+          <label for="rightPatternNo">No Pattern</label>
+        </div>
+      </div>
+      <div class="note">(If needed, check this option and contact customer service to provide line art)</div>
+      <div class="radio-group" id="rightPatternColorGroup" style="display: none;">
+        <div class="radio-item">
+          <input type="radio" name="rightPatternColor" id="rightPatternGold" value="rightPatternGold" checked>
+          <label for="rightPatternGold">Gold Hot Stamping</label>
+        </div>
+        <div class="radio-item">
+          <input type="radio" name="rightPatternColor" id="rightPatternSilver" value="rightPatternSilver">
+          <label for="rightPatternSilver">Silver Hot Stamping</label>
+        </div>
+        <div class="radio-item">
+          <input type="radio" name="rightPatternColor" id="rightPatternOriginal" value="rightPatternOriginal">
+          <label for="rightPatternOriginal">Original Color (Mandatory for Wild Cowhide)</label>
+        </div>
+      </div>
+      <div class="warning" id="rightPatternCowhideWarning">Wild cowhide only supports original color, no gold/silver stamping.</div>
+    </div>
+  </div>
+
+  <!-- Other Customizations -->
+  <div class="section">
+    <div class="section-title">6. Other Customization Options</div>
+    <div class="radio-group">
+      <div class="radio-item">
+        <input type="radio" name="logoReplace" id="logoReplaceYes" value="yes">
+        <label for="logoReplaceYes">Replace with Your Own Logo (<span class="price-tag">+$10 / £8</span>)</label>
+      </div>
+      <div class="radio-item">
+        <input type="radio" name="logoReplace" id="logoReplaceNo" value="no" checked>
+        <label for="logoReplaceNo">Do Not Replace Logo</label>
+      </div>
+    </div>
+    <div class="note">(If needed, check this option and contact customer service to provide line art)</div>
+
+    <div class="radio-group">
+      <div class="radio-item">
+        <input type="radio" name="embroidery" id="embroideryYes" value="yes">
+        <label for="embroideryYes">Add Embroidery on Back of Hand (<span class="price-tag">$15-45 / £12-35, Quote Required</span>)</label>
+      </div>
+      <div class="radio-item">
+        <input type="radio" name="embroidery" id="embroideryNo" value="no" checked>
+        <label for="embroideryNo">No Embroidery</label>
+      </div>
+    </div>
+    <div class="note">(If needed, check this option and contact customer service to provide line art)</div>
+  </div>
+
+  <div class="btn-group">
+    <button class="prev-btn" id="prevBtn">Previous: Color Preview</button>
+    <button class="next-btn" id="nextBtn">Next: Final Customization Plan</button>
+  </div>
+
+  <script>
+    // Get DOM elements
+    const currentPriceEl = document.getElementById('currentPrice');
+    const currentPriceGBPEl = document.getElementById('currentPriceGBP');
+    const leftPatternYes = document.getElementById('leftPatternYes');
+    const leftPatternNo = document.getElementById('leftPatternNo');
+    const leftPatternColorGroup = document.getElementById('leftPatternColorGroup');
+    const rightPatternYes = document.getElementById('rightPatternYes');
+    const rightPatternNo = document.getElementById('rightPatternNo');
+    const rightPatternColorGroup = document.getElementById('rightPatternColorGroup');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const leftEngText = document.getElementById('leftEngText');
+    const leftChText = document.getElementById('leftChText');
+    const rightEngText = document.getElementById('rightEngText');
+    const rightChText = document.getElementById('rightChText');
+    
+    // Warning elements
+    const rareLeatherWarning = document.getElementById('rareLeatherWarning');
+    const textLogoWarning = document.getElementById('textLogoWarning');
+    const leftHandWarning = document.getElementById('leftHandWarning');
+    const rightHandWarning = document.getElementById('rightHandWarning');
+    const leftCowhideWarning = document.getElementById('leftCowhideWarning');
+    const rightCowhideWarning = document.getElementById('rightCowhideWarning');
+    const leftPatternCowhideWarning = document.getElementById('leftPatternCowhideWarning');
+    const rightPatternCowhideWarning = document.getElementById('rightPatternCowhideWarning');
+
+    // Get leather type
+    const leatherType = localStorage.getItem('leatherType') || '';
+    const isRareLeather = ['Shark Skin', 'Crocodile Skin', 'Ostrich Skin', 'Lizard Skin'].includes(leatherType);
+    const isCowhide = leatherType.includes('Wild Cowhide');
+
+    // Restore previous selections on page load
+    window.onload = function() {
+      const savedOptions = JSON.parse(localStorage.getItem('customOptions')) || {};
+      
+      if (savedOptions.logoColor) {
+        const logoColorEl = document.getElementById(savedOptions.logoColor);
+        if (logoColorEl) logoColorEl.checked = true;
+      }
+      
+      if (savedOptions.logoStitch) {
+        const logoStitchEl = document.getElementById(savedOptions.logoStitch);
+        if (logoStitchEl) logoStitchEl.checked = true;
+      }
+      
+      if (savedOptions.leftEngText) leftEngText.value = savedOptions.leftEngText;
+      if (savedOptions.leftEngFont) {
+        const leftEngFontEl = document.getElementById('leftEng' + (savedOptions.leftEngFont === 'cursive' ? 'Cursive' : 'Normal'));
+        if (leftEngFontEl) leftEngFontEl.checked = true;
+      }
+      if (savedOptions.leftChText) leftChText.value = savedOptions.leftChText;
+      if (savedOptions.leftChFont) {
+        const leftChFontEl = document.getElementById('leftCh' + (savedOptions.leftChFont === 'song' ? 'Song' : 'Normal'));
+        if (leftChFontEl) leftChFontEl.checked = true;
+      }
+      if (savedOptions.leftPrintColor) {
+        const leftPrintColorEl = document.getElementById(savedOptions.leftPrintColor);
+        if (leftPrintColorEl) leftPrintColorEl.checked = true;
+      }
+      
+      if (savedOptions.rightEngText) rightEngText.value = savedOptions.rightEngText;
+      if (savedOptions.rightEngFont) {
+        const rightEngFontEl = document.getElementById('rightEng' + (savedOptions.rightEngFont === 'cursive' ? 'Cursive' : 'Normal'));
+        if (rightEngFontEl) rightEngFontEl.checked = true;
+      }
+      if (savedOptions.rightChText) rightChText.value = savedOptions.rightChText;
+      if (savedOptions.rightChFont) {
+        const rightChFontEl = document.getElementById('rightCh' + (savedOptions.rightChFont === 'song' ? 'Song' : 'Normal'));
+        if (rightChFontEl) rightChFontEl.checked = true;
+      }
+      if (savedOptions.rightPrintColor) {
+        const rightPrintColorEl = document.getElementById(savedOptions.rightPrintColor);
+        if (rightPrintColorEl) rightPrintColorEl.checked = true;
+      }
+      
+      if (savedOptions.leftWristPattern === 'yes') {
+        leftPatternYes.checked = true;
+        leftPatternColorGroup.style.display = 'flex';
+        if (savedOptions.leftPatternColor) {
+          const leftPatternColorEl = document.getElementById(savedOptions.leftPatternColor);
+          if (leftPatternColorEl) leftPatternColorEl.checked = true;
+        }
+      }
+      if (savedOptions.rightWristPattern === 'yes') {
+        rightPatternYes.checked = true;
+        rightPatternColorGroup.style.display = 'flex';
+        if (savedOptions.rightPatternColor) {
+          const rightPatternColorEl = document.getElementById(savedOptions.rightPatternColor);
+          if (rightPatternColorEl) rightPatternColorEl.checked = true;
+        }
+      }
+      
+      if (savedOptions.logoReplace) {
+        const logoReplaceEl = document.getElementById('logoReplace' + (savedOptions.logoReplace === 'yes' ? 'Yes' : 'No'));
+        if (logoReplaceEl) logoReplaceEl.checked = true;
+      }
+      if (savedOptions.embroidery) {
+        const embroideryEl = document.getElementById('embroidery' + (savedOptions.embroidery === 'yes' ? 'Yes' : 'No'));
+        if (embroideryEl) embroideryEl.checked = true;
+      }
+      
+      checkWarnings();
+      calculatePrice();
+    };
+
+    // Pattern selection logic
+    leftPatternYes.addEventListener('change', function() {
+      leftPatternColorGroup.style.display = this.checked ? 'flex' : 'none';
+      checkWarnings();
+      calculatePrice();
+    });
+    
+    leftPatternNo.addEventListener('change', function() {
+      leftPatternColorGroup.style.display = this.checked ? 'none' : 'flex';
+      checkWarnings();
+      calculatePrice();
+    });
+    
+    rightPatternYes.addEventListener('change', function() {
+      rightPatternColorGroup.style.display = this.checked ? 'flex' : 'none';
+      checkWarnings();
+      calculatePrice();
+    });
+    
+    rightPatternNo.addEventListener('change', function() {
+      rightPatternColorGroup.style.display = this.checked ? 'none' : 'flex';
+      checkWarnings();
+      calculatePrice();
+    });
+
+    // Input restriction and validation
+    leftEngText.addEventListener('input', function() {
+      if (this.value.length > 25) this.value = this.value.substring(0, 25);
+      const allowedPunctuation = [',', '.', '?', '!'];
+      this.value = this.value.split('').filter(char => {
+        return /[a-zA-Z0-9]/.test(char) || allowedPunctuation.includes(char) || char === ' ';
+      }).join('');
+      if (this.value) leftChText.value = '';
+      checkWarnings();
+      calculatePrice();
+    });
+    
+    leftChText.addEventListener('input', function() {
+      if (this.value.length > 10) this.value = this.value.substring(0, 10);
+      if (this.value) leftEngText.value = '';
+      checkWarnings();
+      calculatePrice();
+    });
+    
+    rightEngText.addEventListener('input', function() {
+      if (this.value.length > 25) this.value = this.value.substring(0, 25);
+      const allowedPunctuation = [',', '.', '?', '!'];
+      this.value = this.value.split('').filter(char => {
+        return /[a-zA-Z0-9]/.test(char) || allowedPunctuation.includes(char) || char === ' ';
+      }).join('');
+      if (this.value) rightChText.value = '';
+      checkWarnings();
+      calculatePrice();
+    });
+    
+    rightChText.addEventListener('input', function() {
+      if (this.value.length > 10) this.value = this.value.substring(0, 10);
+      if (this.value) rightEngText.value = '';
+      checkWarnings();
+      calculatePrice();
+    });
+
+    // Check and show warnings
+    function checkWarnings() {
+      const selectedLogoColor = document.querySelector('input[name="logoColor"]:checked').value;
+      const isTextLogo = selectedLogoColor === 'logoTextGold' || selectedLogoColor === 'logoTextSilver';
+      
+      rareLeatherWarning.style.display = (isRareLeather && !isTextLogo) ? 'block' : 'none';
+      
+      const selectedStitch = document.querySelector('input[name="logoStitch"]:checked').value;
+      textLogoWarning.style.display = (isTextLogo && selectedStitch !== 'stitchPrintOnly') ? 'block' : 'none';
+      
+      leftHandWarning.style.display = (leftEngText.value && leftChText.value) ? 'block' : 'none';
+      rightHandWarning.style.display = (rightEngText.value && rightChText.value) ? 'block' : 'none';
+      
+      const leftPrintColor = document.querySelector('input[name="leftPrintColor"]:checked').value;
+      const rightPrintColor = document.querySelector('input[name="rightPrintColor"]:checked').value;
+      
+      leftCowhideWarning.style.display = (isCowhide && leftPrintColor !== 'leftOriginal') ? 'block' : 'none';
+      rightCowhideWarning.style.display = (isCowhide && rightPrintColor !== 'rightOriginal') ? 'block' : 'none';
+      
+      if (leftPatternYes.checked) {
+        const leftPatternColor = document.querySelector('input[name="leftPatternColor"]:checked').value;
+        leftPatternCowhideWarning.style.display = (isCowhide && leftPatternColor !== 'leftPatternOriginal') ? 'block' : 'none';
+      } else {
+        leftPatternCowhideWarning.style.display = 'none';
+      }
+      
+      if (rightPatternYes.checked) {
+        const rightPatternColor = document.querySelector('input[name="rightPatternColor"]:checked').value;
+        rightPatternCowhideWarning.style.display = (isCowhide && rightPatternColor !== 'rightPatternOriginal') ? 'block' : 'none';
+      } else {
+        rightPatternCowhideWarning.style.display = 'none';
+      }
+    }
+
+    // Price calculation
+    function calculatePrice() {
+      const basePrice = parseInt(localStorage.getItem('basePrice')) || 0;
+      const basePriceGBP = parseInt(localStorage.getItem('basePriceGBP')) || 0;
+      const colorExtra = parseInt(localStorage.getItem('colorExtra')) || 0;
+      const colorExtraGBP = parseInt(localStorage.getItem('colorExtraGBP')) || 0;
+      let customExtra = 0;
+      let customExtraGBP = 0;
+      
+      if (leftChText.value) { customExtra +=5; customExtraGBP +=4; }
+      if (rightChText.value) { customExtra +=5; customExtraGBP +=4; }
+      if (leftPatternYes.checked) { customExtra +=5; customExtraGBP +=4; }
+      if (rightPatternYes.checked) { customExtra +=5; customExtraGBP +=4; }
+      if (document.getElementById('logoReplaceYes').checked) { customExtra +=10; customExtraGBP +=8; }
+      
+      localStorage.setItem('customExtra', customExtra);
+      localStorage.setItem('customExtraGBP', customExtraGBP);
+      
+      const total = basePrice + colorExtra + customExtra;
+      const totalGBP = basePriceGBP + colorExtraGBP + customExtraGBP;
+      currentPriceEl.textContent = total;
+      currentPriceGBPEl.textContent = totalGBP;
+    }
+
+    // Save current selections
+    function saveCurrentOptions() {
+      const customOptions = {
+        logoColor: document.querySelector('input[name="logoColor"]:checked').value,
+        logoStitch: document.querySelector('input[name="logoStitch"]:checked').value,
+        leftEngText: leftEngText.value,
+        leftEngFont: document.querySelector('input[name="leftEngFont"]:checked').value,
+        leftChText: leftChText.value,
+        leftChFont: document.querySelector('input[name="leftChFont"]:checked').value,
+        leftPrintColor: document.querySelector('input[name="leftPrintColor"]:checked').value,
+        rightEngText: rightEngText.value,
+        rightEngFont: document.querySelector('input[name="rightEngFont"]:checked').value,
+        rightChText: rightChText.value,
+        rightChFont: document.querySelector('input[name="rightChFont"]:checked').value,
+        rightPrintColor: document.querySelector('input[name="rightPrintColor"]:checked').value,
+        leftWristPattern: document.querySelector('input[name="leftWristPattern"]:checked').value,
+        leftPatternColor: document.querySelector('input[name="leftPatternColor"]:checked')?.value,
+        rightWristPattern: document.querySelector('input[name="rightWristPattern"]:checked').value,
+        rightPatternColor: document.querySelector('input[name="rightPatternColor"]:checked')?.value,
+        logoReplace: document.querySelector('input[name="logoReplace"]:checked').value,
+        embroidery: document.querySelector('input[name="embroidery"]:checked').value
+      };
+      localStorage.setItem('customOptions', JSON.stringify(customOptions));
+    }
+
+    // Button events
+    prevBtn.addEventListener('click', function() {
+      saveCurrentOptions();
+      window.location.href = '3.color.html';
+    });
+    
+    nextBtn.addEventListener('click', function() {
+      if (rareLeatherWarning.style.display === 'block' || textLogoWarning.style.display === 'block' ||
+          leftHandWarning.style.display === 'block' || rightHandWarning.style.display === 'block' ||
+          (isCowhide && (leftCowhideWarning.style.display === 'block' || rightCowhideWarning.style.display === 'block' ||
+                         leftPatternCowhideWarning.style.display === 'block' || rightPatternCowhideWarning.style.display === 'block'))) {
+        alert('Please fix all warnings before proceeding');
+        return;
+      }
+      saveCurrentOptions();
+      window.location.href = '5.result.html';
+    });
+
+    // Listen radio changes
+    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+      radio.addEventListener('change', function() {
+        calculatePrice();
+        checkWarnings();
+      });
+    });
+  </script>
+</body>
+</html>

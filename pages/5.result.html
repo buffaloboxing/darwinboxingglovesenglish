@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>5. Final Custom Plan</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 750px; margin: 0 auto; background: #f9f9f9; }
+    .card { background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .title { font-size: 22px; font-weight: bold; color: #333; margin-bottom: 25px; text-align: center; }
+    .result-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f2f2f2; }
+    .item-label { color: #666; }
+    .item-value { color: #333; font-weight: 500; }
+    .color-swatch { display: inline-block; width: 16px; height: 16px; border-radius: 3px; margin-right: 5px; vertical-align: middle; }
+    .section-title { font-weight: bold; margin: 20px 0 10px; color: #333; font-size: 16px; }
+    .custom-section { padding: 15px; background: #f8f8f8; border-radius: 6px; margin-bottom: 15px; }
+    .custom-detail { margin: 8px 0; font-size: 14px; }
+    .color-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .color-item { display: flex; justify-content: space-between; align-items: center; }
+    .final-price { margin: 25px 0; padding: 15px; background: #f8f8f8; border-radius: 6px; text-align: center; }
+    .final-price-text { font-size: 16px; color: #666; margin-bottom: 8px; }
+    .final-price-num { font-size: 28px; font-weight: bold; color: #e4393c; }
+    .note { font-size: 14px; color: #999; margin: 15px 0; line-height: 1.5; }
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .prev-btn, .copy-btn {
+      flex: 1;
+      padding: 16px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .prev-btn {
+      background: #f5f5f5;
+      color: #333;
+      border: 1px solid #ddd;
+    }
+    .copy-btn {
+      background: #07c160;
+      color: #fff;
+      border: none;
+    }
+    .copy-btn:active { background: #06b152; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="title">Darwin Boxing Glove Custom Plan</div>
+    
+    <div class="result-item">
+      <div class="item-label">Glove Size</div>
+      <div class="item-value" id="sizeVal">--</div>
+    </div>
+    <div class="result-item">
+      <div class="item-label">Leather Type</div>
+      <div class="item-value" id="leatherVal">--</div>
+    </div>
+    <div class="result-item">
+      <div class="item-label">Logo Color</div>
+      <div class="item-value" id="logoColorVal">Default</div>
+    </div>
+    <div class="result-item">
+      <div class="item-label">Logo Stitching Method</div>
+      <div class="item-value" id="logoStitchVal">Outer Stitch</div>
+    </div>
+    
+    <div class="section-title">Area Color Scheme</div>
+    <div class="color-grid" id="colorGrid"></div>
+    
+    <div class="section-title">Inner Wrist Stamping Details</div>
+    <div class="custom-section" id="printDetail"></div>
+    
+    <div class="section-title">Inner Wrist Pattern Details</div>
+    <div class="custom-section" id="patternDetail"></div>
+    
+    <div class="result-item">
+      <div class="item-label">Logo Replacement</div>
+      <div class="item-value" id="logoReplaceVal">Not Selected</div>
+    </div>
+    <div class="result-item">
+      <div class="item-label">Back-of-Hand Embroidery</div>
+      <div class="item-value" id="embroideryVal">Not Selected</div>
+    </div>
+    <div class="result-item">
+      <div class="item-label">Color Extra Fee</div>
+      <div class="item-value" id="colorVal">$0 / £0</div>
+    </div>
+    <div class="result-item">
+      <div class="item-label">Custom Extra Fee</div>
+      <div class="item-value" id="customVal">$0 / £0</div>
+    </div>
+
+    <div class="final-price">
+      <div class="final-price-text">Estimated Total (Excl. Embroidery)</div>
+      <div class="final-price-num" id="totalPrice">$0 / £0</div>
+    </div>
+
+    <div class="note">
+      1. Back-of-hand embroidery requires a pattern, customer service will quote based on complexity;<br>
+      2. Final price is subject to confirmation by customer service;<br>
+      3. Copy the plan and send it to customer service to place an order directly.
+    </div>
+
+    <div class="btn-group">
+      <button class="prev-btn" id="prevBtn">Previous: Edit Custom Content</button>
+      <button class="copy-btn" onclick="copyResult()">Copy Plan to Customer Service</button>
+    </div>
+  </div>
+
+  <script>
+    // Area name mapping
+    const areaNames = {
+      '1': 'Area ①', '2': 'Area ②', '3': 'Area ③', '4': 'Area ④',
+      '5': 'Area ⑤', '6': 'Area ⑥', '7': 'Area ⑦', '8': 'Area ⑧'
+    };
+
+    // Color name mapping
+    const colorNames = {
+      '#FFFFFF': 'Pure White', '#F5F0EB': 'Milkshake White', '#9D5F3B': 'Gold Brown',
+      '#746148': 'Elephant Grey', '#1E2E44': 'Midnight Blue', '#000000': 'Black',
+      '#80412D': 'Caramel Brown', '#3FBF72': 'Comic Green', '#B3A59A': 'Trench Grey',
+      '#F27D3C': 'Orange', '#F2C12E': 'Sun Yellow', '#F9E77F': 'Chick Yellow',
+      '#404234': 'Olive Green', '#BDE0F2': 'Breeze Blue', '#A0E7E5': 'Tiffany Blue',
+      '#0D32C4': 'Klein Blue', '#91A3B1': 'Linen Blue', '#C0A086': 'Marrakech Brown',
+      '#828776': 'Sage Green', '#808080': 'Storm Cloud Grey', '#BE3033': 'Bright Red',
+      '#EEB9C9': 'Sakura Pink', '#DF6981': 'Rose Pink', '#E4A3BB': 'Petal Pink',
+      '#6A2A30': 'Burgundy', '#FFD700': 'Lemon Yellow', '#C6AEA6': 'Apricot',
+      '#294162': 'Deep Blue', '#C0C0C0': 'Seagull Grey', '#402D2D': 'Dark Coffee'
+    };
+
+    window.onload = function() {
+      const size = localStorage.getItem('customSize') || 'Not Selected';
+      const leather = localStorage.getItem('leatherType') || 'Not Selected';
+      const basePrice = parseInt(localStorage.getItem('basePrice')) || 0;
+      const basePriceGBP = parseInt(localStorage.getItem('basePriceGBP')) || 0;
+      const colorExtra = parseInt(localStorage.getItem('colorExtra')) || 0;
+      const colorExtraGBP = parseInt(localStorage.getItem('colorExtraGBP')) || 0;
+      const customExtra = parseInt(localStorage.getItem('customExtra')) || 0;
+      const customExtraGBP = parseInt(localStorage.getItem('customExtraGBP')) || 0;
+      const areaColors = JSON.parse(localStorage.getItem('areaColors')) || {};
+      const customOptions = JSON.parse(localStorage.getItem('customOptions')) || {};
+
+      document.getElementById('sizeVal').innerText = size + ' oz';
+      document.getElementById('leatherVal').innerText = leather;
+      document.getElementById('colorVal').innerText = '$' + colorExtra + ' / £' + colorExtraGBP;
+      document.getElementById('customVal').innerText = '$' + customExtra + ' / £' + customExtraGBP;
+
+      // Logo info mapping
+      const logoColorMap = {
+        'logoDefault': 'Original Vegetable Tanned Leather Logo',
+        'logoContrast': 'Contrast Color Logo (Matches Back of Hand)',
+        'logoTextGold': 'Gold Hot Stamping Text Logo',
+        'logoTextSilver': 'Silver Hot Stamping Text Logo'
+      };
+      const logoStitchMap = {
+        'stitchOuter': 'Outer Stitch (Directly on Wrist Leather)',
+        'stitchInner': 'Inner Stitch (Under Wrist Leather)',
+        'stitchPrintOnly': 'Hot Stamping Only (No Stitching)'
+      };
+      document.getElementById('logoColorVal').innerText = logoColorMap[customOptions.logoColor] || 'Default Original Logo';
+      document.getElementById('logoStitchVal').innerText = logoStitchMap[customOptions.logoStitch] || 'Outer Stitch';
+
+      // Logo replace & embroidery
+      document.getElementById('logoReplaceVal').innerText = customOptions.logoReplace === 'yes' ? 'Selected (+$10/£8)' : 'Not Selected';
+      document.getElementById('embroideryVal').innerText = customOptions.embroidery === 'yes' ? 'Selected ($15-45/£12-35, Pending Quote)' : 'Not Selected';
+
+      // Color grid
+      const colorGrid = document.getElementById('colorGrid');
+      colorGrid.innerHTML = '';
+      for (let i = 1; i <= 8; i++) {
+        const colorCode = areaColors[i];
+        const colorItem = document.createElement('div');
+        colorItem.className = 'color-item';
+        if (colorCode) {
+          const cName = colorNames[colorCode] || colorCode;
+          colorItem.innerHTML = `<span>${areaNames[i]}</span><span><span class="color-swatch" style="background:${colorCode}"></span>${cName}</span>`;
+        } else {
+          colorItem.innerHTML = `<span>${areaNames[i]}</span><span>Not Selected</span>`;
+        }
+        colorGrid.appendChild(colorItem);
+      }
+
+      // Stamping detail
+      const printDetail = document.getElementById('printDetail');
+      let printHtml = '';
+      if (customOptions.leftEngText || customOptions.leftChText) {
+        const content = customOptions.leftEngText || customOptions.leftChText;
+        const type = customOptions.leftEngText ? 'English/Numbers' : 'Chinese (+$5/£4)';
+        const font = customOptions.leftEngFont === 'cursive' ? 'Cursive' : 'Regular';
+        const color = getColorText(customOptions.leftPrintColor);
+        printHtml += `<div class="custom-detail"><strong>Left Hand:</strong> ${type} "${content}", Font: ${font}, Color: ${color}</div>`;
+      } else printHtml += '<div class="custom-detail">Left Hand: No Stamping</div>';
+      
+      if (customOptions.rightEngText || customOptions.rightChText) {
+        const content = customOptions.rightEngText || customOptions.rightChText;
+        const type = customOptions.rightEngText ? 'English/Numbers' : 'Chinese (+$5/£4)';
+        const font = customOptions.rightEngFont === 'cursive' ? 'Cursive' : 'Regular';
+        const color = getColorText(customOptions.rightPrintColor);
+        printHtml += `<div class="custom-detail"><strong>Right Hand:</strong> ${type} "${content}", Font: ${font}, Color: ${color}</div>`;
+      } else printHtml += '<div class="custom-detail">Right Hand: No Stamping</div>';
+      printDetail.innerHTML = printHtml;
+
+      // Pattern detail
+      const patternDetail = document.getElementById('patternDetail');
+      let patternHtml = '';
+      if (customOptions.leftWristPattern === 'yes') {
+        const color = getPatternColorText(customOptions.leftPatternColor);
+        patternHtml += `<div class="custom-detail"><strong>Left Hand:</strong> Customized (+$5/£4), Color: ${color}</div>`;
+      } else patternHtml += '<div class="custom-detail">Left Hand: No Pattern</div>';
+      
+      if (customOptions.rightWristPattern === 'yes') {
+        const color = getPatternColorText(customOptions.rightPatternColor);
+        patternHtml += `<div class="custom-detail"><strong>Right Hand:</strong> Customized (+$5/£4), Color: ${color}</div>`;
+      } else patternHtml += '<div class="custom-detail">Right Hand: No Pattern</div>';
+      patternDetail.innerHTML = patternHtml;
+
+      // Total price
+      const total = basePrice + colorExtra + customExtra;
+      const totalGBP = basePriceGBP + colorExtraGBP + customExtraGBP;
+      document.getElementById('totalPrice').innerText = '$' + total + ' / £' + totalGBP;
+    };
+
+    // Color text helper
+    function getColorText(id) {
+      if (id?.includes('Gold')) return 'Gold Hot Stamping';
+      if (id?.includes('Silver')) return 'Silver Hot Stamping';
+      if (id?.includes('Original')) return 'Original Color (Wild Cowhide Only)';
+      return 'Default';
+    }
+    function getPatternColorText(id) {
+      if (id?.includes('Gold')) return 'Gold Hot Stamping';
+      if (id?.includes('Silver')) return 'Silver Hot Stamping';
+      if (id?.includes('Original')) return 'Original Brand (Wild Cowhide Only)';
+      return 'Default';
+    }
+
+    // Copy result
+    function copyResult() {
+      const size = document.getElementById('sizeVal').innerText;
+      const leather = document.getElementById('leatherVal').innerText;
+      const logoColor = document.getElementById('logoColorVal').innerText;
+      const logoStitch = document.getElementById('logoStitchVal').innerText;
+      const colorFee = document.getElementById('colorVal').innerText;
+      const customFee = document.getElementById('customVal').innerText;
+      const logoReplace = document.getElementById('logoReplaceVal').innerText;
+      const embroidery = document.getElementById('embroideryVal').innerText;
+      const total = document.getElementById('totalPrice').innerText;
+      const printDetail = document.getElementById('printDetail').innerText.trim();
+      const patternDetail = document.getElementById('patternDetail').innerText.trim();
+      
+      const areaColors = JSON.parse(localStorage.getItem('areaColors')) || {};
+      let colorText = '';
+      for (let i=1; i<=8; i++) {
+        const c = areaColors[i];
+        if (c) colorText += `${areaNames[i]}: ${colorNames[c] || c} (${c})\n`;
+      }
+      if (!colorText) colorText = 'No color selected\n';
+
+      const text = `
+Darwin Boxing Glove Custom Plan:
+1. Glove Size: ${size}
+2. Leather Type: ${leather}
+3. Logo Settings:
+   - Color: ${logoColor}
+   - Stitching: ${logoStitch}
+4. Area Color Scheme:
+${colorText}
+5. Inner Wrist Stamping:
+${printDetail}
+6. Inner Wrist Pattern:
+${patternDetail}
+7. Logo Replacement: ${logoReplace}
+8. Back-of-Hand Embroidery: ${embroidery}
+9. Color Extra Fee: ${colorFee}
+10. Custom Extra Fee: ${customFee}
+11. Estimated Total (Excl. Embroidery): ${total}
+
+Note: Customer service will confirm the plan and final price. Embroidery requires a pattern for quotation.
+      `;
+
+      navigator.clipboard.writeText(text.trim()).then(()=>{
+        alert('Plan copied! You can send it to customer service now~');
+      }).catch(()=>{
+        alert('Copy failed, please copy manually~');
+      });
+    }
+
+    // Previous button
+    document.getElementById('prevBtn').addEventListener('click', ()=>{
+      window.location.href = '4.customize.html';
+    });
+  </script>
+</body>
+</html>
