@@ -47,29 +47,29 @@
   <div class="title">Select Leather Type</div>
   
   <!-- Unified price display -->
-  <div class="current-price">Current Price: $<span id="currentPrice">275</span> / £<span id="currentPriceGBP">210</span></div>
+  <div class="current-price">Current Price: $<span id="currentPrice">280</span> / £<span id="currentPriceGBP">210</span></div>
   
   <div class="leather-list" id="leatherList">
-    <div class="leather-item active" data-type="Swift Cowhide" data-price="275" data-priceGBP="210">
-      Swift Cowhide <span class="price-tag">$275 / £210</span>
+    <div class="leather-item active" data-type="Swift Cowhide" data-price="280" data-priceGBP="210">
+      Swift Cowhide <span class="price-tag">$280 / £210</span>
     </div>
-    <div class="leather-item" data-type="Swift Cowhide + Curtiba Wild Cowhide" data-price="340" data-priceGBP="260">
-      Swift Cowhide + Curtiba Wild Cowhide <span class="price-tag">$340 / £260</span>
+    <div class="leather-item" data-type="Swift Cowhide + Curtiba Wild Cowhide" data-price="310" data-priceGBP="240">
+      Swift Cowhide + Curtiba Wild Cowhide <span class="price-tag">$310 / £240</span>
     </div>
-    <div class="leather-item" data-type="Swift Cowhide + Shark Skin" data-price="550" data-priceGBP="420">
-      Swift Cowhide + Shark Skin <span class="price-tag">$550 / £420</span>
+    <div class="leather-item" data-type="Swift Cowhide + Shark Skin" data-price="560" data-priceGBP="430">
+      Swift Cowhide + Shark Skin <span class="price-tag">$560 / £430</span>
     </div>
-    <div class="leather-item" data-type="Swift Cowhide + Crocodile Skin" data-price="600" data-priceGBP="480">
-      Swift Cowhide + Crocodile Skin <span class="price-tag">$600 / £480</span>
+    <div class="leather-item" data-type="Swift Cowhide + Crocodile Skin" data-price="620" data-priceGBP="470">
+      Swift Cowhide + Crocodile Skin <span class="price-tag">$620 / £470</span>
     </div>
-    <div class="leather-item" data-type="Swift Cowhide + Ostrich Skin" data-price="600" data-priceGBP="480">
-      Swift Cowhide + Ostrich Skin <span class="price-tag">$600 / £480</span>
+    <div class="leather-item" data-type="Swift Cowhide + Ostrich Skin" data-price="620" data-priceGBP="470">
+      Swift Cowhide + Ostrich Skin <span class="price-tag">$620 / £470</span>
     </div>
-    <div class="leather-item" data-type="Swift Cowhide + Lizard Skin" data-price="600" data-priceGBP="480">
-      Swift Cowhide + Lizard Skin <span class="price-tag">$600 / £480</span>
+    <div class="leather-item" data-type="Swift Cowhide + Lizard Skin" data-price="620" data-priceGBP="470">
+      Swift Cowhide + Lizard Skin <span class="price-tag">$620 / £470</span>
     </div>
-    <div class="leather-item" data-type="Swift Cowhide + Python Skin" data-price="600" data-priceGBP="480">
-      Swift Cowhide + Python Skin <span class="price-tag">$600 / £480</span>
+    <div class="leather-item" data-type="Swift Cowhide + Python Skin" data-price="620" data-priceGBP="470">
+      Swift Cowhide + Python Skin <span class="price-tag">$620 / £470</span>
     </div>
   </div>
   
@@ -100,9 +100,9 @@
         }
       });
     } else {
-      // Initialize local storage
+      // Initialize local storage with updated default prices
       localStorage.setItem('customLeather', selectedLeather);
-      localStorage.setItem('basePrice', '275');
+      localStorage.setItem('basePrice', '280');
       localStorage.setItem('basePriceGBP', '210');
       localStorage.setItem('leatherType', selectedLeather);
     }
