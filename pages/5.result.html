@@ -154,12 +154,13 @@
     window.onload = function() {
       const size = localStorage.getItem('customSize') || 'Not Selected';
       const leather = localStorage.getItem('leatherType') || 'Not Selected';
-      const basePrice = parseInt(localStorage.getItem('basePrice')) || 0;
-      const basePriceGBP = parseInt(localStorage.getItem('basePriceGBP')) || 0;
-      const colorExtra = parseInt(localStorage.getItem('colorExtra')) || 0;
-      const colorExtraGBP = parseInt(localStorage.getItem('colorExtraGBP')) || 0;
-      const customExtra = parseInt(localStorage.getItem('customExtra')) || 0;
-      const customExtraGBP = parseInt(localStorage.getItem('customExtraGBP')) || 0;
+      // 价格数值容错兜底，彻底避免空值导致价格异常
+      const basePrice = Math.max(0, parseInt(localStorage.getItem('basePrice')) || 380);
+      const basePriceGBP = Math.max(0, parseInt(localStorage.getItem('basePriceGBP')) || 285);
+      const colorExtra = Math.max(0, parseInt(localStorage.getItem('colorExtra')) || 0);
+      const colorExtraGBP = Math.max(0, parseInt(localStorage.getItem('colorExtraGBP')) || 0);
+      const customExtra = Math.max(0, parseInt(localStorage.getItem('customExtra')) || 0);
+      const customExtraGBP = Math.max(0, parseInt(localStorage.getItem('customExtraGBP')) || 0);
       const areaColors = JSON.parse(localStorage.getItem('areaColors')) || {};
       const customOptions = JSON.parse(localStorage.getItem('customOptions')) || {};
 
