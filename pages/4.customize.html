@@ -319,7 +319,7 @@
   </div>
 
   <script>
-    // Get DOM elements
+    // DOM Elements
     const currentPriceEl = document.getElementById('currentPrice');
     const currentPriceGBPEl = document.getElementById('currentPriceGBP');
     const leftPatternYes = document.getElementById('leftPatternYes');
@@ -345,148 +345,36 @@
     const leftPatternCowhideWarning = document.getElementById('leftPatternCowhideWarning');
     const rightPatternCowhideWarning = document.getElementById('rightPatternCowhideWarning');
 
-    // Get leather type & fix rare leather judgment
+    // Leather type judgment
     const leatherType = localStorage.getItem('leatherType') || '';
     const isRareLeather = /Shark Skin|Crocodile Skin|Ostrich Skin|Lizard Skin|Python Skin/.test(leatherType);
     const isCowhide = leatherType.includes('Wild Cowhide');
 
-    // Restore previous selections on page load
-    window.onload = function() {
-      const savedOptions = JSON.parse(localStorage.getItem('customOptions')) || {};
+    // Price calculation
+    function calculatePrice() {
+      const basePrice = Math.max(0, parseInt(localStorage.getItem('basePrice')) || 380);
+      const basePriceGBP = Math.max(0, parseInt(localStorage.getItem('basePriceGBP')) || 285);
+      const colorExtra = Math.max(0, parseInt(localStorage.getItem('colorExtra')) || 0);
+      const colorExtraGBP = Math.max(0, parseInt(localStorage.getItem('colorExtraGBP')) || 0);
+      let customExtra = 0;
+      let customExtraGBP = 0;
       
-      if (savedOptions.logoColor) {
-        const logoColorEl = document.getElementById(savedOptions.logoColor);
-        if (logoColorEl) logoColorEl.checked = true;
-      }
+      if (leftChText.value) { customExtra += 5; customExtraGBP += 4; }
+      if (rightChText.value) { customExtra += 5; customExtraGBP += 4; }
+      if (leftPatternYes.checked) { customExtra += 5; customExtraGBP += 4; }
+      if (rightPatternYes.checked) { customExtra += 5; customExtraGBP += 4; }
+      if (document.getElementById('logoReplaceYes').checked) { customExtra += 10; customExtraGBP += 8; }
       
-      if (savedOptions.logoStitch) {
-        const logoStitchEl = document.getElementById(savedOptions.logoStitch);
-        if (logoStitchEl) logoStitchEl.checked = true;
-      }
+      localStorage.setItem('customExtra', customExtra);
+      localStorage.setItem('customExtraGBP', customExtraGBP);
       
-      if (savedOptions.leftEngText) leftEngText.value = savedOptions.leftEngText;
-      if (savedOptions.leftEngFont) {
-        const leftEngFontEl = document.getElementById('leftEng' + (savedOptions.leftEngFont === 'cursive' ? 'Cursive' : 'Normal'));
-        if (leftEngFontEl) leftEngFontEl.checked = true;
-      }
-      if (savedOptions.leftChText) leftChText.value = savedOptions.leftChText;
-      if (savedOptions.leftChFont) {
-        const leftChFontEl = document.getElementById('leftCh' + (savedOptions.leftChFont === 'song' ? 'Song' : 'Normal'));
-        if (leftChFontEl) leftChFontEl.checked = true;
-      }
-      if (savedOptions.leftPrintColor) {
-        const leftPrintColorEl = document.getElementById(savedOptions.leftPrintColor);
-        if (leftPrintColorEl) leftPrintColorEl.checked = true;
-      }
-      
-      if (savedOptions.rightEngText) rightEngText.value = savedOptions.rightEngText;
-      if (savedOptions.rightEngFont) {
-        const rightEngFontEl = document.getElementById('rightEng' + (savedOptions.rightEngFont === 'cursive' ? 'Cursive' : 'Normal'));
-        if (rightEngFontEl) rightEngFontEl.checked = true;
-      }
-      if (savedOptions.rightChText) rightChText.value = savedOptions.rightChText;
-      if (savedOptions.rightChFont) {
-        const rightChFontEl = document.getElementById('rightCh' + (savedOptions.rightChFont === 'song' ? 'Song' : 'Normal'));
-        if (rightChFontEl) rightChFontEl.checked = true;
-      }
-      if (savedOptions.rightPrintColor) {
-        const rightPrintColorEl = document.getElementById(savedOptions.rightPrintColor);
-        if (rightPrintColorEl) rightPrintColorEl.checked = true;
-      }
-      
-      if (savedOptions.leftWristPattern === 'yes') {
-        leftPatternYes.checked = true;
-        leftPatternColorGroup.style.display = 'flex';
-        if (savedOptions.leftPatternColor) {
-          const leftPatternColorEl = document.getElementById(savedOptions.leftPatternColor);
-          if (leftPatternColorEl) leftPatternColorEl.checked = true;
-        }
-      }
-      if (savedOptions.rightWristPattern === 'yes') {
-        rightPatternYes.checked = true;
-        rightPatternColorGroup.style.display = 'flex';
-        if (savedOptions.rightPatternColor) {
-          const rightPatternColorEl = document.getElementById(savedOptions.rightPatternColor);
-          if (rightPatternColorEl) rightPatternColorEl.checked = true;
-        }
-      }
-      
-      if (savedOptions.logoReplace) {
-        const logoReplaceEl = document.getElementById('logoReplace' + (savedOptions.logoReplace === 'yes' ? 'Yes' : 'No'));
-        if (logoReplaceEl) logoReplaceEl.checked = true;
-      }
-      if (savedOptions.embroidery) {
-        const embroideryEl = document.getElementById('embroidery' + (savedOptions.embroidery === 'yes' ? 'Yes' : 'No'));
-        if (embroideryEl) embroideryEl.checked = true;
-      }
-      
-      checkWarnings();
-      calculatePrice();
-    };
+      const total = basePrice + colorExtra + customExtra;
+      const totalGBP = basePriceGBP + colorExtraGBP + customExtraGBP;
+      currentPriceEl.textContent = total;
+      currentPriceGBPEl.textContent = totalGBP;
+    }
 
-    // Pattern selection logic
-    leftPatternYes.addEventListener('change', function() {
-      leftPatternColorGroup.style.display = this.checked ? 'flex' : 'none';
-      checkWarnings();
-      calculatePrice();
-    });
-    
-    leftPatternNo.addEventListener('change', function() {
-      leftPatternColorGroup.style.display = this.checked ? 'none' : 'flex';
-      checkWarnings();
-      calculatePrice();
-    });
-    
-    rightPatternYes.addEventListener('change', function() {
-      rightPatternColorGroup.style.display = this.checked ? 'flex' : 'none';
-      checkWarnings();
-      calculatePrice();
-    });
-    
-    rightPatternNo.addEventListener('change', function() {
-      rightPatternColorGroup.style.display = this.checked ? 'none' : 'flex';
-      checkWarnings();
-      calculatePrice();
-    });
-
-    // Input restriction and validation
-    leftEngText.addEventListener('input', function() {
-      if (this.value.length > 25) this.value = this.value.substring(0, 25);
-      const allowedPunctuation = [',', '.', '?', '!'];
-      this.value = this.value.split('').filter(char => {
-        return /[a-zA-Z0-9]/.test(char) || allowedPunctuation.includes(char) || char === ' ';
-      }).join('');
-      if (this.value) leftChText.value = '';
-      checkWarnings();
-      calculatePrice();
-    });
-    
-    leftChText.addEventListener('input', function() {
-      if (this.value.length > 10) this.value = this.value.substring(0, 10);
-      if (this.value) leftEngText.value = '';
-      checkWarnings();
-      calculatePrice();
-    });
-    
-    rightEngText.addEventListener('input', function() {
-      if (this.value.length > 25) this.value = this.value.substring(0, 25);
-      const allowedPunctuation = [',', '.', '?', '!'];
-      this.value = this.value.split('').filter(char => {
-        return /[a-zA-Z0-9]/.test(char) || allowedPunctuation.includes(char) || char === ' ';
-      }).join('');
-      if (this.value) rightChText.value = '';
-      checkWarnings();
-      calculatePrice();
-    });
-    
-    rightChText.addEventListener('input', function() {
-      if (this.value.length > 10) this.value = this.value.substring(0, 10);
-      if (this.value) rightEngText.value = '';
-      checkWarnings();
-      calculatePrice();
-    });
-
-    // Check and show warnings
+    // Check warnings
     function checkWarnings() {
       const selectedLogoColor = document.querySelector('input[name="logoColor"]:checked').value;
       const isTextLogo = selectedLogoColor === 'logoTextGold' || selectedLogoColor === 'logoTextSilver';
@@ -520,16 +408,195 @@
       }
     }
 
-    // Price calculation
-    function calculatePrice() {
-      const basePrice = Math.max(0, parseInt(localStorage.getItem('basePrice')) || 380);
-      const basePriceGBP = Math.max(0, parseInt(localStorage.getItem('basePriceGBP')) || 285);
-      const colorExtra = Math.max(0, parseInt(localStorage.getItem('colorExtra')) || 0);
-      const colorExtraGBP = Math.max(0, parseInt(localStorage.getItem('colorExtraGBP')) || 0);
-      let customExtra = 0;
-      let customExtraGBP = 0;
+    // Save current options
+    function saveCurrentOptions() {
+      const customOptions = {
+        logoColor: document.querySelector('input[name="logoColor"]:checked').value,
+        logoStitch: document.querySelector('input[name="logoStitch"]:checked').value,
+        leftEngText: leftEngText.value,
+        leftEngFont: document.querySelector('input[name="leftEngFont"]:checked').value,
+        leftChText: leftChText.value,
+        leftChFont: document.querySelector('input[name="leftChFont"]:checked').value,
+        leftPrintColor: document.querySelector('input[name="leftPrintColor"]:checked').value,
+        rightEngText: rightEngText.value,
+        rightEngFont: document.querySelector('input[name="rightEngFont"]:checked').value,
+        rightChText: rightChText.value,
+        rightChFont: document.querySelector('input[name="rightChFont"]:checked').value,
+        rightPrintColor: document.querySelector('input[name="rightPrintColor"]:checked').value,
+        leftWristPattern: document.querySelector('input[name="leftWristPattern"]:checked').value,
+        leftPatternColor: document.querySelector('input[name="leftPatternColor"]:checked')?.value,
+        rightWristPattern: document.querySelector('input[name="rightWristPattern"]:checked').value,
+        rightPatternColor: document.querySelector('input[name="rightPatternColor"]:checked')?.value,
+        logoReplace: document.querySelector('input[name="logoReplace"]:checked').value,
+        embroidery: document.querySelector('input[name="embroidery"]:checked').value
+      };
+      localStorage.setItem('customOptions', JSON.stringify(customOptions));
+    }
+
+    // Pattern toggle logic
+    leftPatternYes.addEventListener('change', function() {
+      leftPatternColorGroup.style.display = this.checked ? 'flex' : 'none';
+      checkWarnings();
+      calculatePrice();
+    });
+    leftPatternNo.addEventListener('change', function() {
+      leftPatternColorGroup.style.display = this.checked ? 'none' : 'flex';
+      checkWarnings();
+      calculatePrice();
+    });
+    rightPatternYes.addEventListener('change', function() {
+      rightPatternColorGroup.style.display = this.checked ? 'flex' : 'none';
+      checkWarnings();
+      calculatePrice();
+    });
+    rightPatternNo.addEventListener('change', function() {
+      rightPatternColorGroup.style.display = this.checked ? 'none' : 'flex';
+      checkWarnings();
+      calculatePrice();
+    });
+
+    // Input validation
+    leftEngText.addEventListener('input', function() {
+      if (this.value.length > 25) this.value = this.value.substring(0, 25);
+      const allowedPunctuation = [',', '.', '?', '!'];
+      this.value = this.value.split('').filter(char => {
+        return /[a-zA-Z0-9]/.test(char) || allowedPunctuation.includes(char) || char === ' ';
+      }).join('');
+      if (this.value) leftChText.value = '';
+      checkWarnings();
+      calculatePrice();
+    });
+    leftChText.addEventListener('input', function() {
+      if (this.value.length > 10) this.value = this.value.substring(0, 10);
+      if (this.value) leftEngText.value = '';
+      checkWarnings();
+      calculatePrice();
+    });
+    rightEngText.addEventListener('input', function() {
+      if (this.value.length > 25) this.value = this.value.substring(0, 25);
+      const allowedPunctuation = [',', '.', '?', '!'];
+      this.value = this.value.split('').filter(char => {
+        return /[a-zA-Z0-9]/.test(char) || allowedPunctuation.includes(char) || char === ' ';
+      }).join('');
+      if (this.value) rightChText.value = '';
+      checkWarnings();
+      calculatePrice();
+    });
+    rightChText.addEventListener('input', function() {
+      if (this.value.length > 10) this.value = this.value.substring(0, 10);
+      if (this.value) rightEngText.value = '';
+      checkWarnings();
+      calculatePrice();
+    });
+
+    // All radio buttons trigger recalculation
+    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+      radio.addEventListener('change', function() {
+        calculatePrice();
+        checkWarnings();
+      });
+    });
+
+    // Button events
+    prevBtn.addEventListener('click', function() {
+      saveCurrentOptions();
+      window.location.href = '3.color.html';
+    });
+    
+    nextBtn.addEventListener('click', function() {
+      // Check if there are active warnings
+      const hasWarning = 
+        rareLeatherWarning.style.display === 'block' ||
+        textLogoWarning.style.display === 'block' ||
+        leftHandWarning.style.display === 'block' ||
+        rightHandWarning.style.display === 'block' ||
+        (isCowhide && (
+          leftCowhideWarning.style.display === 'block' ||
+          rightCowhideWarning.style.display === 'block' ||
+          leftPatternCowhideWarning.style.display === 'block' ||
+          rightPatternCowhideWarning.style.display === 'block'
+        ));
+
+      if (hasWarning) {
+        alert('Please fix all warnings before proceeding');
+        return;
+      }
+      saveCurrentOptions();
+      window.location.href = '5.result.html';
+    });
+
+    // Page load: restore selections & init
+    window.onload = function() {
+      const savedOptions = JSON.parse(localStorage.getItem('customOptions')) || {};
       
-      if (leftChText.value) { customExtra +=5; customExtraGBP +=4; }
-      if (rightChText.value) { customExtra +=5; customExtraGBP +=4; }
-      if (leftPatternYes.checked) { customExtra +=5; customExtraGBP +=4; }
-      if (rightPatternYes
+      if (savedOptions.logoColor) {
+        const el = document.getElementById(savedOptions.logoColor);
+        if (el) el.checked = true;
+      }
+      if (savedOptions.logoStitch) {
+        const el = document.getElementById(savedOptions.logoStitch);
+        if (el) el.checked = true;
+      }
+      
+      if (savedOptions.leftEngText) leftEngText.value = savedOptions.leftEngText;
+      if (savedOptions.leftEngFont) {
+        const el = document.getElementById('leftEng' + (savedOptions.leftEngFont === 'cursive' ? 'Cursive' : 'Normal'));
+        if (el) el.checked = true;
+      }
+      if (savedOptions.leftChText) leftChText.value = savedOptions.leftChText;
+      if (savedOptions.leftChFont) {
+        const el = document.getElementById('leftCh' + (savedOptions.leftChFont === 'song' ? 'Song' : 'Normal'));
+        if (el) el.checked = true;
+      }
+      if (savedOptions.leftPrintColor) {
+        const el = document.getElementById(savedOptions.leftPrintColor);
+        if (el) el.checked = true;
+      }
+      
+      if (savedOptions.rightEngText) rightEngText.value = savedOptions.rightEngText;
+      if (savedOptions.rightEngFont) {
+        const el = document.getElementById('rightEng' + (savedOptions.rightEngFont === 'cursive' ? 'Cursive' : 'Normal'));
+        if (el) el.checked = true;
+      }
+      if (savedOptions.rightChText) rightChText.value = savedOptions.rightChText;
+      if (savedOptions.rightChFont) {
+        const el = document.getElementById('rightCh' + (savedOptions.rightChFont === 'song' ? 'Song' : 'Normal'));
+        if (el) el.checked = true;
+      }
+      if (savedOptions.rightPrintColor) {
+        const el = document.getElementById(savedOptions.rightPrintColor);
+        if (el) el.checked = true;
+      }
+      
+      if (savedOptions.leftWristPattern === 'yes') {
+        leftPatternYes.checked = true;
+        leftPatternColorGroup.style.display = 'flex';
+        if (savedOptions.leftPatternColor) {
+          const el = document.getElementById(savedOptions.leftPatternColor);
+          if (el) el.checked = true;
+        }
+      }
+      if (savedOptions.rightWristPattern === 'yes') {
+        rightPatternYes.checked = true;
+        rightPatternColorGroup.style.display = 'flex';
+        if (savedOptions.rightPatternColor) {
+          const el = document.getElementById(savedOptions.rightPatternColor);
+          if (el) el.checked = true;
+        }
+      }
+      
+      if (savedOptions.logoReplace) {
+        const el = document.getElementById('logoReplace' + (savedOptions.logoReplace === 'yes' ? 'Yes' : 'No'));
+        if (el) el.checked = true;
+      }
+      if (savedOptions.embroidery) {
+        const el = document.getElementById('embroidery' + (savedOptions.embroidery === 'yes' ? 'Yes' : 'No'));
+        if (el) el.checked = true;
+      }
+      
+      checkWarnings();
+      calculatePrice();
+    };
+  </script>
+</body>
+</html>
