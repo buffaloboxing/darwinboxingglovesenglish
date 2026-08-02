@@ -29,17 +29,38 @@
         }
         .color-container {
             position: relative; margin-top: 10px; width: 100%;
-            display: flex; flex-wrap: wrap; gap: 10px;
+            display: flex; flex-wrap: wrap; gap: 12px 10px;
         }
+        /* 单个颜色项容器（色圈+名称） */
+        .color-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            width: 62px;
+            transition: transform 0.2s;
+        }
+        .color-item:hover { transform: translateY(-2px); }
+
         .color-circle {
             width: 30px; height: 30px; border-radius: 50%;
-            cursor: pointer; box-shadow: 0 0 0 2px transparent;
+            box-shadow: 0 0 0 2px transparent;
             transition: all 0.2s;
         }
         .color-circle.selected {
             box-shadow: 0 0 0 2px #07c160, 0 0 0 4px rgba(7, 193, 96, 0.2);
             transform: scale(1.1);
         }
+        /* 颜色名称文字样式 */
+        .color-name {
+            font-size: 12px;
+            color: #333;
+            text-align: center;
+            line-height: 1.2;
+            word-break: break-all;
+        }
+
         .current-price { font-size: 16px; font-weight: bold; color: #333; margin: 10px 0; }
         .price-alert { padding: 10px; background: #fff1f0; border: 1px solid #ffa39e; border-radius: 6px; margin: 10px 0; color: #e83e3e; font-size: 14px; display: none; }
         .alert-box { padding: 12px; background: #fff8e1; border: 1px solid #ffe082; border-radius: 6px; margin: 10px 0; color: #e65100; font-size: 14px; }
@@ -85,7 +106,7 @@
         </select>
     </div>
     <div>
-        <label>Select Color (Click the color circle): </label>
+        <label>Select Color (Click the color circle or name): </label>
         <div class="color-container" id="colorContainer"></div>
     </div>
 </div>
@@ -215,7 +236,7 @@
         renderLayer(idx);
     }
 
-    /* ==================== Color Selection ==================== */
+    /* ==================== Color Selection (Color Circle + Name) ==================== */
     const colors = [
         { code: '#FFFFFF', name: 'Pure White' }, { code: '#F5F0EB', name: 'Milkshake White' },
         { code: '#9D5F3B', name: 'Gold Brown' }, { code: '#746148', name: 'Elephant Grey' },
@@ -237,12 +258,26 @@
     function createColorCircles() {
         colorContainer.innerHTML = '';
         colors.forEach(color => {
+            // Single color item container
+            const item = document.createElement('div');
+            item.className = 'color-item';
+
+            // Color circle
             const circle = document.createElement('div');
             circle.className = 'color-circle';
             circle.style.backgroundColor = color.code;
-            circle.title = color.name;
             circle.dataset.color = color.code;
-            circle.onclick = () => {
+
+            // Color name
+            const nameEl = document.createElement('div');
+            nameEl.className = 'color-name';
+            nameEl.textContent = color.name;
+
+            item.appendChild(circle);
+            item.appendChild(nameEl);
+
+            // Click whole item (circle + text) to select
+            item.onclick = () => {
                 document.querySelectorAll('.color-circle').forEach(el => el.classList.remove('selected'));
                 circle.classList.add('selected');
                 const area = areaSelect.value;
@@ -250,7 +285,8 @@
                 tintLayer(parseInt(area) - 1, color.code);
                 calculatePrice();
             };
-            colorContainer.appendChild(circle);
+
+            colorContainer.appendChild(item);
         });
     }
 
