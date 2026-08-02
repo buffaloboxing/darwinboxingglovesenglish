@@ -150,20 +150,88 @@
       '#402D2D': 'F028 Dark Coffee'
     };
 
+    // Color text helper
+    function getColorText(id) {
+      if (id?.includes('Gold')) return 'Gold Hot Stamping';
+      if (id?.includes('Silver')) return 'Silver Hot Stamping';
+      if (id?.includes('Original')) return 'Original Color (Wild Cowhide Only)';
+      return 'Default';
+    }
+    function getPatternColorText(id) {
+      if (id?.includes('Gold')) return 'Gold Hot Stamping';
+      if (id?.includes('Silver')) return 'Silver Hot Stamping';
+      if (id?.includes('Original')) return 'Original Brand (Wild Cowhide Only)';
+      return 'Default';
+    }
 
+    // Copy result
+    function copyResult() {
+      const size = document.getElementById('sizeVal').innerText;
+      const leather = document.getElementById('leatherVal').innerText;
+      const logoColor = document.getElementById('logoColorVal').innerText;
+      const logoStitch = document.getElementById('logoStitchVal').innerText;
+      const colorFee = document.getElementById('colorVal').innerText;
+      const customFee = document.getElementById('customVal').innerText;
+      const logoReplace = document.getElementById('logoReplaceVal').innerText;
+      const embroidery = document.getElementById('embroideryVal').innerText;
+      const total = document.getElementById('totalPrice').innerText;
+      const printDetail = document.getElementById('printDetail').innerText.trim();
+      const patternDetail = document.getElementById('patternDetail').innerText.trim();
+      
+      const areaColors = JSON.parse(localStorage.getItem('areaColors')) || {};
+      let colorText = '';
+      for (let i=1; i<=8; i++) {
+        const c = areaColors[i];
+        if (c) colorText += `${areaNames[i]}: ${colorNames[c] || c} (${c})\n`;
+      }
+      if (!colorText) colorText = 'No color selected\n';
+
+      const text = `
+Darwin Boxing Glove Custom Plan:
+1. Glove Size: ${size}
+2. Leather Type: ${leather}
+3. Logo Settings:
+   - Color: ${logoColor}
+   - Stitching: ${logoStitch}
+4. Area Color Scheme:
+${colorText}
+5. Inner Wrist Stamping:
+${printDetail}
+6. Inner Wrist Pattern:
+${patternDetail}
+7. Logo Replacement: ${logoReplace}
+8. Back-of-Hand Embroidery: ${embroidery}
+9. Color Extra Fee: ${colorFee}
+10. Custom Extra Fee: ${customFee}
+11. Estimated Total (Excl. Embroidery): ${total}
+
+Note: Customer service will confirm the plan and final price. Embroidery requires a pattern for quotation.
+      `.trim();
+
+      navigator.clipboard.writeText(text).then(()=>{
+        alert('Plan copied! You can send it to customer service now~');
+      }).catch(()=>{
+        alert('Copy failed, please copy manually~');
+      });
+    }
+
+    // Page load: render all data
     window.onload = function() {
       const size = localStorage.getItem('customSize') || 'Not Selected';
       const leather = localStorage.getItem('leatherType') || 'Not Selected';
-      // 价格数值容错兜底，彻底避免空值导致价格异常
+      
+      // Full fault tolerance for all prices, consistent with previous pages
       const basePrice = Math.max(0, parseInt(localStorage.getItem('basePrice')) || 380);
       const basePriceGBP = Math.max(0, parseInt(localStorage.getItem('basePriceGBP')) || 285);
       const colorExtra = Math.max(0, parseInt(localStorage.getItem('colorExtra')) || 0);
       const colorExtraGBP = Math.max(0, parseInt(localStorage.getItem('colorExtraGBP')) || 0);
       const customExtra = Math.max(0, parseInt(localStorage.getItem('customExtra')) || 0);
       const customExtraGBP = Math.max(0, parseInt(localStorage.getItem('customExtraGBP')) || 0);
+      
       const areaColors = JSON.parse(localStorage.getItem('areaColors')) || {};
       const customOptions = JSON.parse(localStorage.getItem('customOptions')) || {};
 
+      // Basic info
       document.getElementById('sizeVal').innerText = size + ' oz';
       document.getElementById('leatherVal').innerText = leather;
       document.getElementById('colorVal').innerText = '$' + colorExtra + ' / £' + colorExtraGBP;
@@ -243,71 +311,6 @@
       const totalGBP = basePriceGBP + colorExtraGBP + customExtraGBP;
       document.getElementById('totalPrice').innerText = '$' + total + ' / £' + totalGBP;
     };
-
-    // Color text helper
-    function getColorText(id) {
-      if (id?.includes('Gold')) return 'Gold Hot Stamping';
-      if (id?.includes('Silver')) return 'Silver Hot Stamping';
-      if (id?.includes('Original')) return 'Original Color (Wild Cowhide Only)';
-      return 'Default';
-    }
-    function getPatternColorText(id) {
-      if (id?.includes('Gold')) return 'Gold Hot Stamping';
-      if (id?.includes('Silver')) return 'Silver Hot Stamping';
-      if (id?.includes('Original')) return 'Original Brand (Wild Cowhide Only)';
-      return 'Default';
-    }
-
-    // Copy result
-    function copyResult() {
-      const size = document.getElementById('sizeVal').innerText;
-      const leather = document.getElementById('leatherVal').innerText;
-      const logoColor = document.getElementById('logoColorVal').innerText;
-      const logoStitch = document.getElementById('logoStitchVal').innerText;
-      const colorFee = document.getElementById('colorVal').innerText;
-      const customFee = document.getElementById('customVal').innerText;
-      const logoReplace = document.getElementById('logoReplaceVal').innerText;
-      const embroidery = document.getElementById('embroideryVal').innerText;
-      const total = document.getElementById('totalPrice').innerText;
-      const printDetail = document.getElementById('printDetail').innerText.trim();
-      const patternDetail = document.getElementById('patternDetail').innerText.trim();
-      
-      const areaColors = JSON.parse(localStorage.getItem('areaColors')) || {};
-      let colorText = '';
-      for (let i=1; i<=8; i++) {
-        const c = areaColors[i];
-        if (c) colorText += `${areaNames[i]}: ${colorNames[c] || c} (${c})\n`;
-      }
-      if (!colorText) colorText = 'No color selected\n';
-
-      const text = `
-Darwin Boxing Glove Custom Plan:
-1. Glove Size: ${size}
-2. Leather Type: ${leather}
-3. Logo Settings:
-   - Color: ${logoColor}
-   - Stitching: ${logoStitch}
-4. Area Color Scheme:
-${colorText}
-5. Inner Wrist Stamping:
-${printDetail}
-6. Inner Wrist Pattern:
-${patternDetail}
-7. Logo Replacement: ${logoReplace}
-8. Back-of-Hand Embroidery: ${embroidery}
-9. Color Extra Fee: ${colorFee}
-10. Custom Extra Fee: ${customFee}
-11. Estimated Total (Excl. Embroidery): ${total}
-
-Note: Customer service will confirm the plan and final price. Embroidery requires a pattern for quotation.
-      `;
-
-      navigator.clipboard.writeText(text.trim()).then(()=>{
-        alert('Plan copied! You can send it to customer service now~');
-      }).catch(()=>{
-        alert('Copy failed, please copy manually~');
-      });
-    }
 
     // Previous button
     document.getElementById('prevBtn').addEventListener('click', ()=>{
