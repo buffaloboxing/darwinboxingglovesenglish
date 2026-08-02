@@ -31,7 +31,6 @@
             position: relative; margin-top: 10px; width: 100%;
             display: flex; flex-wrap: wrap; gap: 12px 10px;
         }
-        /* 单个颜色项容器（色圈+名称） */
         .color-item {
             display: flex;
             flex-direction: column;
@@ -52,7 +51,6 @@
             box-shadow: 0 0 0 2px #07c160, 0 0 0 4px rgba(7, 193, 96, 0.2);
             transform: scale(1.1);
         }
-        /* 颜色名称文字样式 */
         .color-name {
             font-size: 12px;
             color: #333;
@@ -76,7 +74,7 @@
 <body>
 <div class="title">Color Preview (Select Area + Color to Apply)</div>
 
-<div class="current-price">Current Price: $<span id="currentPrice">275</span> / £<span id="currentPriceGBP">210</span></div>
+<div class="current-price">Current Price: $<span id="currentPrice">380</span> / £<span id="currentPriceGBP">285</span></div>
 <div class="price-alert" id="priceAlert"></div>
 
 <div class="canvas-container">
@@ -123,7 +121,7 @@
         localStorage.removeItem('areaColors');
         localStorage.removeItem('colorExtra');
         localStorage.removeItem('colorExtraGBP');
-        localStorage.setItem('hasVisitedColorPage', 'true'); // Mark as visited
+        localStorage.setItem('hasVisitedColorPage', 'true');
     }
 
     /* ==================== Core Coloring Logic ==================== */
@@ -141,8 +139,8 @@
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
 
-    let basePrice = parseInt(localStorage.getItem('basePrice')) || 275;
-    let basePriceGBP = parseInt(localStorage.getItem('basePriceGBP')) || 210;
+    let basePrice = Math.max(0, parseInt(localStorage.getItem('basePrice')) || 380);
+    let basePriceGBP = Math.max(0, parseInt(localStorage.getItem('basePriceGBP')) || 285);
     let colorExtra = 0;
     let colorExtraGBP = 0;
     const areaColors = { '1': null, '2': null, '3': null, '4': null, '5': null, '6': null, '7': null, '8': null };
@@ -180,7 +178,7 @@
         const loaded = await Promise.all(promises);
         loaded.forEach((img, idx) => {
             images[idx] = img;
-            renderLayer(idx); // Draw original image only
+            renderLayer(idx);
         });
         placeholder.style.display = 'none';
     }
@@ -236,7 +234,7 @@
         renderLayer(idx);
     }
 
-    /* ==================== Color Selection (Color Circle + Name) ==================== */
+    /* ==================== Color Selection ==================== */
     const colors = [
         { code: '#FFFFFF', name: 'Pure White' }, { code: '#F5F0EB', name: 'Milkshake White' },
         { code: '#9D5F3B', name: 'Gold Brown' }, { code: '#746148', name: 'Elephant Grey' },
@@ -258,17 +256,14 @@
     function createColorCircles() {
         colorContainer.innerHTML = '';
         colors.forEach(color => {
-            // Single color item container
             const item = document.createElement('div');
             item.className = 'color-item';
 
-            // Color circle
             const circle = document.createElement('div');
             circle.className = 'color-circle';
             circle.style.backgroundColor = color.code;
             circle.dataset.color = color.code;
 
-            // Color name
             const nameEl = document.createElement('div');
             nameEl.className = 'color-name';
             nameEl.textContent = color.name;
@@ -276,7 +271,6 @@
             item.appendChild(circle);
             item.appendChild(nameEl);
 
-            // Click whole item (circle + text) to select
             item.onclick = () => {
                 document.querySelectorAll('.color-circle').forEach(el => el.classList.remove('selected'));
                 circle.classList.add('selected');
@@ -371,7 +365,6 @@
     };
 
     /* ==================== Initialization ==================== */
-    // Restore colors (if not first visit)
     const saved = localStorage.getItem('areaColors');
     if (saved && !isFirstVisit) {
         Object.assign(areaColors, JSON.parse(saved));
@@ -381,7 +374,6 @@
         createColorCircles();
         showLeatherTip();
 
-        // Restore coloring (if not first visit)
         if (saved && !isFirstVisit) {
             setTimeout(() => {
                 Object.keys(areaColors).forEach(area => {
@@ -391,7 +383,7 @@
                 calculatePrice();
             }, 100);
         } else {
-            calculatePrice(); // First visit: price = basePrice
+            calculatePrice();
         }
     }).catch(err => {
         console.error(err);
