@@ -1,19 +1,94 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1"  charset="UTF-8">
-    <title>3. Color Preview</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>3. Color Preview | BUFFALO BOXING</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; max-width: 750px; margin: 0 auto; }
-        .title { font-size: 20px; font-weight: bold; margin: 20px 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+            padding: 40px 20px; 
+            max-width: 750px; 
+            margin: 0 auto; 
+            background: #fafafa;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+        .page-frame {
+            background: #ffffff;
+            border: 1px solid #1a1a1a;
+            border-radius: 2px;
+            padding: 48px 40px;
+        }
+        .brand-header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        .brand-name {
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            color: #1a1a1a;
+        }
+        .brand-series {
+            font-size: 11px;
+            letter-spacing: 4px;
+            color: #666;
+            margin-top: 6px;
+            text-transform: uppercase;
+        }
+        .page-title { 
+            font-size: 20px; 
+            font-weight: 500; 
+            margin-bottom: 24px;
+            color: #1a1a1a;
+            letter-spacing: 1px;
+        }
+        .current-price { 
+            font-size: 14px; 
+            color: #666; 
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        .current-price span {
+            font-size: 22px;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-left: 8px;
+        }
+        .price-alert { 
+            padding: 12px 16px; 
+            background: #fafafa; 
+            border: 1px solid #d9d9d9; 
+            border-radius: 2px; 
+            margin-bottom: 20px; 
+            color: #1a1a1a; 
+            font-size: 13px; 
+            display: none; 
+            line-height: 1.7;
+        }
+        .alert-box { 
+            padding: 14px 18px; 
+            background: #fafafa; 
+            border: 1px solid #d9d9d9; 
+            border-radius: 2px; 
+            margin: 20px 0; 
+            color: #333; 
+            font-size: 13px; 
+            line-height: 1.7;
+        }
         .canvas-container {
             position: relative;
             width: 100%;
-            height: 330px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            background-color: #f9f9f9;
+            height: 360px;
+            border: 1px solid #d9d9d9;
+            border-radius: 2px;
+            background-color: #fafafa;
             overflow: hidden;
+            margin-bottom: 24px;
         }
         .canvas-placeholder {
             position: absolute;
@@ -22,96 +97,176 @@
             color: #999; font-size: 14px; z-index: 1;
         }
         #canvasContainer { position: relative; width: 100%; height: 100%; }
+        /* 修复：等比例显示，不拉伸变形 */
         #canvasContainer canvas {
-            position: absolute; top: 0; left: 0;
-            width: 100%; height: 100%;
-            image-rendering: pixelated;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            transform: translate(-50%, -50%);
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+        }
+        .color-rules {
+            margin-bottom: 24px;
+        }
+        .color-rule { 
+            font-size: 13px; 
+            color: #666; 
+            margin: 6px 0; 
+            line-height: 1.6; 
+        }
+        .controls { 
+            padding: 20px; 
+            background: #fafafa; 
+            border-radius: 2px;
+            margin-bottom: 40px;
+            border: 1px solid #d9d9d9;
+        }
+        .controls label {
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+        }
+        select { 
+            padding: 10px 12px; 
+            border: 1px solid #d9d9d9; 
+            border-radius: 2px; 
+            margin: 10px 0 20px; 
+            width: 100%; 
+            box-sizing: border-box;
+            background: #fff;
+            font-size: 14px;
+            color: #1a1a1a;
+            outline: none;
+            transition: border-color 0.2s ease;
+            font-family: inherit;
+        }
+        select:focus {
+            border-color: #1a1a1a;
         }
         .color-container {
-            position: relative; margin-top: 10px; width: 100%;
-            display: flex; flex-wrap: wrap; gap: 12px 10px;
+            position: relative; 
+            margin-top: 10px; 
+            width: 100%;
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 16px 12px;
         }
         .color-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
             cursor: pointer;
-            width: 62px;
-            transition: transform 0.2s;
+            width: 60px;
+            transition: transform 0.2s ease;
         }
         .color-item:hover { transform: translateY(-2px); }
 
         .color-circle {
-            width: 30px; height: 30px; border-radius: 50%;
+            width: 32px; 
+            height: 32px; 
+            border-radius: 50%;
             box-shadow: 0 0 0 2px transparent;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(0,0,0,0.08);
         }
         .color-circle.selected {
-            box-shadow: 0 0 0 2px #07c160, 0 0 0 4px rgba(7, 193, 96, 0.2);
-            transform: scale(1.1);
+            box-shadow: 0 0 0 2px #1a1a1a, 0 0 0 4px rgba(26, 26, 26, 0.08);
+            transform: scale(1.05);
         }
         .color-name {
             font-size: 12px;
-            color: #333;
+            color: #666;
             text-align: center;
             line-height: 1.2;
             word-break: break-all;
         }
 
-        .current-price { font-size: 16px; font-weight: bold; color: #333; margin: 10px 0; }
-        .price-alert { padding: 10px; background: #fff1f0; border: 1px solid #ffa39e; border-radius: 6px; margin: 10px 0; color: #e83e3e; font-size: 14px; display: none; }
-        .alert-box { padding: 12px; background: #fff8e1; border: 1px solid #ffe082; border-radius: 6px; margin: 10px 0; color: #e65100; font-size: 14px; }
-        .color-rule { font-size: 14px; color: #666; margin: 5px 0; line-height: 1.5; }
-        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
-        .prev-btn, .next-btn { flex: 1; padding: 15px; border-radius: 6px; cursor: pointer; font-size: 16px; }
-        .prev-btn { background: #f5f5f5; color: #333; border: 1px solid #ddd; }
-        .next-btn { background: #07c160; color: #fff; border: none; }
-        .controls { margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 6px; }
-        select { padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin: 10px 0; width: 100%; box-sizing: border-box; }
+        .btn-group { 
+            display: flex; 
+            gap: 12px; 
+        }
+        .prev-btn, .next-btn { 
+            flex: 1; 
+            padding: 16px; 
+            border-radius: 2px; 
+            cursor: pointer; 
+            font-size: 14px;
+            letter-spacing: 2px;
+            transition: all 0.2s ease;
+        }
+        .prev-btn { 
+            background: #fff; 
+            color: #1a1a1a; 
+            border: 1px solid #d9d9d9; 
+        }
+        .prev-btn:hover {
+            border-color: #1a1a1a;
+        }
+        .next-btn { 
+            background: #1a1a1a; 
+            color: #fff; 
+            border: 1px solid #1a1a1a;
+        }
+        .next-btn:hover {
+            background: #000;
+            border-color: #000;
+        }
     </style>
 </head>
 <body>
-<div class="title">Color Preview (Select Area + Color to Apply)</div>
-
-<div class="current-price">Current Price: $<span id="currentPrice">380</span> / £<span id="currentPriceGBP">285</span></div>
-<div class="price-alert" id="priceAlert"></div>
-
-<div class="canvas-container">
-    <div class="canvas-placeholder">Glove preview loading...</div>
-    <div id="canvasContainer"></div>
-</div>
-
-<div id="leatherTip" class="alert-box" style="display: none;"></div>
-
-<div class="color-rules">
-    <div class="color-rule">Areas ①, ②, ③: 2 free colors included, +$60/£50 per additional color</div>
-    <div class="color-rule">Areas ④, ⑤, ⑥, ⑦, ⑧: 1 extra free color on top of the 2 free base colors, +$40/£30 per additional color</div>
-</div>
-
-<div class="controls">
-    <div>
-        <label>Select Area to Color: </label>
-        <select id="areaSelect">
-            <option value="1">Area ①</option>
-            <option value="2">Area ②</option>
-            <option value="3">Area ③</option>
-            <option value="4">Area ④</option>
-            <option value="5">Area ⑤</option>
-            <option value="6">Area ⑥</option>
-            <option value="7">Area ⑦</option>
-            <option value="8">Area ⑧</option>
-        </select>
+<div class="page-frame">
+    <div class="brand-header">
+        <div class="brand-name">BUFFALO BOXING</div>
+        <div class="brand-series">Darwin Custom Series</div>
     </div>
-    <div>
-        <label>Select Color (Click the color circle or name): </label>
-        <div class="color-container" id="colorContainer"></div>
-    </div>
-</div>
 
-<div class="btn-group">
-    <button class="prev-btn" id="prevBtn">Previous: Select Leather</button>
-    <button class="next-btn" id="nextBtn">Next: Custom Hot Stamping/Pattern</button>
+    <div class="page-title">Color Preview</div>
+
+    <div class="current-price">Current Price: $<span id="currentPrice">380</span> / £<span id="currentPriceGBP">285</span></div>
+    <div class="price-alert" id="priceAlert"></div>
+
+    <div class="canvas-container">
+        <div class="canvas-placeholder">Glove preview loading...</div>
+        <div id="canvasContainer"></div>
+    </div>
+
+    <div id="leatherTip" class="alert-box" style="display: none;"></div>
+
+    <div class="color-rules">
+        <div class="color-rule">· Areas ①, ②, ③: 2 free colors included, +$60/£50 per additional color</div>
+        <div class="color-rule">· Areas ④-⑧: 1 extra free color on top of base, +$40/£30 per additional color</div>
+    </div>
+
+    <div class="controls">
+        <div>
+            <label>Select Area to Color</label>
+            <select id="areaSelect">
+                <option value="1">Area ①</option>
+                <option value="2">Area ②</option>
+                <option value="3">Area ③</option>
+                <option value="4">Area ④</option>
+                <option value="5">Area ⑤</option>
+                <option value="6">Area ⑥</option>
+                <option value="7">Area ⑦</option>
+                <option value="8">Area ⑧</option>
+            </select>
+        </div>
+        <div>
+            <label>Select Color</label>
+            <div class="color-container" id="colorContainer"></div>
+        </div>
+    </div>
+
+    <div class="btn-group">
+        <button class="prev-btn" id="prevBtn">BACK · Previous</button>
+        <button class="next-btn" id="nextBtn">NEXT · Customize</button>
+    </div>
 </div>
 
 <script>
@@ -319,7 +474,7 @@
             const over = area123Colors.size - area123Free;
             extra += over * 60;
             extraGBP += over * 50;
-            alertText += `Areas ①, ②, ③: ${over} extra color(s) used, +$${over*60}/£${over*50}; `;
+            alertText += `· Areas ①-③: ${over} extra color(s), +$${over*60}/£${over*50}\n`;
         }
 
         const area45678Free = isWildCowhide ? 2 : 1;
@@ -327,7 +482,7 @@
             const over = newColorsIn45678.size - area45678Free;
             extra += over * 40;
             extraGBP += over * 30;
-            alertText += `Areas ④, ⑤, ⑥, ⑦, ⑧: ${over} extra color(s) used, +$${over*40}/£${over*30}; `;
+            alertText += `· Areas ④-⑧: ${over} extra color(s), +$${over*40}/£${over*30}`;
         }
 
         priceAlert.textContent = alertText;
@@ -345,10 +500,10 @@
     function showLeatherTip() {
         const leatherType = localStorage.getItem('leatherType') || '';
         if (leatherType.includes('Wild Cowhide')) {
-            leatherTip.textContent = 'Wild cowhide is fixed to dark brown. You can use dark brown for matching, and it will NOT count towards your 2 free regular cowhide color limit.';
+            leatherTip.textContent = 'Wild cowhide is fixed to dark brown. It will NOT count towards your 2 free regular cowhide color limit.';
             leatherTip.style.display = 'block';
         } else if (/Shark|Crocodile|Ostrich|Lizard|Python/.test(leatherType)) {
-            leatherTip.textContent = 'Exotic leathers (Crocodile/Shark/Ostrich/Lizard/Python) do not have a color chart. Common colors like black, brown, white are available. You can use similar colors from the chart for preview, and we will confirm with actual leather photos. These exotic leathers are fixed for areas ② and ⑤; contact us for quotes if you want to use them in other areas.';
+            leatherTip.textContent = 'Exotic leathers have no fixed color chart. Common colors: black, brown, white. Use similar colors for preview; we will confirm actual leather stock. Exotic leather is default for areas ② and ⑤. Contact us for quotes on other areas.';
             leatherTip.style.display = 'block';
         } else {
             leatherTip.style.display = 'none';
@@ -387,7 +542,7 @@
         }
     }).catch(err => {
         console.error(err);
-        placeholder.textContent = 'Image load failed. Please ensure 1.png ~ 8.png exist in the images folder.';
+        placeholder.textContent = 'Image load failed. Please ensure 1.png ~ 8.png exist.';
     });
 </script>
 </body>
