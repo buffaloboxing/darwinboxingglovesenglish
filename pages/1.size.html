@@ -2,26 +2,117 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>1. Select Glove Size</title>
+  <title>1. Select Glove Size | BUFFALO BOXING</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; max-width: 750px; margin: 0 auto; }
-    .title { font-size: 20px; font-weight: bold; margin: 20px 0; }
-    .size-list { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 30px; }
-    .size-item { border: 1px solid #ddd; padding: 12px 24px; border-radius: 6px; cursor: pointer; }
-    .size-item.active { border-color: #07c160; background: #f8f8f8; color: #07c160; }
-    .next-btn { width: 100%; background: #07c160; color: #fff; border: none; padding: 15px; border-radius: 6px; cursor: pointer; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      padding: 40px 20px; 
+      max-width: 750px; 
+      margin: 0 auto; 
+      background: #fafafa;
+      color: #1a1a1a;
+      line-height: 1.6;
+    }
+    /* Vintage black border frame */
+    .page-frame {
+      background: #ffffff;
+      border: 1px solid #1a1a1a;
+      border-radius: 2px;
+      padding: 48px 40px;
+    }
+    /* Brand header */
+    .brand-header {
+      text-align: center;
+      margin-bottom: 48px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    .brand-name {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      color: #1a1a1a;
+    }
+    .brand-series {
+      font-size: 11px;
+      letter-spacing: 4px;
+      color: #666;
+      margin-top: 6px;
+      text-transform: uppercase;
+    }
+    .page-title { 
+      font-size: 20px; 
+      font-weight: 500; 
+      margin-bottom: 36px;
+      color: #1a1a1a;
+      letter-spacing: 1px;
+    }
+    /* Unified 2-column size grid */
+    .size-list { 
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 60px; 
+    }
+    .size-item { 
+      border: 1px solid #d9d9d9; 
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 2px; 
+      cursor: pointer;
+      font-size: 15px;
+      color: #333;
+      transition: all 0.2s ease;
+      background: #fff;
+    }
+    .size-item:hover {
+      border-color: #1a1a1a;
+      color: #1a1a1a;
+    }
+    .size-item.active { 
+      border-color: #1a1a1a; 
+      background: #fafafa; 
+      color: #1a1a1a;
+      font-weight: 500;
+    }
+    .next-btn { 
+      width: 100%; 
+      background: #1a1a1a; 
+      color: #fff; 
+      border: 1px solid #1a1a1a;
+      padding: 16px; 
+      border-radius: 2px; 
+      cursor: pointer;
+      font-size: 14px;
+      letter-spacing: 2px;
+      transition: all 0.2s ease;
+    }
+    .next-btn:hover {
+      background: #000;
+      border-color: #000;
+    }
   </style>
 </head>
 <body>
-  <div class="title">Select Glove Size (Ounces)</div>
-  <div class="size-list" id="sizeList">
-    <div class="size-item" data-size="8">8 oz</div>
-    <div class="size-item" data-size="10">10 oz</div>
-    <div class="size-item" data-size="12">12 oz</div>
-    <div class="size-item" data-size="14">14 oz</div>
-    <div class="size-item" data-size="16">16 oz</div>
+  <div class="page-frame">
+    <div class="brand-header">
+      <div class="brand-name">BUFFALO BOXING</div>
+      <div class="brand-series">Darwin Custom Series</div>
+    </div>
+
+    <div class="page-title">Select Glove Size / OZ</div>
+    <div class="size-list" id="sizeList">
+      <div class="size-item" data-size="8">8 oz</div>
+      <div class="size-item" data-size="10">10 oz</div>
+      <div class="size-item" data-size="12">12 oz</div>
+      <div class="size-item" data-size="14">14 oz</div>
+      <div class="size-item" data-size="16">16 oz</div>
+    </div>
+    <button class="next-btn" id="nextBtn">NEXT · Select Leather</button>
   </div>
-  <button class="next-btn" id="nextBtn">Next: Select Leather</button>
 
   <script>
     const sizeList = document.getElementById('sizeList');
