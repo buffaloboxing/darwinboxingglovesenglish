@@ -1,286 +1,464 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <title>5. Result | BUFFALO BOXING</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-            padding: 40px 20px; 
-            max-width: 750px; 
-            margin: 0 auto; 
-            background: #fafafa;
-            color: #1a1a1a;
-            line-height: 1.6;
-        }
-        .page-frame {
-            background: #ffffff;
-            border: 1px solid #1a1a1a;
-            border-radius: 2px;
-            padding: 48px 40px;
-        }
-        .brand-header {
-            text-align: center;
-            margin-bottom: 48px;
-            padding-bottom: 24px;
-            border-bottom: 1px solid #1a1a1a;
-        }
-        .brand-name {
-            font-size: 20px;
-            font-weight: 600;
-            letter-spacing: 3px;
-            color: #1a1a1a;
-        }
-        .brand-series {
-            font-size: 11px;
-            letter-spacing: 4px;
-            color: #666;
-            margin-top: 6px;
-            text-transform: uppercase;
-        }
-        .page-title { 
-            font-size: 20px; 
-            font-weight: 500; 
-            margin-bottom: 24px;
-            color: #1a1a1a;
-            letter-spacing: 1px;
-        }
-        .final-price {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 32px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid #1a1a1a;
-        }
-        .final-price span {
-            font-size: 28px;
-            color: #1a1a1a;
-        }
-        .summary-box {
-            padding: 20px;
-            background: #fafafa;
-            border-radius: 2px;
-            margin-bottom: 32px;
-            border: 1px solid #d9d9d9;
-        }
-        .summary-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        .summary-item:last-child {
-            border-bottom: none;
-        }
-        .summary-label {
-            font-size: 14px;
-            color: #666;
-        }
-        .summary-value {
-            font-size: 14px;
-            color: #1a1a1a;
-            font-weight: 500;
-        }
-        .copy-result {
-            padding: 16px;
-            background: #fafafa;
-            border-radius: 2px;
-            margin-bottom: 32px;
-            border: 1px solid #d9d9d9;
-            font-size: 13px;
-            line-height: 1.7;
-        }
-        .btn-group { 
-            display: flex; 
-            gap: 12px; 
-        }
-        .prev-btn, .copy-btn, .restart-btn { 
-            flex: 1; 
-            padding: 16px; 
-            border-radius: 2px; 
-            cursor: pointer; 
-            font-size: 14px;
-            letter-spacing: 2px;
-            transition: all 0.2s ease;
-        }
-        .prev-btn { 
-            background: #fff; 
-            color: #1a1a1a; 
-            border: 1px solid #d9d9d9; 
-        }
-        .prev-btn:hover {
-            border-color: #1a1a1a;
-        }
-        .copy-btn { 
-            background: #1a1a1a; 
-            color: #fff; 
-            border: 1px solid #1a1a1a;
-        }
-        .copy-btn:hover {
-            background: #000;
-            border-color: #000;
-        }
-        .restart-btn { 
-            background: #fff; 
-            color: #1a1a1a; 
-            border: 1px solid #d9d9d9; 
-        }
-        .restart-btn:hover {
-            border-color: #1a1a1a;
-        }
-    </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>5. Final Custom Plan | BUFFALO BOXING</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      padding: 40px 20px; 
+      max-width: 750px; 
+      margin: 0 auto; 
+      background: #fafafa;
+      color: #1a1a1a;
+      line-height: 1.7;
+    }
+    .page-frame {
+      background: #ffffff;
+      border: 1px solid #1a1a1a;
+      border-radius: 2px;
+      padding: 48px 40px;
+    }
+    .brand-header {
+      text-align: center;
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    .brand-name {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      color: #1a1a1a;
+    }
+    .brand-series {
+      font-size: 11px;
+      letter-spacing: 4px;
+      color: #666;
+      margin-top: 6px;
+      text-transform: uppercase;
+    }
+    .page-title { 
+      font-size: 20px; 
+      font-weight: 500; 
+      color: #1a1a1a; 
+      margin-bottom: 36px; 
+      text-align: center;
+      letter-spacing: 1px;
+    }
+    .result-item { 
+      display: flex; 
+      justify-content: space-between; 
+      padding: 14px 0; 
+      border-bottom: 1px solid #f0f0f0; 
+      font-size: 14px;
+    }
+    .item-label { color: #999; }
+    .item-value { color: #1a1a1a; font-weight: 500; text-align: right; }
+    .color-swatch { 
+      display: inline-block; 
+      width: 14px; 
+      height: 14px; 
+      border-radius: 2px; 
+      margin-right: 8px; 
+      vertical-align: middle;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+    .section-title { 
+      font-weight: 500; 
+      margin: 32px 0 16px; 
+      color: #1a1a1a; 
+      font-size: 15px;
+      letter-spacing: 0.5px;
+    }
+    .custom-section { 
+      padding: 18px 20px; 
+      background: #fafafa; 
+      border-radius: 2px; 
+      margin-bottom: 12px; 
+      border: 1px solid #f0f0f0;
+    }
+    .custom-detail { 
+      margin: 6px 0; 
+      font-size: 14px; 
+      color: #333; 
+    }
+    .color-grid { 
+      display: grid; 
+      grid-template-columns: repeat(2, 1fr); 
+      gap: 0 24px; 
+    }
+    .color-item { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center;
+      font-size: 14px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .final-price { 
+      margin: 36px 0 20px; 
+      padding: 28px 24px; 
+      background: #fafafa; 
+      border-radius: 2px; 
+      text-align: center; 
+      border: 1px solid #1a1a1a;
+    }
+    .final-price-text { 
+      font-size: 12px; 
+      color: #666; 
+      margin-bottom: 8px; 
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .final-price-num { 
+      font-size: 30px; 
+      font-weight: 500; 
+      color: #1a1a1a;
+      letter-spacing: 0.5px;
+    }
+    .note { 
+      font-size: 12px; 
+      color: #999; 
+      margin: 20px 0; 
+      line-height: 1.8; 
+    }
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .prev-btn, .copy-btn {
+      flex: 1;
+      padding: 16px;
+      border-radius: 2px;
+      font-size: 14px;
+      cursor: pointer;
+      letter-spacing: 2px;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .prev-btn {
+      background: #fff;
+      color: #1a1a1a;
+      border: 1px solid #d9d9d9;
+    }
+    .prev-btn:hover {
+      border-color: #1a1a1a;
+    }
+    .copy-btn {
+      background: #1a1a1a;
+      color: #fff;
+      border: 1px solid #1a1a1a;
+    }
+    .copy-btn:hover {
+      background: #000;
+      border-color: #000;
+    }
+  </style>
 </head>
 <body>
-<div class="page-frame">
+  <div class="page-frame">
     <div class="brand-header">
-        <div class="brand-name">BUFFALO BOXING</div>
-        <div class="brand-series">Darwin Custom Series</div>
+      <div class="brand-name">BUFFALO BOXING</div>
+      <div class="brand-series">Darwin Custom Series</div>
     </div>
 
-    <div class="page-title">Final Result</div>
-
-    <div class="final-price">Final Price: $<span id="finalPrice">380</span> / £<span id="finalPriceGBP">285</span></div>
-
-    <div class="summary-box">
-        <div class="summary-item">
-            <span class="summary-label">Size:</span>
-            <span class="summary-value" id="summarySize">10 oz</span>
-        </div>
-        <div class="summary-item">
-            <span class="summary-label">Leather:</span>
-            <span class="summary-value" id="summaryLeather">Swift Cowhide</span>
-        </div>
-        <div class="summary-item">
-            <span class="summary-label">Colors:</span>
-            <span class="summary-value" id="summaryColors">Custom</span>
-        </div>
-        <div class="summary-item">
-            <span class="summary-label">Custom Text:</span>
-            <span class="summary-value" id="summaryText">None</span>
-        </div>
-        <div class="summary-item">
-            <span class="summary-label">Custom Font:</span>
-            <span class="summary-value" id="summaryFont">None</span>
-        </div>
+    <div class="page-title">Final Custom Plan</div>
+    
+    <div class="result-item">
+      <div class="item-label">Glove Size</div>
+      <div class="item-value" id="sizeVal">--</div>
+    </div>
+    <div class="result-item">
+      <div class="item-label">Leather Type</div>
+      <div class="item-value" id="leatherVal">--</div>
+    </div>
+    <div class="result-item">
+      <div class="item-label">Logo Color</div>
+      <div class="item-value" id="logoColorVal">Default</div>
+    </div>
+    <div class="result-item">
+      <div class="item-label">Logo Stitching Method</div>
+      <div class="item-value" id="logoStitchVal">Outer Stitch</div>
+    </div>
+    
+    <div class="section-title">Area Color Scheme</div>
+    <div class="color-grid" id="colorGrid"></div>
+    
+    <div class="section-title">Inner Wrist Stamping Details</div>
+    <div class="custom-section" id="printDetail"></div>
+    
+    <div class="section-title">Inner Wrist Pattern Details</div>
+    <div class="custom-section" id="patternDetail"></div>
+    
+    <div class="result-item">
+      <div class="item-label">Logo Replacement</div>
+      <div class="item-value" id="logoReplaceVal">Not Selected</div>
+    </div>
+    <div class="result-item">
+      <div class="item-label">Back-of-Hand Embroidery</div>
+      <div class="item-value" id="embroideryVal">Not Selected</div>
+    </div>
+    <div class="result-item">
+      <div class="item-label">Color Extra Fee</div>
+      <div class="item-value" id="colorVal">$0 / £0</div>
+    </div>
+    <div class="result-item">
+      <div class="item-label">Custom Extra Fee</div>
+      <div class="item-value" id="customVal">$0 / £0</div>
     </div>
 
-    <div class="copy-result" id="copyResult">
-        <strong>Customization Summary:</strong><br>
-        Size: <span id="copySize">10 oz</span><br>
-        Leather: <span id="copyLeather">Swift Cowhide</span><br>
-        Colors: <span id="copyColors">Custom</span><br>
-        Custom Text: <span id="copyText">None</span><br>
-        Final Price: $<span id="copyPrice">380</span> / £<span id="copyPriceGBP">285</span>
+    <div class="final-price">
+      <div class="final-price-text">Estimated Total (Excl. Embroidery)</div>
+      <div class="final-price-num" id="totalPrice">$0 / £0</div>
+    </div>
+
+    <div class="note">
+      1. Back-of-hand embroidery requires a pattern, customer service will quote based on complexity;<br>
+      2. Final price is subject to confirmation by customer service;<br>
+      3. Copy the plan and send it to customer service to place an order directly.
     </div>
 
     <div class="btn-group">
-        <button class="prev-btn" id="prevBtn">BACK · Previous</button>
-        <button class="copy-btn" id="copyBtn">COPY SUMMARY</button>
-        <button class="restart-btn" id="restartBtn">RESTART</button>
+      <button class="prev-btn" id="prevBtn">BACK · Edit</button>
+      <button class="copy-btn" onclick="copyResult()">COPY · Plan</button>
     </div>
-</div>
+  </div>
 
-<script>
-    const finalPriceEl = document.getElementById('finalPrice');
-    const finalPriceGBPEl = document.getElementById('finalPriceGBP');
-    const summarySize = document.getElementById('summarySize');
-    const summaryLeather = document.getElementById('summaryLeather');
-    const summaryColors = document.getElementById('summaryColors');
-    const summaryText = document.getElementById('summaryText');
-    const summaryFont = document.getElementById('summaryFont');
-    const copyResult = document.getElementById('copyResult');
-    const copyBtn = document.getElementById('copyBtn');
-    const prevBtn = document.getElementById('prevBtn');
-    const restartBtn = document.getElementById('restartBtn');
-
-    function loadSummary() {
-        const size = localStorage.getItem('customSize') || '10 oz';
-        const leather = localStorage.getItem('leatherType') || 'Swift Cowhide';
-        const areaColors = JSON.parse(localStorage.getItem('areaColors')) || {};
-        const customText = localStorage.getItem('customText') || '';
-        const customFont = localStorage.getItem('customFont') || '';
-        
-        const basePrice = Math.max(0, parseInt(localStorage.getItem('basePrice')) || 380);
-        const basePriceGBP = Math.max(0, parseInt(localStorage.getItem('basePriceGBP')) || 285);
-        const colorExtra = Math.max(0, parseInt(localStorage.getItem('colorExtra')) || 0);
-        const colorExtraGBP = Math.max(0, parseInt(localStorage.getItem('colorExtraGBP')) || 0);
-        const customExtra = Math.max(0, parseInt(localStorage.getItem('customExtra')) || 0);
-        const customExtraGBP = Math.max(0, parseInt(localStorage.getItem('customExtraGBP')) || 0);
-        
-        const finalPrice = basePrice + colorExtra + customExtra;
-        const finalPriceGBP = basePriceGBP + colorExtraGBP + customExtraGBP;
-        
-        finalPriceEl.innerText = finalPrice;
-        finalPriceGBPEl.innerText = finalPriceGBP;
-        
-        summarySize.innerText = size;
-        summaryLeather.innerText = leather;
-        
-        const colorCount = Object.values(areaColors).filter(c => c).length;
-        summaryColors.innerText = colorCount > 0 ? `${colorCount} color(s)` : 'None';
-        
-        summaryText.innerText = customText || 'None';
-        summaryFont.innerText = customFont || 'None';
-        
-        // Update copy text
-        document.getElementById('copySize').innerText = size;
-        document.getElementById('copyLeather').innerText = leather;
-        document.getElementById('copyColors').innerText = colorCount > 0 ? `${colorCount} color(s)` : 'None';
-        document.getElementById('copyText').innerText = customText || 'None';
-        document.getElementById('copyPrice').innerText = finalPrice;
-        document.getElementById('copyPriceGBP').innerText = finalPriceGBP;
-    }
-
-    function copyResult() {
-        const text = copyResult.textContent;
-        
-        if (isSecureContext && navigator.clipboard) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert('Summary copied to clipboard!');
-            }).catch(err => {
-                console.error('Failed to copy: ', err);
-                fallbackCopyTextToClipboard(text);
-            });
-        } else {
-            fallbackCopyTextToClipboard(text);
-        }
-    }
-
-    function fallbackCopyTextToClipboard(text) {
-        const textArea = document.createElement('textarea');
-        textArea.value = text;
-        textArea.style.position = 'fixed';
-        textArea.style.left = '-999999px';
-        textArea.style.top = '-999999px';
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        
-        try {
-            const successful = document.execCommand('copy');
-            const msg = successful ? 'Summary copied to clipboard!' : 'Failed to copy';
-            alert(msg);
-        } catch (err) {
-            console.error('Fallback: Oops, unable to copy', err);
-            alert('Failed to copy summary');
-        }
-        
-        document.body.removeChild(textArea);
-    }
-
-    prevBtn.onclick = () => { window.location.href = '4.customize.html'; };
-    
-    restartBtn.onclick = () => {
-        if (confirm('Are you sure you want to restart? All selections will be lost.')) {
-            localStorage.clear();
-            window.location.href = '1.size.html';
-        }
+  <script>
+    // Area name mapping
+    const areaNames = {
+      '1': 'Area ①', '2': 'Area ②', '3': 'Area ③', '4': 'Area ④',
+      '5': 'Area ⑤', '6': 'Area ⑥', '7': 'Area ⑦', '8': 'Area ⑧'
     };
 
-    copyBtn.onclick = copyResult;
+    // Color name mapping
+    const colorNames = {
+      '#FFFFFF': 'F001 Pure White',
+      '#F5F0EB': 'F002 Milkshake White',
+      '#9D5F3B': 'F003 Gold Brown',
+      '#746148': 'F004 Elephant Grey',
+      '#1E2E44': 'F005 Midnight Blue',
+      '#000000': 'F006 Black',
+      '#80412D': 'F033 Caramel Brown',
+      '#3FBF72': 'F032 Comic Green',
+      '#B3A59A': 'F009 Trench Grey',
+      '#F27D3C': 'F010 Orange',
+      '#F2C12E': 'F011 Sun Yellow',
+      '#F9E77F': 'F012 Chick Yellow',
+      '#404234': 'F013 Olive Green',
+      '#BDE0F2': 'F014 Breeze Blue',
+      '#A0E7E5': 'F015 Tiffany Blue',
+      '#0D32C4': 'F016 Klein Blue',
+      '#91A3B1': 'F017 Linen Blue',
+      '#C0A086': 'F018 Marrakech Brown',
+      '#8C8969': 'F019 Sage Green',
+      '#808080': 'F020 Storm Cloud Grey',
+      '#BE3033': 'F021 Bright Red',
+      '#EEB9C9': 'F022 Sakura Pink',
+      '#DF6981': 'F023 Rose Pink',
+      '#E4A3BB': 'F031 Petal Pink',
+      '#6A2A30': 'F029 Burgundy',
+      '#FFD700': 'F025 Lemon Yellow',
+      '#C6AEA6': 'F026 Apricot',
+      '#294162': 'F030 Deep Blue',
+      '#C0C0C0': 'F027 Seagull Grey',
+      '#402D2D': 'F028 Dark Coffee'
+    };
 
-    loadSummary();
-</script>
+    // Color text helper
+    function getColorText(id) {
+      if (id?.includes('Gold')) return 'Gold Hot Stamping';
+      if (id?.includes('Silver')) return 'Silver Hot Stamping';
+      if (id?.includes('Original')) return 'Original Color (Wild Cowhide Only)';
+      return 'Default';
+    }
+    function getPatternColorText(id) {
+      if (id?.includes('Gold')) return 'Gold Hot Stamping';
+      if (id?.includes('Silver')) return 'Silver Hot Stamping';
+      if (id?.includes('Original')) return 'Original Color (Wild Cowhide Only)';
+      return 'Default';
+    }
+
+    // 兼容移动端的复制方案
+    function copyResult() {
+      const size = document.getElementById('sizeVal').innerText;
+      const leather = document.getElementById('leatherVal').innerText;
+      const logoColor = document.getElementById('logoColorVal').innerText;
+      const logoStitch = document.getElementById('logoStitchVal').innerText;
+      const colorFee = document.getElementById('colorVal').innerText;
+      const customFee = document.getElementById('customVal').innerText;
+      const logoReplace = document.getElementById('logoReplaceVal').innerText;
+      const embroidery = document.getElementById('embroideryVal').innerText;
+      const total = document.getElementById('totalPrice').innerText;
+      const printDetail = document.getElementById('printDetail').innerText.trim();
+      const patternDetail = document.getElementById('patternDetail').innerText.trim();
+      
+      const areaColors = JSON.parse(localStorage.getItem('areaColors')) || {};
+      let colorText = '';
+      for (let i=1; i<=8; i++) {
+        const c = areaColors[i];
+        if (c) colorText += `${areaNames[i]}: ${colorNames[c] || c} (${c})\n`;
+      }
+      if (!colorText) colorText = 'No color selected\n';
+
+      const text = 
+`Darwin Boxing Glove Custom Plan:
+1. Glove Size: ${size}
+2. Leather Type: ${leather}
+3. Logo Settings:
+   - Color: ${logoColor}
+   - Stitching: ${logoStitch}
+4. Area Color Scheme:
+${colorText}
+5. Inner Wrist Stamping:
+${printDetail}
+6. Inner Wrist Pattern:
+${patternDetail}
+7. Logo Replacement: ${logoReplace}
+8. Back-of-Hand Embroidery: ${embroidery}
+9. Color Extra Fee: ${colorFee}
+10. Custom Extra Fee: ${customFee}
+11. Estimated Total (Excl. Embroidery): ${total}
+
+Note: Customer service will confirm the plan and final price. Embroidery requires a pattern for quotation.`.trim();
+
+      // 优先现代API，失败自动降级，兼容手机浏览器
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => {
+          alert('Plan copied! Send it to customer service to order.');
+        }).catch(() => {
+          fallbackCopy(text);
+        });
+      } else {
+        fallbackCopy(text);
+      }
+    }
+
+    // 降级复制：兼容移动端、本地文件场景
+    function fallbackCopy(text) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.top = '0';
+      textarea.style.left = '0';
+      textarea.style.opacity = '0';
+      textarea.style.fontSize = '14px';
+      document.body.appendChild(textarea);
+      textarea.select();
+      textarea.setSelectionRange(0, text.length);
+      try {
+        document.execCommand('copy');
+        alert('Plan copied! Send it to customer service to order.');
+      } catch (err) {
+        alert('Copy failed. Please select and copy the text manually.');
+      }
+      document.body.removeChild(textarea);
+    }
+
+    // Page load: render all data
+    window.onload = function() {
+      const size = localStorage.getItem('customSize') || 'Not Selected';
+      const leather = localStorage.getItem('leatherType') || 'Not Selected';
+      
+      // Full fault tolerance for all prices
+      const basePrice = Math.max(0, parseInt(localStorage.getItem('basePrice')) || 380);
+      const basePriceGBP = Math.max(0, parseInt(localStorage.getItem('basePriceGBP')) || 285);
+      const colorExtra = Math.max(0, parseInt(localStorage.getItem('colorExtra')) || 0);
+      const colorExtraGBP = Math.max(0, parseInt(localStorage.getItem('colorExtraGBP')) || 0);
+      const customExtra = Math.max(0, parseInt(localStorage.getItem('customExtra')) || 0);
+      const customExtraGBP = Math.max(0, parseInt(localStorage.getItem('customExtraGBP')) || 0);
+      
+      const areaColors = JSON.parse(localStorage.getItem('areaColors')) || {};
+      const customOptions = JSON.parse(localStorage.getItem('customOptions')) || {};
+
+      // Basic info
+      document.getElementById('sizeVal').innerText = size + ' oz';
+      document.getElementById('leatherVal').innerText = leather;
+      document.getElementById('colorVal').innerText = '$' + colorExtra + ' / £' + colorExtraGBP;
+      document.getElementById('customVal').innerText = '$' + customExtra + ' / £' + customExtraGBP;
+
+      // Logo info mapping
+      const logoColorMap = {
+        'logoDefault': 'Original Vegetable Tanned Leather Logo',
+        'logoContrast': 'Contrast Color Logo (Matches Back of Hand)',
+        'logoTextGold': 'Gold Hot Stamping Text Logo',
+        'logoTextSilver': 'Silver Hot Stamping Text Logo'
+      };
+      const logoStitchMap = {
+        'stitchOuter': 'Outer Stitch (Directly on Wrist Leather)',
+        'stitchInner': 'Inner Stitch (Under Wrist Leather)',
+        'stitchPrintOnly': 'Hot Stamping Only (No Stitching)'
+      };
+      document.getElementById('logoColorVal').innerText = logoColorMap[customOptions.logoColor] || 'Default Original Logo';
+      document.getElementById('logoStitchVal').innerText = logoStitchMap[customOptions.logoStitch] || 'Outer Stitch';
+
+      // Logo replace & embroidery
+      document.getElementById('logoReplaceVal').innerText = customOptions.logoReplace === 'yes' ? 'Selected (+$10/£8)' : 'Not Selected';
+      document.getElementById('embroideryVal').innerText = customOptions.embroidery === 'yes' ? 'Selected ($15-45/£12-35, Pending Quote)' : 'Not Selected';
+
+      // Color grid
+      const colorGrid = document.getElementById('colorGrid');
+      colorGrid.innerHTML = '';
+      for (let i = 1; i <= 8; i++) {
+        const colorCode = areaColors[i];
+        const colorItem = document.createElement('div');
+        colorItem.className = 'color-item';
+        if (colorCode) {
+          const cName = colorNames[colorCode] || colorCode;
+          colorItem.innerHTML = `<span>${areaNames[i]}</span><span><span class="color-swatch" style="background:${colorCode}"></span>${cName}</span>`;
+        } else {
+          colorItem.innerHTML = `<span>${areaNames[i]}</span><span style="color:#ccc;">Not Selected</span>`;
+        }
+        colorGrid.appendChild(colorItem);
+      }
+
+      // Stamping detail
+      const printDetail = document.getElementById('printDetail');
+      let printHtml = '';
+      if (customOptions.leftEngText || customOptions.leftChText) {
+        const content = customOptions.leftEngText || customOptions.leftChText;
+        const type = customOptions.leftEngText ? 'English/Numbers' : 'Chinese (+$5/£4)';
+        const font = customOptions.leftEngFont === 'cursive' ? 'Cursive' : 'Regular';
+        const color = getColorText(customOptions.leftPrintColor);
+        printHtml += `<div class="custom-detail"><strong>Left Hand:</strong> ${type} "${content}", Font: ${font}, Color: ${color}</div>`;
+      } else printHtml += '<div class="custom-detail">Left Hand: No Stamping</div>';
+      
+      if (customOptions.rightEngText || customOptions.rightChText) {
+        const content = customOptions.rightEngText || customOptions.rightChText;
+        const type = customOptions.rightEngText ? 'English/Numbers' : 'Chinese (+$5/£4)';
+        const font = customOptions.rightEngFont === 'cursive' ? 'Cursive' : 'Regular';
+        const color = getColorText(customOptions.rightPrintColor);
+        printHtml += `<div class="custom-detail"><strong>Right Hand:</strong> ${type} "${content}", Font: ${font}, Color: ${color}</div>`;
+      } else printHtml += '<div class="custom-detail">Right Hand: No Stamping</div>';
+      printDetail.innerHTML = printHtml;
+
+      // Pattern detail
+      const patternDetail = document.getElementById('patternDetail');
+      let patternHtml = '';
+      if (customOptions.leftWristPattern === 'yes') {
+        const color = getPatternColorText(customOptions.leftPatternColor);
+        patternHtml += `<div class="custom-detail"><strong>Left Hand:</strong> Customized (+$5/£4), Color: ${color}</div>`;
+      } else patternHtml += '<div class="custom-detail">Left Hand: No Pattern</div>';
+      
+      if (customOptions.rightWristPattern === 'yes') {
+        const color = getPatternColorText(customOptions.rightPatternColor);
+        patternHtml += `<div class="custom-detail"><strong>Right Hand:</strong> Customized (+$5/£4), Color: ${color}</div>`;
+      } else patternHtml += '<div class="custom-detail">Right Hand: No Pattern</div>';
+      patternDetail.innerHTML = patternHtml;
+
+      // Total price
+      const total = basePrice + colorExtra + customExtra;
+      const totalGBP = basePriceGBP + colorExtraGBP + customExtraGBP;
+      document.getElementById('totalPrice').innerText = '$' + total + ' / £' + totalGBP;
+    };
+
+    // Previous button
+    document.getElementById('prevBtn').addEventListener('click', () => {
+      window.location.href = '4.customize.html';
+    });
+  </script>
 </body>
 </html>
