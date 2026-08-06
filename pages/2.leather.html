@@ -2,80 +2,165 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>2. Select Leather Type</title>
+  <title>2. Select Leather Type | BUFFALO BOXING</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; max-width: 750px; margin: 0 auto; }
-    .title { font-size: 20px; font-weight: bold; margin: 20px 0; }
-    .current-price {
-      font-size: 16px;
-      font-weight: bold;
-      color: #333;
-      margin: 10px 0;
-      padding: 10px;
-      border: 1px solid #eee;
-      border-radius: 6px;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      padding: 40px 20px; 
+      max-width: 750px; 
+      margin: 0 auto; 
+      background: #fafafa;
+      color: #1a1a1a;
+      line-height: 1.6;
     }
-    .leather-list { display: flex; flex-direction: column; gap: 12px; margin: 20px 0 30px; }
-    .leather-item { border: 1px solid #ddd; padding: 15px; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
-    .leather-item.active { border-color: #07c160; background: #f8f8f8; color: #07c160; }
-    .price-tag { color: #e4393c; font-weight: bold; margin-left: 10px; }
+    .page-frame {
+      background: #ffffff;
+      border: 1px solid #1a1a1a;
+      border-radius: 2px;
+      padding: 48px 40px;
+    }
+    .brand-header {
+      text-align: center;
+      margin-bottom: 48px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    .brand-name {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      color: #1a1a1a;
+    }
+    .brand-series {
+      font-size: 11px;
+      letter-spacing: 4px;
+      color: #666;
+      margin-top: 6px;
+      text-transform: uppercase;
+    }
+    .page-title { 
+      font-size: 20px; 
+      font-weight: 500; 
+      margin-bottom: 24px;
+      color: #1a1a1a;
+      letter-spacing: 1px;
+    }
+    .current-price {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    .current-price span {
+      font-size: 22px;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin-left: 8px;
+    }
+    .leather-list { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 12px; 
+      margin-bottom: 60px; 
+    }
+    .leather-item { 
+      border: 1px solid #d9d9d9; 
+      padding: 18px 20px; 
+      border-radius: 2px; 
+      cursor: pointer; 
+      transition: all 0.2s ease;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+    }
+    .leather-item:hover {
+      border-color: #1a1a1a;
+    }
+    .leather-item.active { 
+      border-color: #1a1a1a; 
+      background: #fafafa; 
+      color: #1a1a1a;
+    }
+    .price-tag { 
+      color: #1a1a1a; 
+      font-weight: 500;
+      font-size: 15px;
+    }
     .btn-group {
       display: flex;
-      gap: 10px;
-      margin-top: 20px;
+      gap: 12px;
     }
     .prev-btn, .next-btn {
       flex: 1;
-      padding: 15px;
-      border-radius: 6px;
+      padding: 16px;
+      border-radius: 2px;
       cursor: pointer;
-      font-size: 16px;
+      font-size: 14px;
+      letter-spacing: 2px;
+      transition: all 0.2s ease;
     }
     .prev-btn {
-      background: #f5f5f5;
-      color: #333;
-      border: 1px solid #ddd;
+      background: #fff;
+      color: #1a1a1a;
+      border: 1px solid #d9d9d9;
+    }
+    .prev-btn:hover {
+      border-color: #1a1a1a;
     }
     .next-btn {
-      background: #07c160;
+      background: #1a1a1a;
       color: #fff;
-      border: none;
+      border: 1px solid #1a1a1a;
+    }
+    .next-btn:hover {
+      background: #000;
+      border-color: #000;
     }
   </style>
 </head>
 <body>
-  <div class="title">Select Leather Type</div>
-  
-  <!-- Unified price display -->
-  <div class="current-price">Current Price: $<span id="currentPrice">380</span> / £<span id="currentPriceGBP">285</span></div>
-  
-  <div class="leather-list" id="leatherList">
-    <div class="leather-item active" data-type="Swift Cowhide" data-price="380" data-price-gbp="285">
-      Swift Cowhide <span class="price-tag">$380 / £285</span>
+  <div class="page-frame">
+    <div class="brand-header">
+      <div class="brand-name">BUFFALO BOXING</div>
+      <div class="brand-series">Darwin Custom Series</div>
     </div>
-    <div class="leather-item" data-type="Swift Cowhide + Curtiba Wild Cowhide" data-price="420" data-price-gbp="315">
-      Swift Cowhide + Curtiba Wild Cowhide <span class="price-tag">$420 / £315</span>
+
+    <div class="page-title">Select Leather Type</div>
+    
+    <!-- Unified price display -->
+    <div class="current-price">Current Price: $<span id="currentPrice">380</span> / £<span id="currentPriceGBP">285</span></div>
+    
+    <div class="leather-list" id="leatherList">
+      <div class="leather-item active" data-type="Swift Cowhide" data-price="380" data-price-gbp="285">
+        Swift Cowhide <span class="price-tag">$380 / £285</span>
+      </div>
+      <div class="leather-item" data-type="Swift Cowhide + Curtiba Wild Cowhide" data-price="420" data-price-gbp="315">
+        Swift Cowhide + Curtiba Wild Cowhide <span class="price-tag">$420 / £315</span>
+      </div>
+      <div class="leather-item" data-type="Swift Cowhide + Shark Skin" data-price="730" data-price-gbp="550">
+        Swift Cowhide + Shark Skin <span class="price-tag">$730 / £550</span>
+      </div>
+      <div class="leather-item" data-type="Swift Cowhide + Crocodile Skin" data-price="810" data-price-gbp="610">
+        Swift Cowhide + Crocodile Skin <span class="price-tag">$810 / £610</span>
+      </div>
+      <div class="leather-item" data-type="Swift Cowhide + Ostrich Skin" data-price="810" data-price-gbp="610">
+        Swift Cowhide + Ostrich Skin <span class="price-tag">$810 / £610</span>
+      </div>
+      <div class="leather-item" data-type="Swift Cowhide + Lizard Skin" data-price="810" data-price-gbp="610">
+        Swift Cowhide + Lizard Skin <span class="price-tag">$810 / £610</span>
+      </div>
+      <div class="leather-item" data-type="Swift Cowhide + Python Skin" data-price="810" data-price-gbp="610">
+        Swift Cowhide + Python Skin <span class="price-tag">$810 / £610</span>
+      </div>
     </div>
-    <div class="leather-item" data-type="Swift Cowhide + Shark Skin" data-price="730" data-price-gbp="550">
-      Swift Cowhide + Shark Skin <span class="price-tag">$730 / £550</span>
+    
+    <div class="btn-group">
+      <button class="prev-btn" id="prevBtn">BACK · Previous</button>
+      <button class="next-btn" id="nextBtn">NEXT · Color Preview</button>
     </div>
-    <div class="leather-item" data-type="Swift Cowhide + Crocodile Skin" data-price="810" data-price-gbp="610">
-      Swift Cowhide + Crocodile Skin <span class="price-tag">$810 / £610</span>
-    </div>
-    <div class="leather-item" data-type="Swift Cowhide + Ostrich Skin" data-price="810" data-price-gbp="610">
-      Swift Cowhide + Ostrich Skin <span class="price-tag">$810 / £610</span>
-    </div>
-    <div class="leather-item" data-type="Swift Cowhide + Lizard Skin" data-price="810" data-price-gbp="610">
-      Swift Cowhide + Lizard Skin <span class="price-tag">$810 / £610</span>
-    </div>
-    <div class="leather-item" data-type="Swift Cowhide + Python Skin" data-price="810" data-price-gbp="610">
-      Swift Cowhide + Python Skin <span class="price-tag">$810 / £610</span>
-    </div>
-  </div>
-  
-  <div class="btn-group">
-    <button class="prev-btn" id="prevBtn">Previous: Select Size</button>
-    <button class="next-btn" id="nextBtn">Next: Color Preview</button>
   </div>
 
   <script>
