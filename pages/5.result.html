@@ -282,7 +282,7 @@
       return 'Default';
     }
 
-    // 兼容移动端的复制方案
+    // 优化排版后的复制方案
     function copyResult() {
       const size = document.getElementById('sizeVal').innerText;
       const leather = document.getElementById('leatherVal').innerText;
@@ -293,47 +293,87 @@
       const logoReplace = document.getElementById('logoReplaceVal').innerText;
       const embroidery = document.getElementById('embroideryVal').innerText;
       const total = document.getElementById('totalPrice').innerText;
-      const printDetail = document.getElementById('printDetail').innerText.trim();
-      const patternDetail = document.getElementById('patternDetail').innerText.trim();
       
       const areaColors = JSON.parse(localStorage.getItem('areaColors')) || {};
-      let colorText = '';
-      for (let i=1; i<=8; i++) {
-        const c = areaColors[i];
-        if (c) colorText += `${areaNames[i]}: ${colorNames[c] || c} (${c})\n`;
-      }
-      if (!colorText) colorText = 'No color selected\n';
+      const customOptions = JSON.parse(localStorage.getItem('customOptions')) || {};
 
-      const text = 
-`Darwin Boxing Glove Custom Plan:
+      // 各区域配色文本
+      let colorText = '';
+      for (let i = 1; i <= 8; i++) {
+        const colorCode = areaColors[i];
+        if (colorCode) {
+          const colorName = colorNames[colorCode] || colorCode;
+          colorText += `  ${areaNames[i]}: ${colorName}\n`;
+        }
+      }
+      if (!colorText) colorText = '  No color selected\n';
+
+      // 手腕印字 - 左右手分行
+      let leftPrint = 'Not customized';
+      let rightPrint = 'Not customized';
+      
+      if (customOptions.leftEngText || customOptions.leftChText) {
+        const content = customOptions.leftEngText || customOptions.leftChText;
+        const type = customOptions.leftEngText ? 'English/Numbers' : 'Chinese (+$5/£4)';
+        const font = customOptions.leftEngFont === 'cursive' ? 'Cursive' : 'Regular';
+        const color = getColorText(customOptions.leftPrintColor || 'leftGold');
+        leftPrint = `${type} "${content}" · ${font} · ${color}`;
+      }
+      
+      if (customOptions.rightEngText || customOptions.rightChText) {
+        const content = customOptions.rightEngText || customOptions.rightChText;
+        const type = customOptions.rightEngText ? 'English/Numbers' : 'Chinese (+$5/£4)';
+        const font = customOptions.rightEngFont === 'cursive' ? 'Cursive' : 'Regular';
+        const color = getColorText(customOptions.rightPrintColor || 'rightGold');
+        rightPrint = `${type} "${content}" · ${font} · ${color}`;
+      }
+
+      // 手腕图案 - 左右手分行
+      let leftPattern = 'Not customized';
+      let rightPattern = 'Not customized';
+      
+      if (customOptions.leftWristPattern === 'yes') {
+        const color = getPatternColorText(customOptions.leftPatternColor || 'leftPatternGold');
+        leftPattern = `Customized (+$5/£4) · ${color}`;
+      }
+      if (customOptions.rightWristPattern === 'yes') {
+        const color = getPatternColorText(customOptions.rightPatternColor || 'rightPatternGold');
+        rightPattern = `Customized (+$5/£4) · ${color}`;
+      }
+
+      const resultText = 
+`BUFFALO BOXING · Darwin Custom Series
+────────────────────
 1. Glove Size: ${size}
 2. Leather Type: ${leather}
-3. Logo Settings:
-   - Color: ${logoColor}
-   - Stitching: ${logoStitch}
-4. Area Color Scheme:
+3. Logo Settings
+  Color: ${logoColor}
+  Stitching: ${logoStitch}
+4. Area Color Scheme
 ${colorText}
-5. Inner Wrist Stamping:
-${printDetail}
-6. Inner Wrist Pattern:
-${patternDetail}
+5. Inner Wrist Stamping
+  Left Hand: ${leftPrint}
+  Right Hand: ${rightPrint}
+6. Inner Wrist Pattern
+  Left Hand: ${leftPattern}
+  Right Hand: ${rightPattern}
 7. Logo Replacement: ${logoReplace}
 8. Back-of-Hand Embroidery: ${embroidery}
 9. Color Extra Fee: ${colorFee}
 10. Custom Extra Fee: ${customFee}
 11. Estimated Total (Excl. Embroidery): ${total}
+────────────────────
+Note: Customer service will confirm the plan and final price. Embroidery requires a pattern for quotation.`;
 
-Note: Customer service will confirm the plan and final price. Embroidery requires a pattern for quotation.`.trim();
-
-      // 优先现代API，失败自动降级，兼容手机浏览器
+      // 优先现代API，失败降级，兼容手机浏览器
       if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(text).then(() => {
+        navigator.clipboard.writeText(resultText).then(() => {
           alert('Plan copied! Send it to customer service to order.');
         }).catch(() => {
-          fallbackCopy(text);
+          fallbackCopy(resultText);
         });
       } else {
-        fallbackCopy(text);
+        fallbackCopy(resultText);
       }
     }
 
