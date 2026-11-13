@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lettering & Patterns · BUFFALO BOXING Head Guard</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    padding: 40px 20px; max-width: 750px; margin: 0 auto; background: #fafafa; color: #1a1a1a; line-height: 1.6;
+  }
+  .page-frame { background: #fff; border: 1px solid #1a1a1a; border-radius: 2px; padding: 32px 20px; }
+  @media (min-width: 768px) { .page-frame { padding: 48px 40px; } }
+  .brand-header { text-align: center; margin-bottom: 44px; padding-bottom: 24px; border-bottom: 1px solid #1a1a1a; }
+  .brand-name { font-size: 20px; font-weight: 600; letter-spacing: 3px; }
+  .brand-series { font-size: 11px; letter-spacing: 4px; color: #666; margin-top: 6px; text-transform: uppercase; }
+
+  .step-tag { font-size: 11px; letter-spacing: 3px; color: #999; text-transform: uppercase; margin-bottom: 10px; }
+  .page-title { font-size: 20px; font-weight: 500; margin-bottom: 22px; letter-spacing: 1px; }
+  .current-price { font-size: 14px; color: #666; margin-bottom: 30px; padding-bottom: 16px; border-bottom: 1px solid #1a1a1a; }
+  .current-price span { font-size: 22px; font-weight: 500; color: #1a1a1a; margin-left: 8px; }
+
+  .section { margin-bottom: 36px; padding-bottom: 30px; border-bottom: 1px solid #e5e5e5; }
+  .section:last-of-type { border-bottom: none; padding-bottom: 0; margin-bottom: 32px; }
+  .section-title { font-size: 15px; font-weight: 500; margin-bottom: 18px; letter-spacing: .5px; }
+  .option-label { font-weight: 500; margin: 14px 0 9px; font-size: 14px; color: #333; display: block; }
+  .radio-group { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 10px; }
+  .radio-item { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #333; cursor: pointer; }
+  .radio-item input[type="radio"] {
+    appearance: none; -webkit-appearance: none; width: 16px; height: 16px;
+    border: 1px solid #b3b3b3; border-radius: 50%; cursor: pointer; position: relative; transition: border-color .2s;
+  }
+  .radio-item input[type="radio"]:checked { border-color: #1a1a1a; }
+  .radio-item input[type="radio"]:checked::after {
+    content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    width: 8px; height: 8px; border-radius: 50%; background: #1a1a1a;
+  }
+  input[type="text"] {
+    width: 100%; padding: 12px 14px; border: 1px solid #d9d9d9; border-radius: 2px; margin: 6px 0 14px;
+    font-size: 16px; font-family: inherit; outline: none; background: #fff; transition: border-color .2s;
+  }
+  input[type="text"]:focus { border-color: #1a1a1a; }
+  select { padding: 12px; border: 1px solid #d9d9d9; border-radius: 2px; width: 100%; background: #fff; font-size: 14px; font-family: inherit; outline: none; margin: 6px 0; }
+  select:focus { border-color: #1a1a1a; }
+  .sub-box { display: none; margin-top: 14px; padding: 16px 18px; border: 1px solid #d9d9d9; border-radius: 2px; background: #fafafa; }
+  .sub-box.show { display: block; }
+  .note { font-size: 12px; color: #999; margin: 8px 0 0; line-height: 1.6; }
+  .price-tag { font-size: 13px; font-weight: 500; }
+  .warning { font-size: 12px; padding: 11px 14px; border: 1px solid #d9d9d9; border-radius: 2px; background: #fafafa; margin: 10px 0; line-height: 1.6; display: none; }
+
+  .small-item { border: 1px solid #d9d9d9; border-radius: 2px; padding: 14px; margin-bottom: 12px; background: #fafafa; }
+  .small-item-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .small-item-title { font-size: 13px; font-weight: 500; color: #666; }
+  .small-del { padding: 7px 12px; border: 1px solid #d9d9d9; background: #fff; border-radius: 2px; cursor: pointer; font-size: 12px; color: #666; }
+  .small-del:hover { border-color: #1a1a1a; color: #1a1a1a; }
+  .add-small-btn { width: 100%; padding: 13px; border: 1px dashed #1a1a1a; background: #fff; border-radius: 2px; cursor: pointer; font-size: 14px; letter-spacing: 1px; color: #1a1a1a; }
+  .add-small-btn:hover { background: #fafafa; }
+  .empty-small { font-size: 13px; color: #999; padding: 8px 0 4px; }
+
+  .btn-group { display: flex; gap: 12px; }
+  .prev-btn, .next-btn { flex: 1; padding: 16px; border-radius: 2px; cursor: pointer; font-size: 14px; letter-spacing: 2px; transition: all .2s; }
+  .prev-btn { background: #fff; color: #1a1a1a; border: 1px solid #d9d9d9; }
+  .prev-btn:hover { border-color: #1a1a1a; }
+  .next-btn { background: #1a1a1a; color: #fff; border: 1px solid #1a1a1a; }
+  .next-btn:hover { background: #000; border-color: #000; }
+  .step-nav { display: flex; gap: 8px; margin-bottom: 30px; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+  .step-nav::-webkit-scrollbar { height: 3px; }
+  .step-nav-item { flex: 0 0 auto; display: flex; align-items: center; gap: 7px; border: 1px solid #d9d9d9; border-radius: 2px; padding: 9px 13px; background: #fff; font-size: 12px; letter-spacing: 1px; color: #666; cursor: pointer; font-family: inherit; transition: all .2s ease; }
+  .step-nav-item .sn-num { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border: 1px solid #999; border-radius: 50%; font-size: 10px; }
+  .step-nav-item:hover { border-color: #1a1a1a; color: #1a1a1a; }
+  .step-nav-item.current { background: #1a1a1a; border-color: #1a1a1a; color: #fff; }
+  .step-nav-item.current .sn-num { border-color: #fff; }
+  .mem-logo-btn { border:1px solid #1a1a1a; background:#fff; color:#1a1a1a; border-radius:2px; padding:10px 14px; font-size:12px; letter-spacing:1px; cursor:pointer; font-family:inherit; margin-bottom:18px; transition:all .2s; }
+  .mem-logo-btn:hover { background:#1a1a1a; color:#fff; }
+  .mem-text-cap { font-size:10px; letter-spacing:1px; color:#aaa; margin:8px 0 4px; }
+  .mem-text-row { display:flex; gap:8px; flex-wrap:wrap; margin:0 0 6px; }
+  .mem-text-chip { border:1px solid #d9d9d9; background:#fafafa; border-radius:2px; padding:5px 10px; font-size:12px; color:#555; cursor:pointer; max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .mem-text-chip:hover { border-color:#1a1a1a; color:#1a1a1a; }
+    .global-nav { display:flex; gap:10px; margin-top:24px; padding-top:18px; border-top:1px solid #f0f0f0; }
+    .gn-link { flex:1; text-align:center; border:1px solid #d9d9d9; border-radius:2px; padding:13px 8px; font-size:12px; letter-spacing:1px; color:#666; background:#fff; text-decoration:none; cursor:pointer; transition:all .2s; }
+    .gn-link:hover { border-color:#1a1a1a; color:#1a1a1a; }
+    .gn-link.gn-bundle { border-color:#1a1a1a; color:#1a1a1a; display:none; }
+    .gn-link.gn-bundle:hover { background:#1a1a1a; color:#fff; }
+</style>
+</head>
+<body>
+  <div class="page-frame">
+    <div class="brand-header">
+      <div class="brand-name">BUFFALO BOXING</div>
+      <div class="brand-series">Head Guard · Darwin Custom</div>
+    </div>
+
+    <div class="step-tag">Step 05 / 06</div>
+    <div class="step-nav" id="stepNav"><button type="button" class="step-nav-item" data-href="h1.head-size.html"><span class="sn-num">1</span>Head Circumference</button><button type="button" class="step-nav-item" data-href="h2.head-leather.html"><span class="sn-num">2</span>Leather</button><button type="button" class="step-nav-item" data-href="h3.head-mode.html"><span class="sn-num">3</span>Mode</button><button type="button" class="step-nav-item" data-href="h4.head-color.html"><span class="sn-num">4</span>Color</button><button type="button" class="step-nav-item current" data-href="h5.head-customize.html"><span class="sn-num">5</span>Lettering</button><button type="button" class="step-nav-item" data-href="h6.head-result.html"><span class="sn-num">6</span>Result</button></div>
+<div class="page-title">Lettering & Patterns</div>
+
+    <div class="current-price">Current Price <span id="currentPrice">$0 / £0</span></div>
+
+    <!-- 01 Logo（先Style，后替换） -->
+    <div class="section">
+      <div class="section-title">01 / Logo</div>
+<button class="mem-logo-btn" id="memLogoBtn" type="button">Same logo as previous piece · one-tap apply</button>
+
+      <span class="option-label">Logo Style</span>
+      <div class="radio-group" id="logoTypeGroup">
+        <label class="radio-item"><input type="radio" name="logoType" value="original" checked> Original Logo（Outer Stitch）</label>
+        <label class="radio-item" id="textLogoItem"><input type="radio" name="logoType" value="text"> Text Logo（Hot Stamping）</label>
+        <label class="radio-item"><input type="radio" name="logoType" value="colored"> Colored Logo (colored Outer Stitch)</label>
+        <label class="radio-item"><input type="radio" name="logoType" value="none"> No Logo</label>
+        <label class="radio-item"><input type="radio" name="logoType" value="embroidery"> Embroidery Logo (separate quote)</label>
+      </div>
+      <div class="warning" id="rareLogoWarning">Exotic leather is only available on Area 1 (middle of the forehead) and Area 3 (ear strips) on the three-tone head guard, and it only supports text-logo hot stamping.</div>
+      <div class="warning" id="embroideryLogoNote">An embroidery logo requires a separate quote based on pattern complexity; contact our team. Not included in the automatic total.</div>
+
+      <!-- Text Logo 子选项（仅Three-Tone，固定正Middle） -->
+      <div class="sub-box" id="textLogoBox">
+        <span class="option-label">Hot Stamping Content</span>
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="textContent" value="brand" checked> Brand Text</label>
+          <label class="radio-item"><input type="radio" name="textContent" value="custom"> Custom Text</label>
+        </div>
+
+        <div class="sub-box" id="textCustomBox" style="background:#fff;">
+          <span class="option-label">Custom Text (free for English letters and numbers; Chinese characters require a metal mold, +$5 / £4)</span>
+          <input type="text" id="textLogoCustom" placeholder="Up to 25 characters; English letters, numbers and Chinese characters" maxlength="25">
+<div class="mem-text-cap" id="textLogoCustomMemCap" style="display:none;">Recent inputs · tap to fill in</div><div class="mem-text-row" id="textLogoCustomMemBox"></div>
+          <span class="option-label">Font</span>
+          <div class="radio-group">
+            <label class="radio-item"><input type="radio" name="textLogoFont" value="normal" checked> Regular / Serif</label>
+            <label class="radio-item"><input type="radio" name="textLogoFont" value="cursive"> Cursive/Handwriting</label>
+          </div>
+        </div>
+
+        <span class="option-label">Hot Stamping Color</span>
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="textPrint" value="gold" checked> Gold Foil</label>
+          <label class="radio-item"><input type="radio" name="textPrint" value="silver"> Silver Foil</label>
+          <label class="radio-item" id="textOriginalItem"><input type="radio" name="textPrint" value="original"> Original (exclusive to Wild Buffalo Leather)</label>
+        </div>
+        <div class="note">The text logo is hot-stamped at the middle of the forehead and only supports hot stamping.</div>
+      </div>
+
+      <!-- Colored Logo 子选项 -->
+      <div class="sub-box" id="coloredLogoBox">
+        <span class="option-label">Select Logo Color</span>
+        <select id="coloredLogoSelect"></select>
+        <div class="note" id="coloredLogoNote"></div>
+      </div>
+
+      <!-- 图案替换（Outer Stitch类） -->
+      <div class="sub-box" id="replaceBox">
+        <span class="option-label">Pattern Source</span>
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="logoReplace" value="no" checked> Keep Brand Logo</label>
+          <label class="radio-item"><input type="radio" name="logoReplace" value="yes"> Replace with Own Pattern <span class="price-tag">+$10 / £8</span></label>
+        </div>
+        <div class="note">Replacement requires a line art image. Gold Foil / Silver Foil / colored hot stamping are only available on Wild Buffalo Leather.</div>
+      </div>
+    </div>
+
+    <!-- 02 Left EarHot Stamping -->
+    <div class="section">
+      <div class="section-title">02 / Left EarHot Stamping</div>
+      <span class="option-label">English / numbers (free, up to 25 characters)</span>
+      <input type="text" id="leftEng" placeholder="Letters, numbers, spaces and , & . -" maxlength="25">
+      <div class="note">English supports only letters, numbers, spaces and the symbols , & . - — other characters cannot be entered.</div>
+<div class="mem-text-cap" id="leftEngMemCap" style="display:none;">Recent inputs · tap to fill in</div><div class="mem-text-row" id="leftEngMemBox"></div>
+      <div class="radio-group">
+        <label class="radio-item"><input type="radio" name="leftEngFont" value="normal" checked> Regular</label>
+        <label class="radio-item"><input type="radio" name="leftEngFont" value="cursive"> Cursive</label>
+      </div>
+      <span class="option-label">Chinese Characters (Metal Mold, +$5 / £4, up to 10 characters)</span>
+      <input type="text" id="leftCh" placeholder="Chinese characters, spaces and punctuation" maxlength="10">
+<div class="mem-text-cap" id="leftChMemCap" style="display:none;">Recent inputs · tap to fill in</div><div class="mem-text-row" id="leftChMemBox"></div>
+      <div class="radio-group">
+        <label class="radio-item"><input type="radio" name="leftChFont" value="handwrite" checked> Handwriting</label>
+        <label class="radio-item"><input type="radio" name="leftChFont" value="song"> Serif</label>
+      </div>
+      <span class="option-label">Hot Stamping Color</span>
+      <div class="radio-group">
+        <label class="radio-item"><input type="radio" name="leftPrint" value="gold" checked> Gold Foil</label>
+        <label class="radio-item"><input type="radio" name="leftPrint" value="silver"> Silver Foil</label>
+        <label class="radio-item"><input type="radio" name="leftPrint" value="original"> Original (exclusive to Wild Buffalo Leather)</label>
+      </div>
+      <div class="warning" id="leftWarn">Choose only one of English/numbers or Chinese characters</div>
+    </div>
+
+    <!-- 03 Right EarHot Stamping -->
+    <div class="section">
+      <div class="section-title">03 / Right EarHot Stamping</div>
+      <span class="option-label">English / numbers (free, up to 25 characters)</span>
+      <input type="text" id="rightEng" placeholder="Letters, numbers, spaces and , & . -" maxlength="25">
+      <div class="note">English supports only letters, numbers, spaces and the symbols , & . - — other characters cannot be entered.</div>
+<div class="mem-text-cap" id="rightEngMemCap" style="display:none;">Recent inputs · tap to fill in</div><div class="mem-text-row" id="rightEngMemBox"></div>
+      <div class="radio-group">
+        <label class="radio-item"><input type="radio" name="rightEngFont" value="normal" checked> Regular</label>
+        <label class="radio-item"><input type="radio" name="rightEngFont" value="cursive"> Cursive</label>
+      </div>
+      <span class="option-label">Chinese Characters (Metal Mold, +$5 / £4, up to 10 characters)</span>
+      <input type="text" id="rightCh" placeholder="Chinese characters, spaces and punctuation" maxlength="10">
+<div class="mem-text-cap" id="rightChMemCap" style="display:none;">Recent inputs · tap to fill in</div><div class="mem-text-row" id="rightChMemBox"></div>
+      <div class="radio-group">
+        <label class="radio-item"><input type="radio" name="rightChFont" value="handwrite" checked> Handwriting</label>
+        <label class="radio-item"><input type="radio" name="rightChFont" value="song"> Serif</label>
+      </div>
+      <span class="option-label">Hot Stamping Color</span>
+      <div class="radio-group">
+        <label class="radio-item"><input type="radio" name="rightPrint" value="gold" checked> Gold Foil</label>
+        <label class="radio-item"><input type="radio" name="rightPrint" value="silver"> Silver Foil</label>
+        <label class="radio-item"><input type="radio" name="rightPrint" value="original"> Original (exclusive to Wild Buffalo Leather)</label>
+      </div>
+      <div class="warning" id="rightWarn">Choose only one of English/numbers or Chinese characters</div>
+    </div>
+
+    <!-- 04 Small Patterns（可叠加多个） -->
+    <div class="section">
+      <div class="section-title">04 / Small Patterns</div>
+      <div class="note" style="margin:0 0 14px;">Each small pattern requires a line art image and can be stacked on multiple positions. Hot stamping +$5 / £4 per piece (Gold Foil / Silver Foil / Original, exclusive to Wild Buffalo Leather). Embroidery +$15-45 / £12-35 per piece; ask our team based on complexity.</div>
+      <div id="smallList"></div>
+      <div class="empty-small" id="smallEmpty">No Small Patterns Added Yet</div>
+      <button class="add-small-btn" id="addSmallBtn" type="button">+ Add a Small Pattern</button>
+    </div>
+
+    <div class="btn-group">
+      <button class="prev-btn" id="prevBtn">BACK · Back</button>
+      <button class="next-btn" id="nextBtn">NEXT · View Plan</button>
+    </div>
+  <div class="global-nav">
+      <a class="gn-link" href="../index.html">Back to customizer home · add/change quantity</a>
+      <a class="gn-link gn-bundle" id="gnBundle" href="../bundle.html">Back to Bundle Summary</a>
+    </div>
+    </div>
+
+  <script>
+    /* ===== 统一存储封装（每件独立前缀） ===== */
+    const BBSUIT_KEY = 'bb_suit';
+    function BB_suit(){ try{ return JSON.parse(localStorage.getItem(BBSUIT_KEY)) || null; }catch(e){ return null; } }
+    function BB_prefix(){
+      const s = BB_suit();
+      if(!s || !Array.isArray(s.items) || !s.items.length) return '';
+      const idx = (typeof s.current === 'number') ? s.current : 0;
+      return 'bb_' + idx + '_';
+    }
+    const LS = {
+      get(k){ return localStorage.getItem(BB_prefix() + k); },
+      set(k,v){ localStorage.setItem(BB_prefix() + k, v); },
+      remove(k){ localStorage.removeItem(BB_prefix() + k); }
+    };
+
+    /* ============ 基础状态 ============ */
+    const leatherType = LS.get('leatherType') || '';
+    const mode = LS.get('mode') || 'triple';
+    const isWild = leatherType.includes('Wild Buffalo Leather');
+    const isRare = /Shark|Crocodile|Ostrich|Lizard/.test(leatherType);
+
+    const COLORS = [
+      ['#FFFFFF','Pure White'],['#F5F0EB','Milkshake White'],['#9D5F3B','Golden Brown'],['#746148','Elephant Gray'],['#1E2E44','Midnight Blue'],
+      ['#000000','Black'],['#80412D','Caramel Brown'],['#3FBF72','Comic Green'],['#B3A59A','Trench Gray'],['#F27D3B','Orange'],
+      ['#F2C12E','Sun Yellow'],['#F9E77F','Chick Yellow'],['#404234','Olive Green'],['#BDE0F2','Breeze Blue'],['#A0E7E5','Tiffany Blue'],
+      ['#0D32C4','Klein Blue'],['#91A3B1','Linen Blue'],['#C0A086','Marala Brown'],['#8C8969','Sage Green'],['#808080','Nimbus Gray'],
+      ['#BE3033','Bright Red'],['#EEB9C9','Sakura Pink'],['#DF6981','Rose Pink'],['#E4A3BB','Petal Pink'],['#6A2A30','Wine Red'],
+      ['#FFD700','Lemon Yellow'],['#C6AEA6','Apricot'],['#294162','Deep Blue'],['#C0C0C0','Seagull Gray'],['#402D2D','Deep Coffee']
+    ];
+
+    let areaColors = {};
+    try { areaColors = JSON.parse(LS.get('areaColors')) || {}; } catch (e) {}
+    const usedHex = new Set(Object.values(areaColors).filter(Boolean));
+
+    /* ============ IME 安全的输入校验 ============ */
+    function sanitizeByKind(el, kind) {
+      let v = el.value;
+      if (kind === 'eng') {
+        // English box: letters, digits, space and , & . - only
+        v = v.replace(/[^A-Za-z0-9 ,&.\-]/g, '');
+        if (v.length > 25) v = v.slice(0, 25);
+      } else if (kind === 'ch') {
+        // Chinese box: Chinese characters + space + punctuation; strips half/full-width letters and digits
+        v = v.replace(/[A-Za-z0-9\uFF21-\uFF3A\uFF41-\uFF5A\uFF10-\uFF19]/g, '');
+        if (v.length > 10) v = v.slice(0, 10);
+      } else {
+        v = v.replace(/[^\x20-\x7E一-龥\u3000-\u303F\uFF01-\uFF5E]/g, '');
+        if (v.length > 25) v = v.slice(0, 25);
+      }
+      el.value = v;
+    }
+    function bindIME(el, kind, after) {
+      let composing = false;
+      el.addEventListener('compositionstart', () => { composing = true; });
+      el.addEventListener('compositionend', () => {
+        composing = false;
+        sanitizeByKind(el, kind);
+        after(el);
+      });
+      el.addEventListener('input', () => {
+        if (composing) return;
+        sanitizeByKind(el, kind);
+        after(el);
+      });
+    }
+    const leftEng = document.getElementById('leftEng');
+    const leftCh = document.getElementById('leftCh');
+    const rightEng = document.getElementById('rightEng');
+    const rightCh = document.getElementById('rightCh');
+
+    /* ============ 同耳英文/Chinese Characters互斥 ============ */
+    const leftWarn = document.getElementById('leftWarn');
+    const rightWarn = document.getElementById('rightWarn');
+    function onEarInput(changed) {
+      if (changed === leftEng || changed === leftCh) {
+        if (changed === leftEng && leftEng.value) leftCh.value = '';
+        if (changed === leftCh && leftCh.value) leftEng.value = '';
+        leftWarn.style.display = (leftEng.value && leftCh.value) ? 'block' : 'none';
+      } else {
+        if (changed === rightEng && rightEng.value) rightCh.value = '';
+        if (changed === rightCh && rightCh.value) rightEng.value = '';
+        rightWarn.style.display = (rightEng.value && rightCh.value) ? 'block' : 'none';
+      }
+      calc();
+    }
+    bindIME(leftEng, 'eng', onEarInput);
+    bindIME(leftCh, 'ch', onEarInput);
+    bindIME(rightEng, 'eng', onEarInput);
+    bindIME(rightCh, 'ch', onEarInput);
+
+    /* ============ Logo Style切换 ============ */
+    const textBox = document.getElementById('textLogoBox');
+    const coloredBox = document.getElementById('coloredLogoBox');
+    const replaceBox = document.getElementById('replaceBox');
+    const embroideryLogoNote = document.getElementById('embroideryLogoNote');
+
+    // Two-Tone：无Text Logo 选项
+    if (mode === 'split') document.getElementById('textLogoItem').style.display = 'none';
+    if (!isWild) document.getElementById('textOriginalItem').style.display = 'none';
+
+    // 稀有皮：锁定Text Logo，禁用其他Style
+    if (isRare) {
+      document.querySelectorAll('input[name="logoType"]').forEach(r => {
+        if (r.value !== 'text') { r.disabled = true; r.closest('.radio-item').style.opacity = '.4'; }
+      });
+      document.querySelector('input[name="logoType"][value="text"]').checked = true;
+    }
+
+    function onLogoTypeChange() {
+      const v = document.querySelector('input[name="logoType"]:checked').value;
+      textBox.classList.toggle('show', v === 'text');
+      coloredBox.classList.toggle('show', v === 'colored');
+      replaceBox.classList.toggle('show', v === 'original' || v === 'colored');
+      embroideryLogoNote.style.display = v === 'embroidery' ? 'block' : 'none';
+      calc();
+    }
+    document.getElementById('logoTypeGroup').addEventListener('change', onLogoTypeChange);
+
+    /* ============ Text Logo Hot Stamping Content切换 ============ */
+    const textCustomBox = document.getElementById('textCustomBox');
+    const textLogoCustom = document.getElementById('textLogoCustom');
+    document.querySelectorAll('input[name="textContent"]').forEach(r => {
+      r.addEventListener('change', () => {
+        const tc = document.querySelector('input[name="textContent"]:checked').value;
+        textCustomBox.classList.toggle('show', tc === 'custom');
+        calc();
+      });
+    });
+    bindIME(textLogoCustom, 'mixed', () => { calc(); });
+
+    /* ============ Colored Logo 选色 ============ */
+    const coloredSelect = document.getElementById('coloredLogoSelect');
+    const coloredNote = document.getElementById('coloredLogoNote');
+    COLORS.forEach(([hex, nm]) => {
+      const inUse = usedHex.has(hex);
+      const o = document.createElement('option');
+      o.value = hex;
+      o.textContent = `${nm} · ${inUse ? 'Already used on the head guard (free)' : 'New color (+$10 / £8)'}`;
+      coloredSelect.appendChild(o);
+    });
+    function refreshColoredNote() {
+      const hex = coloredSelect.value;
+      coloredNote.textContent = usedHex.has(hex)
+        ? 'This color is already used on the head guard, so there is no extra charge for the logo.'
+        : 'This color is not used on the head guard, so the logo adds +$10 / £8.';
+    }
+    coloredSelect.addEventListener('change', () => { refreshColoredNote(); calc(); });
+
+    /* ============ Small Patterns动态列表（可叠加） ============ */
+    const POS_OPTIONS = [
+      ['leftEar','Left Ear'],['rightEar','Right Ear'],['foreLeft','Left Forehead'],
+      ['foreRight','Right Forehead'],['other','Other Areas (add notes)']
+    ];
+    const smallList = document.getElementById('smallList');
+    const smallEmpty = document.getElementById('smallEmpty');
+    let smallPatterns = [];
+
+    function renderSmallList() {
+      smallList.innerHTML = '';
+      smallEmpty.style.display = smallPatterns.length ? 'none' : 'block';
+      smallPatterns.forEach((item, idx) => {
+        const div = document.createElement('div');
+        div.className = 'small-item';
+        const opts = POS_OPTIONS.map(([val, nm]) =>
+          `<option value="${val}" ${item.pos === val ? 'selected' : ''}>${nm}</option>`).join('');
+        const isHot = item.craft !== 'embroidery';
+        const title = isHot
+          ? `Small Patterns ${idx + 1} · Hot Stamping (+$5 / £4)`
+          : `Small Patterns ${idx + 1} · Embroidery (+$15–45 / £12–35)`;
+        const printName = 'smallPrint' + idx;
+        const originalRadio = isWild
+          ? `<label class="radio-item"><input type="radio" name="${printName}" value="original" ${item.print === 'original' ? 'checked' : ''}> Original (exclusive to Wild Buffalo Leather)</label>`
+          : '';
+        const craftDetail = isHot
+          ? `<span class="option-label" style="margin-top:12px;">Hot Stamping Color</span>
+             <div class="radio-group">
+               <label class="radio-item"><input type="radio" name="${printName}" value="gold" ${(!item.print || item.print === 'gold') ? 'checked' : ''}> Gold Foil</label>
+               <label class="radio-item"><input type="radio" name="${printName}" value="silver" ${item.print === 'silver' ? 'checked' : ''}> Silver Foil</label>
+               ${originalRadio}
+             </div>
+             <div class="note">Only simple line art images are supported.</div>`
+          : `<div class="note" style="margin-top:10px;">Embroidery is quoted based on pattern complexity, +$15–45 / £12–35 per piece. Contact our team to confirm; not included in the automatic total.</div>`;
+        div.innerHTML =
+          `<div class="small-item-head">
+             <span class="small-item-title">${title}</span>
+             <button type="button" class="small-del" data-del="${idx}">Remove</button>
+           </div>
+           <span class="option-label" style="margin-top:10px;">Craft</span>
+           <div class="radio-group">
+             <label class="radio-item"><input type="radio" class="small-craft" data-idx="${idx}" value="hot" ${isHot ? 'checked' : ''}> Hot Stamping</label>
+             <label class="radio-item"><input type="radio" class="small-craft" data-idx="${idx}" value="embroidery" ${!isHot ? 'checked' : ''}> Embroidery</label>
+           </div>
+           <select class="small-pos" data-idx="${idx}">${opts}</select>
+           ${craftDetail}
+           <input type="text" class="small-note" data-idx="${idx}"
+             placeholder="Add notes for other areas here"
+             value="${(item.note || '').replace(/"/g, '&quot;')}"
+             style="${item.pos === 'other' ? '' : 'display:none;'}">`;
+        smallList.appendChild(div);
+      });
+      calc();
+    }
+    document.getElementById('addSmallBtn').addEventListener('click', () => {
+      smallPatterns.push({ pos: 'leftEar', note: '', craft: 'hot', print: 'gold' });
+      renderSmallList();
+    });
+    smallList.addEventListener('click', e => {
+      const del = e.target.closest('[data-del]');
+      if (del) { smallPatterns.splice(parseInt(del.dataset.del, 10), 1); renderSmallList(); }
+    });
+    smallList.addEventListener('change', e => {
+      if (e.target.classList.contains('small-craft')) {
+        const idx = parseInt(e.target.dataset.idx, 10);
+        smallPatterns[idx].craft = e.target.value;
+        if (e.target.value === 'hot' && !smallPatterns[idx].print) smallPatterns[idx].print = 'gold';
+        renderSmallList();
+      } else if (e.target.classList.contains('small-pos')) {
+        const idx = parseInt(e.target.dataset.idx, 10);
+        smallPatterns[idx].pos = e.target.value;
+        renderSmallList();
+      }
+    });
+    smallList.addEventListener('input', e => {
+      if (e.target.classList.contains('small-note')) {
+        const idx = parseInt(e.target.dataset.idx, 10);
+        smallPatterns[idx].note = e.target.value;
+        calc();
+      }
+    });
+    smallList.addEventListener('change', e => {
+      if (e.target.name && e.target.name.indexOf('smallPrint') === 0) {
+        const idx = parseInt(e.target.name.replace('smallPrint', ''), 10);
+        smallPatterns[idx].print = e.target.value;
+        calc();
+      }
+    });
+
+    /* ============ 稀有皮警告 ============ */
+    if (isRare) document.getElementById('rareLogoWarning').style.display = 'block';
+
+    /* ============ Pricing ============ */
+    const basePrice = parseInt(LS.get('basePrice'),10) || 1299;
+    const colorExtra = parseInt(LS.get('colorExtra'),10) || 0;
+    const currentPriceEl = document.getElementById('currentPrice');
+
+    function bbMoney(usd){ return '$' + usd + ' / £' + Math.round(usd / 1.32); }
+
+    function calc() {
+      let customExtra = 0;
+      const logoType = document.querySelector('input[name="logoType"]:checked').value;
+      if (logoType === 'colored' && !usedHex.has(coloredSelect.value)) customExtra += 10;
+      const replaceEl = document.querySelector('input[name="logoReplace"]:checked');
+      if (replaceEl && replaceEl.value === 'yes') customExtra += 10;
+      if (logoType === 'text') {
+        const tc = document.querySelector('input[name="textContent"]:checked').value;
+        if (tc === 'custom' && /[一-龥]/.test(textLogoCustom.value)) customExtra += 5;
+      }
+      if (leftCh.value.trim()) customExtra += 5;
+      if (rightCh.value.trim()) customExtra += 5;
+      customExtra += smallPatterns.filter(it => it.craft !== 'embroidery').length * 5;
+
+      LS.set('customExtra', customExtra);
+      currentPriceEl.textContent = bbMoney(basePrice + colorExtra + customExtra);
+    }
+
+    document.querySelectorAll('input[type="radio"]').forEach(r => {
+      r.addEventListener('change', calc);
+    });
+
+    /* ============ Save ============ */
+    function saveOptions() {
+      const get = name => { const el = document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : ''; };
+      const data = {
+        logoType: get('logoType'),
+        textContent: get('textContent'),
+        textLogoCustom: textLogoCustom.value,
+        textLogoFont: get('textLogoFont'),
+        textPrint: get('textPrint'),
+        coloredLogo: coloredSelect.value,
+        logoReplace: get('logoReplace'),
+        leftEng: leftEng.value, leftEngFont: get('leftEngFont'),
+        leftCh: leftCh.value, leftChFont: get('leftChFont'), leftPrint: get('leftPrint'),
+        rightEng: rightEng.value, rightEngFont: get('rightEngFont'),
+        rightCh: rightCh.value, rightChFont: get('rightChFont'), rightPrint: get('rightPrint'),
+        smallPatterns: smallPatterns.slice()
+      };
+      LS.set('customOptions', JSON.stringify(data));
+      MEM_setLogo({logoType:data.logoType,textContent:data.textContent,textLogoFont:data.textLogoFont,textPrint:data.textPrint,logoStitch:data.logoStitch,logoReplace:data.logoReplace,coloredLogo:data.coloredLogo});
+      [data.textLogoCustom,data.leftEng,data.leftCh,data.rightEng,data.rightCh].forEach(function(t){ MEM_addText(t); });
+    }
+
+    function restoreOptions() {
+      let data;
+      try { data = JSON.parse(LS.get('customOptions')); } catch (e) { return; }
+      if (!data) return;
+      const check = (name, val) => {
+        if (!val) return;
+        const el = document.querySelector(`input[name="${name}"][value="${val}"]`);
+        if (el) el.checked = true;
+      };
+      check('logoType', data.logoType);
+      check('textContent', data.textContent);
+      textLogoCustom.value = data.textLogoCustom || '';
+      check('textLogoFont', data.textLogoFont);
+      check('textPrint', data.textPrint);
+      if (data.coloredLogo) coloredSelect.value = data.coloredLogo;
+      check('logoReplace', data.logoReplace);
+      leftEng.value = data.leftEng || ''; check('leftEngFont', data.leftEngFont);
+      leftCh.value = data.leftCh || ''; check('leftChFont', data.leftChFont); check('leftPrint', data.leftPrint);
+      rightEng.value = data.rightEng || ''; check('rightEngFont', data.rightEngFont);
+      rightCh.value = data.rightCh || ''; check('rightChFont', data.rightChFont); check('rightPrint', data.rightPrint);
+
+      // Small Patterns：优先新数组；兼容旧的单图案字段；补齐Craft与Hot Stamping Color
+      const normalizeSmall = it => ({
+        pos: it.pos || 'leftEar', note: it.note || '',
+        craft: it.craft || 'hot', print: it.print || 'gold'
+      });
+      if (Array.isArray(data.smallPatterns)) {
+        smallPatterns = data.smallPatterns.map(normalizeSmall);
+      } else if (data.smallPattern === 'yes') {
+        smallPatterns = [normalizeSmall({ pos: data.smallPos, note: data.smallNote })];
+      }
+      renderSmallList();
+
+      // Text Logo 自定义框显示态
+      const tc = document.querySelector('input[name="textContent"]:checked');
+      if (tc) textCustomBox.classList.toggle('show', tc.value === 'custom');
+
+      onLogoTypeChange();
+      refreshColoredNote();
+    }
+
+    /* ============ Navigation（明确逐级跳转） ============ */
+    document.getElementById('prevBtn').onclick = () => {
+      saveOptions();
+      window.location.href = 'h4.head-color.html';
+    };
+    document.getElementById('nextBtn').onclick = () => {
+      saveOptions();
+      window.location.href = 'h6.head-result.html';
+    };
+
+    /* ============ 初始化 ============ */
+    restoreOptions();
+    onLogoTypeChange();
+    refreshColoredNote();
+    calc();
+      window.__bbSave = saveOptions;
+    document.getElementById('stepNav').addEventListener('click', function(e){
+      const it = e.target.closest('.step-nav-item');
+      if (!it) return;
+      try { if (window.__bbSave) window.__bbSave(); } catch(err){}
+      window.location.href = it.dataset.href;
+    });
+    /* ===== 全局记忆库 bb_memory（跨装备共享，不随件前缀隔离） ===== */
+    function MEM_get(){ try{ return JSON.parse(localStorage.getItem('bb_memory')) || {colors:[],texts:[],logo:null}; }catch(e){ return {colors:[],texts:[],logo:null}; } }
+    function MEM_save(m){ localStorage.setItem('bb_memory', JSON.stringify(m)); }
+    /* ===== 记忆库扩展：Text与 Logo 快照 ===== */
+    function MEM_addText(t){
+      t=(t||'').trim(); if(!t) return;
+      const m=MEM_get();
+      m.texts=m.texts.filter(x=>x!==t);
+      m.texts.unshift(t); m.texts=m.texts.slice(0,6);
+      MEM_save(m);
+    }
+    function MEM_setLogo(snap){ const m=MEM_get(); m.logo=snap; MEM_save(m); }
+    function applyMemLogo(){
+      const snap=MEM_get().logo;
+      if(!snap){ alert('No reusable logo yet. Please finish the previous piece first.'); return; }
+      const setRadio=(name,val)=>{
+        if(!val) return;
+        const el=document.querySelector('input[name="'+name+'"][value="'+val+'"]');
+        if(el && !el.disabled){ el.checked=true; el.dispatchEvent(new Event('change',{bubbles:true})); }
+      };
+      ['logoType','textContent','textLogoFont','textPrint','logoStitch','logoReplace'].forEach(n=>setRadio(n,snap[n]));
+      if(snap.coloredLogo && typeof coloredSelect!=='undefined' && coloredSelect){
+        try{ coloredSelect.value=snap.coloredLogo; coloredSelect.dispatchEvent(new Event('change',{bubbles:true})); }catch(e){}
+      }
+      if(typeof onLogoTypeChange==='function') onLogoTypeChange();
+      if(typeof calc==='function') calc();
+    }
+    function renderMemTextChips(){
+      const m=MEM_get();
+      ['textLogoCustom','leftEng','leftCh','rightEng','rightCh'].forEach(id=>{
+        const inputEl=document.getElementById(id);
+        const cap=document.getElementById(id+'MemCap');
+        const box=document.getElementById(id+'MemBox');
+        if(!inputEl||!cap||!box) return;
+        if(!m.texts.length){ cap.style.display='none'; box.innerHTML=''; return; }
+        cap.style.display='block'; box.innerHTML='';
+        m.texts.forEach(t=>{
+          const c=document.createElement('span');
+          c.className='mem-text-chip'; c.textContent=t; c.title=t;
+          c.onclick=()=>{ inputEl.value=t; inputEl.dispatchEvent(new Event('input',{bubbles:true})); if(typeof calc==='function')calc(); };
+          box.appendChild(c);
+        });
+      });
+    }
+    renderMemTextChips();
+    document.getElementById('memLogoBtn').addEventListener('click', applyMemLogo);
+</script>
+<script>
+    (function(){
+      try{
+        var st=BB_suit();
+        var b=document.getElementById('gnBundle');
+        if(b && st && st.mode==='suit') b.style.display='inline-block';
+      }catch(e){}
+    })();
+  </script>
+</body>
+</html>
