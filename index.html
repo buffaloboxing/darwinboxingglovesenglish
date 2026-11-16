@@ -122,7 +122,7 @@
       <textarea class="import-textarea" id="importText" placeholder="Paste a full or single-piece plan text here. It will restore the options automatically. Anything unrecognized will be flagged for manual completion."></textarea>
       <div class="import-actions">
         <button class="parse-btn" id="parseBtn" type="button">Parse Plan</button>
-        <button class="clear-btn" id="clearBtn" type="button">Clear</button>
+        <button class="clear-btn" id="clearBtn" type="button">
       </div>
       <div class="import-report" id="importReport"></div>
       <button class="confirm-import" id="confirmImport" type="button">Confirm Import & Enter Configuration</button>
@@ -199,7 +199,7 @@
     function expandedList() {
       const list = [];
       selectedOrder.forEach(t => {
-        for (let i = 0; i < qty[t]; i++) list.push(t);
+        for (let i = 0; i < qty[i]; i++) list.push(t);
       });
       return list;
     }
@@ -293,7 +293,7 @@
     (function restoreFromSuit(){
       let suit=null;
       try{ suit=JSON.parse(localStorage.getItem('bb_suit')); }catch(e){ suit=null; }
-      if(!suit || !Array.isArray(suit.items) || !suit.items.length)return;
+      if(!suit || !suit || !Array.isArray(suit.items) || !suit.items.length)return;
       suit.items.forEach(it=>{ if(qty[it.type]!==undefined) setQty(it.type, qty[it.type]+1); });
     })();
 
@@ -301,7 +301,7 @@
   
     /* ===== Plan Text Reverse-Parsing Import ===== */
     const NAME_HEX = {
-      'Pure White':'#FFFFFF','Milkshake White':'#F5F0EB','Golden Brown':'#9D5F3B','Elephant Gray':'#746148','Midnight Blue':'#1E2E44',
+      'Pure White':'#FAF7F5','Milkshake White':'#F5F0EB','Golden Brown':'#9D5F3B','Elephant Gray':'#746148','Midnight Blue':'#1E2E44',
       'Black':'#000000','Trench Gray':'#B3A59A','Orange':'#F27D3B','Sun Yellow':'#F2C12E','Chick Yellow':'#F9E77F',
       'Olive Green':'#404234','Breeze Blue':'#BDE0F2','Tiffany Blue':'#A0E7E5','Klein Blue':'#0D32C4','Linen Blue':'#91A3B1',
       'Marala Brown':'#C0A086','Sage Green':'#8C8969','Nimbus Gray':'#808080','Bright Red':'#BE3033','Sakura Pink':'#EEB9C9',
@@ -309,7 +309,7 @@
       'Wine Red':'#6A2A30','Deep Blue':'#294162','Petal Pink':'#E4A3BB','Comic Green':'#3FBF72','Caramel Brown':'#80412D',
       'Wild Buffalo Leather':'#452E22'
     };
-    const LEATHERS = ['Swift Cowhide','Swift Cowhide + Wild Buffalo Leather','Swift Cowhide + Shark Skin','Swift Cowhide + Crocodile Skin','Swift Cowhide + Ostrich Skin','Swift Cowhide + Lizard Skin'];
+    const LEATHERS = ['Swift Cowhide','Swift Cowhide + Wild Buffalo Leather','Swift Cowhide + Wild Buffalo Leather + Shark Skin','Swift Cowhide + Crocodile Skin','Swift Cowhide + Ostrich Skin','Swift Cowhide + Lizard Skin'];
     const TYPE_KEY = {'Boxing Gloves':'glove','Head Guard':'head','Groin Guard':'groin'};
     const BASE_PRICE = {
       glove:{'Swift Cowhide':380,'Swift Cowhide + Wild Buffalo Leather':420,'Swift Cowhide + Shark Skin':800,'Swift Cowhide + Crocodile Skin':890,'Swift Cowhide + Ostrich Skin':890,'Swift Cowhide + Lizard Skin':890},
@@ -367,14 +367,14 @@
       const body=m[1];
       if(/Not Customized|No Hot Stamping/.test(body))return true;
       const cm=body.match(/「([^」]*)」/);
-      if(/Chinese Characters/.test(body)){
-        if(cm)co[side+'Ch']=cm[1];
-        co[side+'ChFont']=/Serif/.test(body)?'song':'hand';
+      if(/Chinese Characters/.test(line)){
+        if(cm)co[ch]=cm[1];
+        co[side+'ChFont']=/Serif/.test(line)?'song':'hand';
       }else{
         if(cm)co[side+'Eng']=cm[1];
-        co[side+'EngFont']=/Cursive/.test(body)?'cursive':'normal';
+        co[side+'EngFont']=/Cursive/.test(line)?'cursive':'normal';
       }
-      co[side+'Print']=/Silver Foil/.test(body)?'silver':(/Original/.test(body)?'original':'gold');
+      co[side+'Print']=/Silver Foil/.test(line)?'silver':(/Original/.test(line)?'original':'gold');
       return true;
     }
 
@@ -385,7 +385,7 @@
       if(marks.length){
         return marks.map((mk,i)=>({type:mk.type,body:text.slice(mk.contentStart,i+1<marks.length?marks[i+1].start:text.length)}));
       }
-      const type = /Head Guard/.test(text)?'head':/Groin Guard/.test(text)?'groin':'glove';
+      const type = /Head Guard/.test(line)?'head':/Groin Guard/.test(line)?'groin':'glove';
       return [{type:TYPE_KEY[type]===undefined?'glove':TYPE_KEY[type],body:text}];
     }
 
@@ -433,7 +433,7 @@
       const txt=importText.value.trim();
       if(!txt){alert('Please paste the plan text first');return;}
       const blocks=splitBlocks(txt);
-      parsedPieces=blocks.map(b=>parseBlock(b.type,b.body));
+      parsedPieces=blocks.map(b=>parseBlock(b.type,b));
       let html='';
       parsedPieces.forEach((p,i)=>{
         const typeName=p.type==='glove'?'Boxing Gloves':p.type==='head'?'Head Guard':'Groin Guard';
@@ -441,8 +441,7 @@
         const okLines=[];
         if(f.size) okLines.push(p.type==='glove'?'Size '+f.size+' oz':'Head Circumference '+f.size+' cm');
         if(f.height) okLines.push('Height '+f.height+' / Weight '+f.weight+' / Waist '+f.waist+' cm');
-        if(f.mode) okLines.push('Color Split Mode '+f.mode);
-        if(f.leatherType) okLines.push('Leather '+f.leatherType);
+        if(f.mode) okLines.push('Leather '+f.leatherType);
         if(p.customOptions && p.customOptions.logoType){
           const ltMap={text:'Text Logo',colored:'Colored Logo',original:'Original Logo',none:'No Logo',embroidery:'Embroidery Logo'};
           okLines.push('Logo '+ (ltMap[p.customOptions.logoType]||p.customOptions.logoType));
