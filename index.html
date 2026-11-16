@@ -122,7 +122,7 @@
       <textarea class="import-textarea" id="importText" placeholder="Paste a full or single-piece plan text here. It will restore the options automatically. Anything unrecognized will be flagged for manual completion."></textarea>
       <div class="import-actions">
         <button class="parse-btn" id="parseBtn" type="button">Parse Plan</button>
-        <button class="clear-btn" id="clearBtn" type="button">
+        <button class="clear-btn" id="clearBtn" type="button">Clear</button>
       </div>
       <div class="import-report" id="importReport"></div>
       <button class="confirm-import" id="confirmImport" type="button">Confirm Import & Enter Configuration</button>
@@ -199,7 +199,7 @@
     function expandedList() {
       const list = [];
       selectedOrder.forEach(t => {
-        for (let i = 0; i < qty[i]; i++) list.push(t);
+        for (let i = 0; i < qty[t]; i++) list.push(t);
       });
       return list;
     }
@@ -293,7 +293,7 @@
     (function restoreFromSuit(){
       let suit=null;
       try{ suit=JSON.parse(localStorage.getItem('bb_suit')); }catch(e){ suit=null; }
-      if(!suit || !suit || !Array.isArray(suit.items) || !suit.items.length)return;
+      if(!suit || !Array.isArray(suit.items) || !suit.items.length)return;
       suit.items.forEach(it=>{ if(qty[it.type]!==undefined) setQty(it.type, qty[it.type]+1); });
     })();
 
@@ -309,7 +309,7 @@
       'Wine Red':'#6A2A30','Deep Blue':'#294162','Petal Pink':'#E4A3BB','Comic Green':'#3FBF72','Caramel Brown':'#80412D',
       'Wild Buffalo Leather':'#452E22'
     };
-    const LEATHERS = ['Swift Cowhide','Swift Cowhide + Wild Buffalo Leather','Swift Cowhide + Wild Buffalo Leather + Shark Skin','Swift Cowhide + Crocodile Skin','Swift Cowhide + Ostrich Skin','Swift Cowhide + Lizard Skin'];
+    const LEATHERS = ['Swift Cowhide','Swift Cowhide + Wild Buffalo Leather','Swift Cowhide + Shark Skin','Swift Cowhide + Crocodile Skin','Swift Cowhide + Ostrich Skin','Swift Cowhide + Lizard Skin'];
     const TYPE_KEY = {'Boxing Gloves':'glove','Head Guard':'head','Groin Guard':'groin'};
     const BASE_PRICE = {
       glove:{'Swift Cowhide':380,'Swift Cowhide + Wild Buffalo Leather':420,'Swift Cowhide + Shark Skin':800,'Swift Cowhide + Crocodile Skin':890,'Swift Cowhide + Ostrich Skin':890,'Swift Cowhide + Lizard Skin':890},
@@ -367,14 +367,14 @@
       const body=m[1];
       if(/Not Customized|No Hot Stamping/.test(body))return true;
       const cm=body.match(/「([^」]*)」/);
-      if(/Chinese Characters/.test(line)){
-        if(cm)co[ch]=cm[1];
+      if(/Chinese Characters/.test(body)){
+        if(cm)co[side+'Ch']=cm[1];
         co[side+'ChFont']=/Serif/.test(line)?'song':'hand';
       }else{
         if(cm)co[side+'Eng']=cm[1];
         co[side+'EngFont']=/Cursive/.test(line)?'cursive':'normal';
       }
-      co[side+'Print']=/Silver Foil/.test(line)?'silver':(/Original/.test(line)?'original':'gold');
+      co[side+'Print']=/Silver Foil/.test(body)?'silver':(/Original/.test(body)?'original':'gold');
       return true;
     }
 
@@ -385,7 +385,7 @@
       if(marks.length){
         return marks.map((mk,i)=>({type:mk.type,body:text.slice(mk.contentStart,i+1<marks.length?marks[i+1].start:text.length)}));
       }
-      const type = /Head Guard/.test(line)?'head':/Groin Guard/.test(line)?'groin':'glove';
+      const type = /Head Guard/.test(text)?'head':/Groin Guard/.test(text)?'groin':'glove';
       return [{type:TYPE_KEY[type]===undefined?'glove':TYPE_KEY[type],body:text}];
     }
 
@@ -441,7 +441,8 @@
         const okLines=[];
         if(f.size) okLines.push(p.type==='glove'?'Size '+f.size+' oz':'Head Circumference '+f.size+' cm');
         if(f.height) okLines.push('Height '+f.height+' / Weight '+f.weight+' / Waist '+f.waist+' cm');
-        if(f.mode) okLines.push('Leather '+f.leatherType);
+        if(f.mode) okLines.push('Color Split Mode '+f.mode);
+        if(f.leatherType) okLines.push('Leather '+f.leatherType);
         if(p.customOptions && p.customOptions.logoType){
           const ltMap={text:'Text Logo',colored:'Colored Logo',original:'Original Logo',none:'No Logo',embroidery:'Embroidery Logo'};
           okLines.push('Logo '+ (ltMap[p.customOptions.logoType]||p.customOptions.logoType));
