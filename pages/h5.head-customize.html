@@ -107,9 +107,6 @@
     var n=Math.round(Number(usd)*RATE[window.BB_CCY]);
     return SYM[window.BB_CCY]+n.toLocaleString('en-US');
   };
-  window.bbToCNY=function(usd){
-    return '¥'+Math.round(Number(usd)*6.6642).toLocaleString('en-US');
-  };
   document.addEventListener('DOMContentLoaded',function(){
     var nodes=document.querySelectorAll('.bb-c');
     for(var i=0;i<nodes.length;i++){nodes[i].textContent=window.bbMoneyFmt(nodes[i].getAttribute('data-usd'));}
