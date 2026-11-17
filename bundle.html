@@ -79,6 +79,9 @@
     var n=Math.round(Number(usd)*RATE[window.BB_CCY]);
     return SYM[window.BB_CCY]+n.toLocaleString('en-US');
   };
+  window.bbToCNY=function(usd){
+    return '¥'+Math.round(Number(usd)*6.6642).toLocaleString('en-US');
+  };
   document.addEventListener('DOMContentLoaded',function(){
     var nodes=document.querySelectorAll('.bb-c');
     for(var i=0;i<nodes.length;i++){nodes[i].textContent=window.bbMoneyFmt(nodes[i].getAttribute('data-usd'));}
@@ -495,6 +498,7 @@
       out.push(allText.join('\n'));
       out.push('════════════════════');
       out.push('Bundle automatic total (excluding embroidery, exotic leather extensions and other separate quotes): ' + bbMoney(grand));
+      out.push('= ' + window.bbToCNY(grand) + ' CNY (internal RMB reference)');
       if (allNotices.length) {
         out.push('Requires confirmation / separate quote:');
         allNotices.forEach(n => out.push('· ' + n));
