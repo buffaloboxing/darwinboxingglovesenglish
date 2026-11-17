@@ -105,6 +105,45 @@
   .confirm-import.show { display:block; }
   .confirm-import:hover { background:#000; }
 </style>
+<style>
+  /* === BB currency + brand footer === */
+  .bb-ccy{display:flex;justify-content:center;margin:0 0 24px;}
+  .bb-ccy-btn{border:1px solid #1a1a1a;background:#fff;color:#666;padding:9px 16px;font-size:11px;letter-spacing:1.5px;cursor:pointer;font-family:inherit;transition:all .15s;}
+  .bb-ccy-btn:not(:last-child){border-right:none;}
+  .bb-ccy-btn:first-child{border-radius:2px 0 0 2px;}
+  .bb-ccy-btn:last-child{border-radius:0 2px 2px;}
+  .bb-ccy-btn.active{background:#1a1a1a;color:#fff;}
+  .bb-c{font-weight:500;}
+  .bb-brand-footer{text-align:center;margin-top:22px;padding-top:16px;border-top:1px solid #1a1a1a;}
+  .bb-brand-footer .bb-slogan{font-size:10px;letter-spacing:4px;color:#666;text-transform:uppercase;}
+  .bb-brand-footer .bb-sub{font-size:8px;letter-spacing:2px;color:#bbb;margin-top:6px;text-transform:uppercase;}
+</style>
+<script>
+(function(){
+  var RATE={usd:1,gbp:0.7585,eur:0.909};
+  var SYM={usd:'$',gbp:'£',eur:'€'};
+  var c=localStorage.getItem('bb_ccy_en')||'usd';
+  if(!RATE[c])c='usd';
+  window.BB_CCY=c;
+  window.bbMoneyFmt=function(usd){
+    var n=Math.round(Number(usd)*RATE[window.BB_CCY]);
+    return SYM[window.BB_CCY]+n.toLocaleString('en-US');
+  };
+  document.addEventListener('DOMContentLoaded',function(){
+    var nodes=document.querySelectorAll('.bb-c');
+    for(var i=0;i<nodes.length;i++){nodes[i].textContent=window.bbMoneyFmt(nodes[i].getAttribute('data-usd'));}
+    var btns=document.querySelectorAll('.bb-ccy-btn');
+    for(var j=0;j<btns.length;j++){btns[j].classList.toggle('active',btns[j].getAttribute('data-c')===window.BB_CCY);}
+    var bar=document.getElementById('bbCcyBar');
+    if(bar){bar.addEventListener('click',function(e){
+      var b=e.target.closest('.bb-ccy-btn');if(!b)return;
+      var nc=b.getAttribute('data-c');if(nc===window.BB_CCY)return;
+      localStorage.setItem('bb_ccy_en',nc);location.reload();
+    });}
+  });
+})();
+</script>
+
 </head>
 <body>
   <div class="page-frame">
@@ -112,6 +151,12 @@
       <div class="brand-name">BUFFALO BOXING</div>
       <div class="brand-series">Darwin Custom Series</div>
     </div>
+<div class="bb-ccy" id="bbCcyBar">
+      <button type="button" class="bb-ccy-btn" data-c="usd">USD</button>
+      <button type="button" class="bb-ccy-btn" data-c="gbp">GBP</button>
+      <button type="button" class="bb-ccy-btn" data-c="eur">EUR</button>
+    </div>
+
 
     <div class="page-title">Choose Your Product</div>
     <div class="page-sub">Choose one piece or combine a bundle. Use +/- to order multiple identical pieces, configured one by one in your selected order.</div>
@@ -133,7 +178,7 @@
         <span class="order-badge" id="badge-glove"></span>
         <div class="pick-name">Boxing Gloves</div>
         <div class="pick-en">Boxing Gloves</div>
-        <div class="pick-price">From<b>$380 / £288</b></div>
+        <div class="pick-price">From<b><span class="bb-c" data-usd="380"></span></b></div>
         <div class="qty-box">
           <button class="qty-btn qty-minus" type="button">−</button>
           <span><span class="qty-num">1</span><span class="qty-unit">pair</span></span>
@@ -145,7 +190,7 @@
         <span class="order-badge" id="badge-head"></span>
         <div class="pick-name">Head Guard</div>
         <div class="pick-en">Head Guard</div>
-        <div class="pick-price">From<b>$290 / £220</b></div>
+        <div class="pick-price">From<b><span class="bb-c" data-usd="290"></span></b></div>
         <div class="qty-box">
           <button class="qty-btn qty-minus" type="button">−</button>
           <span><span class="qty-num">1</span><span class="qty-unit">piece</span></span>
@@ -157,7 +202,7 @@
         <span class="order-badge" id="badge-groin"></span>
         <div class="pick-name">Groin Guard</div>
         <div class="pick-en">Groin Guard</div>
-        <div class="pick-price">From<b>$290 / £220</b></div>
+        <div class="pick-price">From<b><span class="bb-c" data-usd="290"></span></b></div>
         <div class="qty-box">
           <button class="qty-btn qty-minus" type="button">−</button>
           <span><span class="qty-num">1</span><span class="qty-unit">piece</span></span>
@@ -168,7 +213,7 @@
 
     <div class="summary-line">
       <span id="countText">No product selected · Total</span>
-      <b id="totalText">$0 / £0</b>
+      <b id="totalText"><span class="bb-c" data-usd="0"></span></b>
     </div>
 
     <button class="next-btn" id="nextBtn">NEXT · Enter Configuration</button>
@@ -182,7 +227,7 @@
     const totalText = document.getElementById('totalText');
     const nextBtn = document.getElementById('nextBtn');
     const PRICE = { glove: 380, head: 290, groin: 290 };
-    function bbMoney(usd){ return '$' + usd + ' / £' + Math.round(usd / 1.32); }
+    function bbMoney(usd){ return window.bbMoneyFmt(usd); }
     const ENTRY = { glove: 'pages/g1.size.html', head: 'pages/h1.head-size.html', groin: 'pages/c1.groin-size.html' };
     const MAX_QTY = 10;
     let qty = { glove: 0, head: 0, groin: 0 };

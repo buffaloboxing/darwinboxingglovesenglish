@@ -52,6 +52,45 @@
     .gn-link.gn-bundle { border-color:#1a1a1a; color:#1a1a1a; display:none; }
     .gn-link.gn-bundle:hover { background:#1a1a1a; color:#fff; }
 </style>
+<style>
+  /* === BB currency + brand footer === */
+  .bb-ccy{display:flex;justify-content:center;margin:0 0 24px;}
+  .bb-ccy-btn{border:1px solid #1a1a1a;background:#fff;color:#666;padding:9px 16px;font-size:11px;letter-spacing:1.5px;cursor:pointer;font-family:inherit;transition:all .15s;}
+  .bb-ccy-btn:not(:last-child){border-right:none;}
+  .bb-ccy-btn:first-child{border-radius:2px 0 0 2px;}
+  .bb-ccy-btn:last-child{border-radius:0 2px 2px;}
+  .bb-ccy-btn.active{background:#1a1a1a;color:#fff;}
+  .bb-c{font-weight:500;}
+  .bb-brand-footer{text-align:center;margin-top:22px;padding-top:16px;border-top:1px solid #1a1a1a;}
+  .bb-brand-footer .bb-slogan{font-size:10px;letter-spacing:4px;color:#666;text-transform:uppercase;}
+  .bb-brand-footer .bb-sub{font-size:8px;letter-spacing:2px;color:#bbb;margin-top:6px;text-transform:uppercase;}
+</style>
+<script>
+(function(){
+  var RATE={usd:1,gbp:0.7585,eur:0.909};
+  var SYM={usd:'$',gbp:'£',eur:'€'};
+  var c=localStorage.getItem('bb_ccy_en')||'usd';
+  if(!RATE[c])c='usd';
+  window.BB_CCY=c;
+  window.bbMoneyFmt=function(usd){
+    var n=Math.round(Number(usd)*RATE[window.BB_CCY]);
+    return SYM[window.BB_CCY]+n.toLocaleString('en-US');
+  };
+  document.addEventListener('DOMContentLoaded',function(){
+    var nodes=document.querySelectorAll('.bb-c');
+    for(var i=0;i<nodes.length;i++){nodes[i].textContent=window.bbMoneyFmt(nodes[i].getAttribute('data-usd'));}
+    var btns=document.querySelectorAll('.bb-ccy-btn');
+    for(var j=0;j<btns.length;j++){btns[j].classList.toggle('active',btns[j].getAttribute('data-c')===window.BB_CCY);}
+    var bar=document.getElementById('bbCcyBar');
+    if(bar){bar.addEventListener('click',function(e){
+      var b=e.target.closest('.bb-ccy-btn');if(!b)return;
+      var nc=b.getAttribute('data-c');if(nc===window.BB_CCY)return;
+      localStorage.setItem('bb_ccy_en',nc);location.reload();
+    });}
+  });
+})();
+</script>
+
 </head>
 <body>
   <div class="page-frame">
@@ -59,31 +98,37 @@
       <div class="brand-name">BUFFALO BOXING</div>
       <div class="brand-series">Head Guard · Darwin Custom</div>
     </div>
+<div class="bb-ccy" id="bbCcyBar">
+      <button type="button" class="bb-ccy-btn" data-c="usd">USD</button>
+      <button type="button" class="bb-ccy-btn" data-c="gbp">GBP</button>
+      <button type="button" class="bb-ccy-btn" data-c="eur">EUR</button>
+    </div>
+
 
     <div class="step-tag">Step 02 / 06</div>
     <div class="step-nav" id="stepNav"><button type="button" class="step-nav-item" data-href="h1.head-size.html"><span class="sn-num">1</span>Head Circumference</button><button type="button" class="step-nav-item current" data-href="h2.head-leather.html"><span class="sn-num">2</span>Leather</button><button type="button" class="step-nav-item" data-href="h3.head-mode.html"><span class="sn-num">3</span>Mode</button><button type="button" class="step-nav-item" data-href="h4.head-color.html"><span class="sn-num">4</span>Color</button><button type="button" class="step-nav-item" data-href="h5.head-customize.html"><span class="sn-num">5</span>Lettering</button><button type="button" class="step-nav-item" data-href="h6.head-result.html"><span class="sn-num">6</span>Result</button></div>
 <div class="page-title">Select Leather Type</div>
 
-    <div class="current-price">Base Price <span id="currentPrice">$290 / £220</span></div>
+    <div class="current-price">Base Price <span id="currentPrice"><span class="bb-c" data-usd="290"></span></span></div>
 
     <div class="leather-list" id="leatherList">
       <div class="leather-item active" data-type="swift" data-price="290">
-        <span class="leather-name">Swift Cowhide</span><span class="price-tag">$290 / £220</span>
+        <span class="leather-name">Swift Cowhide</span><span class="price-tag"><span class="bb-c" data-usd="290"></span></span>
       </div>
       <div class="leather-item" data-type="wild" data-price="330">
-        <span class="leather-name">Swift Cowhide + Wild Buffalo Leather</span><span class="price-tag">$330 / £250</span>
+        <span class="leather-name">Swift Cowhide + Wild Buffalo Leather</span><span class="price-tag"><span class="bb-c" data-usd="330"></span></span>
       </div>
       <div class="leather-item" data-type="shark" data-price="760">
-        <span class="leather-name">Swift Cowhide + Shark Skin</span><span class="price-tag">$760 / £576</span>
+        <span class="leather-name">Swift Cowhide + Shark Skin</span><span class="price-tag"><span class="bb-c" data-usd="760"></span></span>
       </div>
       <div class="leather-item" data-type="croc" data-price="760">
-        <span class="leather-name">Swift Cowhide + Crocodile Skin</span><span class="price-tag">$760 / £576</span>
+        <span class="leather-name">Swift Cowhide + Crocodile Skin</span><span class="price-tag"><span class="bb-c" data-usd="760"></span></span>
       </div>
       <div class="leather-item" data-type="ostrich" data-price="760">
-        <span class="leather-name">Swift Cowhide + Ostrich Skin</span><span class="price-tag">$760 / £576</span>
+        <span class="leather-name">Swift Cowhide + Ostrich Skin</span><span class="price-tag"><span class="bb-c" data-usd="760"></span></span>
       </div>
       <div class="leather-item" data-type="lizard" data-price="760">
-        <span class="leather-name">Swift Cowhide + Lizard Skin</span><span class="price-tag">$760 / £576</span>
+        <span class="leather-name">Swift Cowhide + Lizard Skin</span><span class="price-tag"><span class="bb-c" data-usd="760"></span></span>
       </div>
     </div>
 
@@ -97,6 +142,11 @@
       <a class="gn-link" href="../index.html">Back to customizer home · add/change quantity</a>
       <a class="gn-link gn-bundle" id="gnBundle" href="../bundle.html">Back to Bundle Summary</a>
     </div>
+<div class="bb-brand-footer">
+      <div class="bb-slogan">CRAFT IS HUMAN</div>
+      <div class="bb-sub">BUFFALO BOXING</div>
+    </div>
+
     </div>
 
   <script>

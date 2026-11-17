@@ -55,6 +55,45 @@
 
   .policy-note { margin-top: 22px; padding-top: 14px; border-top: 1px solid #f0f0f0; font-size: 11px; color: #9a9a9a; line-height: 1.9; letter-spacing: .2px; }
 </style>
+<style>
+  /* === BB currency + brand footer === */
+  .bb-ccy{display:flex;justify-content:center;margin:0 0 24px;}
+  .bb-ccy-btn{border:1px solid #1a1a1a;background:#fff;color:#666;padding:9px 16px;font-size:11px;letter-spacing:1.5px;cursor:pointer;font-family:inherit;transition:all .15s;}
+  .bb-ccy-btn:not(:last-child){border-right:none;}
+  .bb-ccy-btn:first-child{border-radius:2px 0 0 2px;}
+  .bb-ccy-btn:last-child{border-radius:0 2px 2px;}
+  .bb-ccy-btn.active{background:#1a1a1a;color:#fff;}
+  .bb-c{font-weight:500;}
+  .bb-brand-footer{text-align:center;margin-top:22px;padding-top:16px;border-top:1px solid #1a1a1a;}
+  .bb-brand-footer .bb-slogan{font-size:10px;letter-spacing:4px;color:#666;text-transform:uppercase;}
+  .bb-brand-footer .bb-sub{font-size:8px;letter-spacing:2px;color:#bbb;margin-top:6px;text-transform:uppercase;}
+</style>
+<script>
+(function(){
+  var RATE={usd:1,gbp:0.7585,eur:0.909};
+  var SYM={usd:'$',gbp:'£',eur:'€'};
+  var c=localStorage.getItem('bb_ccy_en')||'usd';
+  if(!RATE[c])c='usd';
+  window.BB_CCY=c;
+  window.bbMoneyFmt=function(usd){
+    var n=Math.round(Number(usd)*RATE[window.BB_CCY]);
+    return SYM[window.BB_CCY]+n.toLocaleString('en-US');
+  };
+  document.addEventListener('DOMContentLoaded',function(){
+    var nodes=document.querySelectorAll('.bb-c');
+    for(var i=0;i<nodes.length;i++){nodes[i].textContent=window.bbMoneyFmt(nodes[i].getAttribute('data-usd'));}
+    var btns=document.querySelectorAll('.bb-ccy-btn');
+    for(var j=0;j<btns.length;j++){btns[j].classList.toggle('active',btns[j].getAttribute('data-c')===window.BB_CCY);}
+    var bar=document.getElementById('bbCcyBar');
+    if(bar){bar.addEventListener('click',function(e){
+      var b=e.target.closest('.bb-ccy-btn');if(!b)return;
+      var nc=b.getAttribute('data-c');if(nc===window.BB_CCY)return;
+      localStorage.setItem('bb_ccy_en',nc);location.reload();
+    });}
+  });
+})();
+</script>
+
 </head>
 <body>
   <div class="page-frame">
@@ -62,6 +101,12 @@
       <div class="brand-name">BUFFALO BOXING</div>
       <div class="brand-series">Darwin Custom Series</div>
     </div>
+<div class="bb-ccy" id="bbCcyBar">
+      <button type="button" class="bb-ccy-btn" data-c="usd">USD</button>
+      <button type="button" class="bb-ccy-btn" data-c="gbp">GBP</button>
+      <button type="button" class="bb-ccy-btn" data-c="eur">EUR</button>
+    </div>
+
 
     <div class="page-title">Bundle Plan Summary</div>
     <div class="page-sub" id="pageSub">Review each piece, then copy the full plan and send it to our team once confirmed</div>
@@ -82,6 +127,11 @@
     </div>
 
     <div class="policy-note">All base prices include international shipping and standard import duties &amp; taxes, with no extra charges on delivery under normal circumstances. If import tariff policies change significantly and unexpectedly during production, we will contact you to confirm. Custom production takes about 1 month, followed by international delivery in 7–14 working days. Custom products cannot be returned or exchanged except for quality issues; for a confirmed quality problem, we cover the return cost or remake the item for you.</div>
+<div class="bb-brand-footer">
+      <div class="bb-slogan">CRAFT IS HUMAN</div>
+      <div class="bb-sub">BUFFALO BOXING</div>
+    </div>
+
   </div>
 
   <script>
@@ -113,7 +163,7 @@
     const stitchText = v => v === 'inner' ? 'Inner Stitch' : 'Outer Stitch';
     const cname = hex => COLOR_NAME[hex] || hex;
     const swatch = hex => `<span class="color-swatch" style="background:${hex};"></span>`;
-    function bbMoney(usd){ return '$' + usd + ' / £' + Math.round(usd / 1.32); }
+    function bbMoney(usd){ return window.bbMoneyFmt(usd); }
 
     /* ===== 读取套装与各件Data ===== */
     let suit;
@@ -154,7 +204,7 @@
         const tc = o.textContent || 'brand';
         if (tc === 'custom') {
           let s = `Text Logo (Wrist Front) · Custom Text「${o.textLogoCustom}」· ${mixedFontText(o.textLogoFont)} · ${printText(o.textPrint)}`;
-          if (/[一-龥]/.test(o.textLogoCustom || '')) s += ' (Chinese character metal mold, +$5 / £4)';
+          if (/[一-龥]/.test(o.textLogoCustom || '')) s += ' (Chinese character metal mold, ' + '+' + bbMoney(5) + ')';
           return s;
         }
         return `Text Logo (Wrist Front) · Brand Text · ${printText(o.textPrint)}`;
@@ -194,7 +244,7 @@
         const lab = side === 'left' ? 'Left Hand' : 'Right Hand';
         let s;
         if (o[side + 'Eng']) s = `${lab}: English/numbers「${o[side+'Eng']}」· ${engFontText(o[side+'EngFont'])} · ${printText(o[side+'Print'])}`;
-        else if (o[side + 'Ch']) s = `${lab}: Chinese Characters「${o[side+'Ch']}」· ${chFontText(o[side+'ChFont'])} · ${printText(o[side+'Print'])} (Metal Mold, +$5 / £4)`;
+        else if (o[side + 'Ch']) s = `${lab}: Chinese Characters「${o[side+'Ch']}」· ${chFontText(o[side+'ChFont'])} · ${printText(o[side+'Print'])} (Metal Mold, +${bbMoney(5)})`;
         else s = `${lab}: Not Customized`;
         html.push(detail(s)); text.push('  ' + s);
       });
@@ -206,22 +256,22 @@
         sp.forEach((it, idx) => {
           let s;
           if (it.craft === 'embroidery') {
-            s = `Small Patterns ${idx+1}: Embroidery (${GLOVE_POS[it.pos]||it.pos}, +$15–45 / £12–35, contact our team, not included in the automatic total)`;
-            notices.push('Boxing Gloves Small Patterns ' + (idx+1) + ' Embroidery: ' + (GLOVE_POS[it.pos]||it.pos) + ', +$15–45 / £12–35 quoted by pattern');
+            s = `Small Patterns ${idx+1}: Embroidery (${GLOVE_POS[it.pos]||it.pos}, +${bbMoney(15)}–${bbMoney(45)}, contact our team, not included in the automatic total)`;
+            notices.push('Boxing Gloves Small Patterns ' + (idx+1) + ' Embroidery: ' + (GLOVE_POS[it.pos]||it.pos) + ', ' + '+' + bbMoney(15) + '–' + bbMoney(45) + ' quoted by pattern');
           } else {
-            s = `Small Patterns ${idx+1}: Hot Stamping (${GLOVE_POS[it.pos]||it.pos}, ${printText(it.print)}, +$5 / £4)`;
+            s = `Small Patterns ${idx+1}: Hot Stamping (${GLOVE_POS[it.pos]||it.pos}, ${printText(it.print)}, +${bbMoney(5)})`;
           }
           html.push(detail(s)); text.push('  ' + s);
         });
       } else { html.push(detail('Small Patterns: Not Added')); text.push('  Not Added'); }
 
       const handS = o.handEmbroidery === 'yes'
-        ? 'Hand Back Embroidery added (+$15–45 / £12–35, provide the pattern and contact our team, not included in the automatic total)'
+        ? 'Hand Back Embroidery added (' + '+' + bbMoney(15) + '–' + bbMoney(45) + ', provide the pattern and contact our team, not included in the automatic total)'
         : 'Not Added';
       html.push(subTitle('Hand Back Embroidery'));
       html.push(detail(handS));
       text.push('Hand Back Embroidery: ' + handS);
-      if (o.handEmbroidery === 'yes') notices.push('Boxing Gloves Hand Back Embroidery: +$15–45 / £12–35 quoted by pattern');
+      if (o.handEmbroidery === 'yes') notices.push('Boxing Gloves Hand Back Embroidery: ' + '+' + bbMoney(15) + '–' + bbMoney(45) + ' quoted by pattern');
 
       if ((o.logoType === 'embroidery')) notices.push('Boxing Gloves Embroidery Logo: separate quote based on pattern complexity');
       if (/Shark|Crocodile|Ostrich|Lizard/.test(d.leather)) notices.push('Boxing Gloves exotic leather「' + d.leather + '」: final leather and price are subject to our team confirmation.');
@@ -241,7 +291,7 @@
         const tc = o.textContent || 'brand';
         if (tc === 'custom') {
           let s = `Text Logo (middle of forehead) · Custom Text「${o.textLogoCustom}」· ${mixedFontText(o.textLogoFont)} · ${printText(o.textPrint)}`;
-          if (/[一-龥]/.test(o.textLogoCustom || '')) s += ' (Chinese character metal mold, +$5 / £4)';
+          if (/[一-龥]/.test(o.textLogoCustom || '')) s += ' (Chinese character metal mold, ' + '+' + bbMoney(5) + ')';
           return s;
         }
         return `Text Logo (middle of forehead) · Brand Text · ${printText(o.textPrint)}`;
@@ -287,14 +337,14 @@
         const lab = side === 'left' ? 'Left Ear' : 'Right Ear';
         let s;
         if (o[side + 'Eng']) s = `${lab}: English/numbers「${o[side+'Eng']}」· ${engFontText(o[side+'EngFont'])} · ${printText(o[side+'Print'])}`;
-        else if (o[side + 'Ch']) s = `${lab}: Chinese Characters「${o[side+'Ch']}」· ${chFontText(o[side+'ChFont'])} · ${printText(o[side+'Print'])} (Metal Mold, +$5 / £4)`;
+        else if (o[side + 'Ch']) s = `${lab}: Chinese Characters「${o[side+'Ch']}」· ${chFontText(o[side+'ChFont'])} · ${printText(o[side+'Print'])} (Metal Mold, +${bbMoney(5)})`;
         else s = `${lab}: No Hot Stamping`;
         html.push(detail(s)); text.push('  ' + s);
       });
 
       html.push(subTitle('Other Customization'));
       text.push('Other Customization：');
-      const repS = o.logoReplace === 'yes' ? 'Selected (+$10 / £8)' : 'Not Selected';
+      const repS = o.logoReplace === 'yes' ? 'Selected (' + '+' + bbMoney(10) + ')' : 'Not Selected';
       html.push(detail('Logo Replacement: ' + repS));
       text.push('  Logo Replacement: ' + repS);
       const sp = headSmallPatterns(o);
@@ -302,10 +352,10 @@
         sp.forEach((it, idx) => {
           let s;
           if (it.craft === 'embroidery') {
-            s = `Small Patterns ${idx+1}: Embroidery (${HEAD_SMALL_POS[it.pos]||it.pos}, +$15–45 / £12–35, contact our team, not included in the automatic total)`;
-            notices.push('Head Guard Small Patterns ' + (idx+1) + ' Embroidery: ' + (HEAD_SMALL_POS[it.pos]||it.pos) + ', +$15–45 / £12–35 quoted by pattern');
+            s = `Small Patterns ${idx+1}: Embroidery (${HEAD_SMALL_POS[it.pos]||it.pos}, +${bbMoney(15)}–${bbMoney(45)}, contact our team, not included in the automatic total)`;
+            notices.push('Head Guard Small Patterns ' + (idx+1) + ' Embroidery: ' + (HEAD_SMALL_POS[it.pos]||it.pos) + ', ' + '+' + bbMoney(15) + '–' + bbMoney(45) + ' quoted by pattern');
           } else {
-            s = `Small Patterns ${idx+1}: Hot Stamping (${HEAD_SMALL_POS[it.pos]||it.pos}, ${printText(it.print)}, +$5 / £4)`;
+            s = `Small Patterns ${idx+1}: Hot Stamping (${HEAD_SMALL_POS[it.pos]||it.pos}, ${printText(it.print)}, +${bbMoney(5)})`;
           }
           if (it.pos === 'other' && it.note) s += ', Notes「' + it.note + '」';
           html.push(detail(s)); text.push('  ' + s);
@@ -357,7 +407,7 @@
       if (lt === 'embroidery') { mainS += ' (separate quote, not in the automatic total)'; notices.push('Groin Guard Embroidery Logo: separate quote based on pattern complexity'); }
       html.push(detail('Logo Style: ' + mainS)); text.push('  Logo Style: ' + mainS);
       if (lt === 'original' || lt === 'colored') {
-        const repS = o.logoReplace === 'yes' ? 'Replace with Own Pattern (+$10 / £8)' : 'Keep Brand Logo';
+        const repS = o.logoReplace === 'yes' ? 'Replace with Own Pattern (' + '+' + bbMoney(10) + ')' : 'Keep Brand Logo';
         html.push(detail('Pattern Source: ' + repS)); text.push('  Pattern Source: ' + repS);
       }
       const gp = o.groinPatterns || {};
@@ -365,8 +415,8 @@
         const it = gp[key];
         let s;
         if (!it || !it.craft || it.craft === 'none') s = nm + ': Not Added';
-        else if (it.craft === 'hot') s = nm + ': Hot Stamping (' + printText(it.print) + ', +$5 / £4)';
-        else { s = nm + ': Embroidery (+$15–45 / £12–35, contact our team, not in the automatic total)'; notices.push('Groin Guard ' + nm + ' Embroidery: quoted by pattern'); }
+        else if (it.craft === 'hot') s = nm + ': Hot Stamping (' + printText(it.print) + ', ' + '+' + bbMoney(5) + ')';
+        else { s = nm + ': Embroidery (' + '+' + bbMoney(15) + '–' + bbMoney(45) + ', contact our team, not in the automatic total)'; notices.push('Groin Guard ' + nm + ' Embroidery: quoted by pattern'); }
         html.push(detail(s)); text.push('  ' + s);
       });
 

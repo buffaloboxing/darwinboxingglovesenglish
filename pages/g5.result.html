@@ -54,6 +54,45 @@
     .gn-link.gn-bundle { border-color:#1a1a1a; color:#1a1a1a; display:none; }
     .gn-link.gn-bundle:hover { background:#1a1a1a; color:#fff; }
 </style>
+<style>
+  /* === BB currency + brand footer === */
+  .bb-ccy{display:flex;justify-content:center;margin:0 0 24px;}
+  .bb-ccy-btn{border:1px solid #1a1a1a;background:#fff;color:#666;padding:9px 16px;font-size:11px;letter-spacing:1.5px;cursor:pointer;font-family:inherit;transition:all .15s;}
+  .bb-ccy-btn:not(:last-child){border-right:none;}
+  .bb-ccy-btn:first-child{border-radius:2px 0 0 2px;}
+  .bb-ccy-btn:last-child{border-radius:0 2px 2px;}
+  .bb-ccy-btn.active{background:#1a1a1a;color:#fff;}
+  .bb-c{font-weight:500;}
+  .bb-brand-footer{text-align:center;margin-top:22px;padding-top:16px;border-top:1px solid #1a1a1a;}
+  .bb-brand-footer .bb-slogan{font-size:10px;letter-spacing:4px;color:#666;text-transform:uppercase;}
+  .bb-brand-footer .bb-sub{font-size:8px;letter-spacing:2px;color:#bbb;margin-top:6px;text-transform:uppercase;}
+</style>
+<script>
+(function(){
+  var RATE={usd:1,gbp:0.7585,eur:0.909};
+  var SYM={usd:'$',gbp:'£',eur:'€'};
+  var c=localStorage.getItem('bb_ccy_en')||'usd';
+  if(!RATE[c])c='usd';
+  window.BB_CCY=c;
+  window.bbMoneyFmt=function(usd){
+    var n=Math.round(Number(usd)*RATE[window.BB_CCY]);
+    return SYM[window.BB_CCY]+n.toLocaleString('en-US');
+  };
+  document.addEventListener('DOMContentLoaded',function(){
+    var nodes=document.querySelectorAll('.bb-c');
+    for(var i=0;i<nodes.length;i++){nodes[i].textContent=window.bbMoneyFmt(nodes[i].getAttribute('data-usd'));}
+    var btns=document.querySelectorAll('.bb-ccy-btn');
+    for(var j=0;j<btns.length;j++){btns[j].classList.toggle('active',btns[j].getAttribute('data-c')===window.BB_CCY);}
+    var bar=document.getElementById('bbCcyBar');
+    if(bar){bar.addEventListener('click',function(e){
+      var b=e.target.closest('.bb-ccy-btn');if(!b)return;
+      var nc=b.getAttribute('data-c');if(nc===window.BB_CCY)return;
+      localStorage.setItem('bb_ccy_en',nc);location.reload();
+    });}
+  });
+})();
+</script>
+
 </head>
 <body>
   <div class="page-frame">
@@ -61,6 +100,12 @@
       <div class="brand-name">BUFFALO BOXING</div>
       <div class="brand-series">Darwin Custom Series</div>
     </div>
+<div class="bb-ccy" id="bbCcyBar">
+      <button type="button" class="bb-ccy-btn" data-c="usd">USD</button>
+      <button type="button" class="bb-ccy-btn" data-c="gbp">GBP</button>
+      <button type="button" class="bb-ccy-btn" data-c="eur">EUR</button>
+    </div>
+
 
     <div class="step-nav" id="stepNav"><button type="button" class="step-nav-item" data-href="g1.size.html"><span class="sn-num">1</span>Size</button><button type="button" class="step-nav-item" data-href="g2.leather.html"><span class="sn-num">2</span>Leather</button><button type="button" class="step-nav-item" data-href="g3.color.html"><span class="sn-num">3</span>Color</button><button type="button" class="step-nav-item" data-href="g4.customize.html"><span class="sn-num">4</span>Lettering</button><button type="button" class="step-nav-item current" data-href="g5.result.html"><span class="sn-num">5</span>Result</button></div>
 <div class="page-title">Plan Confirmation</div>
@@ -96,8 +141,8 @@
     </div>
 
     <div class="note">
-      1. Chinese character metal molds and small-pattern hot stamping are +$5 / £4 each; logo replacement plate is +$10 / £8. All included in the automatic total.<br>
-      2. Embroidery logo and embroidery small patterns are quoted by our team based on complexity (+$15–45 / £12–35). Not included in the automatic total.<br>
+      1. Chinese character metal molds and small-pattern hot stamping are +<span class="bb-c" data-usd="5"></span> each; logo replacement plate is +<span class="bb-c" data-usd="10"></span>. All included in the automatic total.<br>
+      2. Embroidery logo and embroidery small patterns are quoted by our team based on complexity (+<span class="bb-c" data-usd="15"></span>–<span class="bb-c" data-usd="45"></span>). Not included in the automatic total.<br>
       3. Final exotic leather and price are subject to our team confirmation.<br>
       4. After copying, send the plan to our team to place the order. Final price is subject to our confirmation.
     </div>
@@ -116,6 +161,11 @@
       <a class="gn-link" href="../index.html">Back to customizer home · add/change quantity</a>
       <a class="gn-link gn-bundle" id="gnBundle" href="../bundle.html">Back to Bundle Summary</a>
     </div>
+<div class="bb-brand-footer">
+      <div class="bb-slogan">CRAFT IS HUMAN</div>
+      <div class="bb-sub">BUFFALO BOXING</div>
+    </div>
+
     </div>
 
   <script>
@@ -157,7 +207,7 @@
     const basePrice = parseInt(LS.get('basePrice'),10) || 0;
     const colorExtra = parseInt(LS.get('colorExtra'),10) || 0;
     const customExtra = parseInt(LS.get('customExtra'),10) || 0;
-    function bbMoney(usd){ return '$' + usd + ' / £' + Math.round(usd / 1.32); }
+    function bbMoney(usd){ return window.bbMoneyFmt(usd); }
     let areaColors = {};
     try { areaColors = JSON.parse(LS.get('areaColors')) || {}; } catch (e) {}
     let opt = {};
@@ -197,7 +247,7 @@
       const tc = opt.textContent || 'brand';
       if (tc === 'custom') {
         let s = `Text Logo（Wrist Front）· Custom Text「${opt.textLogoCustom}」· ${mixedFontText(opt.textLogoFont)} · ${printText(opt.textPrint)}`;
-        if (/[一-龥]/.test(opt.textLogoCustom || '')) s += ' (Chinese character metal mold, +$5 / £4)';
+        if (/[一-龥]/.test(opt.textLogoCustom || '')) s += ' (Chinese character metal mold, ' + '+' + bbMoney(5) + ')';
         logoHtml += `<div class="custom-detail">${s}</div>`;
       } else {
         logoHtml += `<div class="custom-detail">Text Logo（Wrist Front）· Brand Text · ${printText(opt.textPrint)}</div>`;
@@ -218,14 +268,14 @@
     if (opt.leftEng) {
       printHtml += `<div class="custom-detail">Left Hand: English/numbers「${opt.leftEng}」· ${engFontText(opt.leftEngFont)} · ${printText(opt.leftPrint)}</div>`;
     } else if (opt.leftCh) {
-      printHtml += `<div class="custom-detail">Left Hand: Chinese Characters「${opt.leftCh}」· ${chFontText(opt.leftChFont)} · ${printText(opt.leftPrint)} (Metal Mold, +$5 / £4)</div>`;
+      printHtml += `<div class="custom-detail">Left Hand: Chinese Characters「${opt.leftCh}」· ${chFontText(opt.leftChFont)} · ${printText(opt.leftPrint)} (Metal Mold, +${bbMoney(5)})</div>`;
     } else {
       printHtml += `<div class="custom-detail">Left Hand: Not Customized</div>`;
     }
     if (opt.rightEng) {
       printHtml += `<div class="custom-detail">Right Hand: English/numbers「${opt.rightEng}」· ${engFontText(opt.rightEngFont)} · ${printText(opt.rightPrint)}</div>`;
     } else if (opt.rightCh) {
-      printHtml += `<div class="custom-detail">Right Hand: Chinese Characters「${opt.rightCh}」· ${chFontText(opt.rightChFont)} · ${printText(opt.rightPrint)} (Metal Mold, +$5 / £4)</div>`;
+      printHtml += `<div class="custom-detail">Right Hand: Chinese Characters「${opt.rightCh}」· ${chFontText(opt.rightChFont)} · ${printText(opt.rightPrint)} (Metal Mold, +${bbMoney(5)})</div>`;
     } else {
       printHtml += `<div class="custom-detail">Right Hand: Not Customized</div>`;
     }
@@ -238,9 +288,9 @@
       smallPatterns.forEach((it, idx) => {
         let s;
         if (it.craft === 'embroidery') {
-          s = `Small Patterns ${idx + 1}: Embroidery (${POS_NAME[it.pos] || it.pos}, +$15–45 / £12–35, contact our team, not included in the automatic total)`;
+          s = `Small Patterns ${idx + 1}: Embroidery (${POS_NAME[it.pos] || it.pos}, +${bbMoney(15)}–${bbMoney(45)}, contact our team, not included in the automatic total)`;
         } else {
-          s = `Small Patterns ${idx + 1}: Hot Stamping (${POS_NAME[it.pos] || it.pos}, ${printText(it.print)}, +$5 / £4)`;
+          s = `Small Patterns ${idx + 1}: Hot Stamping (${POS_NAME[it.pos] || it.pos}, ${printText(it.print)}, +${bbMoney(5)})`;
         }
         smallHtml += `<div class="custom-detail">${s}</div>`;
       });
@@ -250,7 +300,7 @@
     document.getElementById('smallDetail').innerHTML = smallHtml;
 
     const handEmbText = opt.handEmbroidery === 'yes'
-      ? 'Hand back embroidery added (+$15–45 / £12–35, provide the pattern and contact our team, not included in the automatic total)'
+      ? 'Hand back embroidery added (' + '+' + bbMoney(15) + '–' + bbMoney(45) + ', provide the pattern and contact our team, not included in the automatic total)'
       : 'Not Added';
     document.getElementById('handEmbroideryDetail').innerHTML = `<div class="custom-detail">${handEmbText}</div>`;
 
@@ -274,7 +324,7 @@
         const tc = opt.textContent || 'brand';
         if (tc === 'custom') {
           let s = '  Text Logo（Wrist Front）· Custom Text「' + opt.textLogoCustom + '」· ' + mixedFontText(opt.textLogoFont) + ' · ' + printText(opt.textPrint);
-          if (/[一-龥]/.test(opt.textLogoCustom || '')) s += ' (Chinese character metal mold, +$5 / £4)';
+          if (/[一-龥]/.test(opt.textLogoCustom || '')) s += ' (Chinese character metal mold, ' + '+' + bbMoney(5) + ')';
           lines.push(s);
         } else {
           lines.push('  Text Logo (Wrist Front) · Brand Text · ' + printText(opt.textPrint));
@@ -290,17 +340,17 @@
       }
       lines.push('Inner Wrist Lettering:');
       if (opt.leftEng) lines.push(`  Left Hand: English/numbers「${opt.leftEng}」· ${engFontText(opt.leftEngFont)} · ${printText(opt.leftPrint)}`);
-      else if (opt.leftCh) lines.push(`  Left Hand: Chinese Characters「${opt.leftCh}」· ${chFontText(opt.leftChFont)} · ${printText(opt.leftPrint)} (Metal Mold, +$5 / £4)`);
+      else if (opt.leftCh) lines.push(`  Left Hand: Chinese Characters「${opt.leftCh}」· ${chFontText(opt.leftChFont)} · ${printText(opt.leftPrint)} (Metal Mold, +${bbMoney(5)})`);
       if (opt.rightEng) lines.push(`  Right Hand: English/numbers「${opt.rightEng}」· ${engFontText(opt.rightEngFont)} · ${printText(opt.rightPrint)}`);
-      else if (opt.rightCh) lines.push(`  Right Hand: Chinese Characters「${opt.rightCh}」· ${chFontText(opt.rightChFont)} · ${printText(opt.rightPrint)} (Metal Mold, +$5 / £4)`);
+      else if (opt.rightCh) lines.push(`  Right Hand: Chinese Characters「${opt.rightCh}」· ${chFontText(opt.rightChFont)} · ${printText(opt.rightPrint)} (Metal Mold, +${bbMoney(5)})`);
       lines.push('Small Patterns:');
       if (smallPatterns.length) {
         smallPatterns.forEach((it, idx) => {
           let s;
           if (it.craft === 'embroidery') {
-            s = '  Small Patterns ' + (idx + 1) + ': Embroidery (' + (POS_NAME[it.pos] || it.pos) + ', +$15–45 / £12–35, contact our team, not included in the automatic total)';
+            s = '  Small Patterns ' + (idx + 1) + ': Embroidery (' + (POS_NAME[it.pos] || it.pos) + ', ' + '+' + bbMoney(15) + '–' + bbMoney(45) + ', contact our team, not included in the automatic total)';
           } else {
-            s = '  Small Patterns ' + (idx + 1) + ': Hot Stamping (' + (POS_NAME[it.pos] || it.pos) + ', ' + printText(it.print) + ', +$5 / £4)';
+            s = '  Small Patterns ' + (idx + 1) + ': Hot Stamping (' + (POS_NAME[it.pos] || it.pos) + ', ' + printText(it.print) + ', ' + '+' + bbMoney(5) + ')';
           }
           lines.push(s);
         });
@@ -308,7 +358,7 @@
         lines.push('  Not Added');
       }
       lines.push('Hand Back Embroidery: ' + (opt.handEmbroidery === 'yes'
-        ? 'Added (+$15–45 / £12–35, provide the pattern and contact our team, not included in the automatic total)'
+        ? 'Added (' + '+' + bbMoney(15) + '–' + bbMoney(45) + ', provide the pattern and contact our team, not included in the automatic total)'
         : 'Not Added'));
       lines.push('Fees: Base ' + bbMoney(basePrice) + ' + Color ' + bbMoney(colorExtra) + ' + Customization ' + bbMoney(customExtra));
       lines.push('Estimated Total (excluding separate embroidery quotes): ' + bbMoney(total));

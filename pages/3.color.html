@@ -1,1 +1,40 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=g3.color.html"><link rel="canonical" href="g3.color.html"><title>Redirecting</title></head><body style="font-family:system-ui,sans-serif;padding:40px"><p>This page has moved. <a href="g3.color.html">Continue</a></p></body></html>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=g3.color.html"><link rel="canonical" href="g3.color.html"><title>Redirecting</title><style>
+  /* === BB currency + brand footer === */
+  .bb-ccy{display:flex;justify-content:center;margin:0 0 24px;}
+  .bb-ccy-btn{border:1px solid #1a1a1a;background:#fff;color:#666;padding:9px 16px;font-size:11px;letter-spacing:1.5px;cursor:pointer;font-family:inherit;transition:all .15s;}
+  .bb-ccy-btn:not(:last-child){border-right:none;}
+  .bb-ccy-btn:first-child{border-radius:2px 0 0 2px;}
+  .bb-ccy-btn:last-child{border-radius:0 2px 2px;}
+  .bb-ccy-btn.active{background:#1a1a1a;color:#fff;}
+  .bb-c{font-weight:500;}
+  .bb-brand-footer{text-align:center;margin-top:22px;padding-top:16px;border-top:1px solid #1a1a1a;}
+  .bb-brand-footer .bb-slogan{font-size:10px;letter-spacing:4px;color:#666;text-transform:uppercase;}
+  .bb-brand-footer .bb-sub{font-size:8px;letter-spacing:2px;color:#bbb;margin-top:6px;text-transform:uppercase;}
+</style>
+<script>
+(function(){
+  var RATE={usd:1,gbp:0.7585,eur:0.909};
+  var SYM={usd:'$',gbp:'£',eur:'€'};
+  var c=localStorage.getItem('bb_ccy_en')||'usd';
+  if(!RATE[c])c='usd';
+  window.BB_CCY=c;
+  window.bbMoneyFmt=function(usd){
+    var n=Math.round(Number(usd)*RATE[window.BB_CCY]);
+    return SYM[window.BB_CCY]+n.toLocaleString('en-US');
+  };
+  document.addEventListener('DOMContentLoaded',function(){
+    var nodes=document.querySelectorAll('.bb-c');
+    for(var i=0;i<nodes.length;i++){nodes[i].textContent=window.bbMoneyFmt(nodes[i].getAttribute('data-usd'));}
+    var btns=document.querySelectorAll('.bb-ccy-btn');
+    for(var j=0;j<btns.length;j++){btns[j].classList.toggle('active',btns[j].getAttribute('data-c')===window.BB_CCY);}
+    var bar=document.getElementById('bbCcyBar');
+    if(bar){bar.addEventListener('click',function(e){
+      var b=e.target.closest('.bb-ccy-btn');if(!b)return;
+      var nc=b.getAttribute('data-c');if(nc===window.BB_CCY)return;
+      localStorage.setItem('bb_ccy_en',nc);location.reload();
+    });}
+  });
+})();
+</script>
+
+</head><body style="font-family:system-ui,sans-serif;padding:40px"><p>This page has moved. <a href="g3.color.html">Continue</a></p></body></html>

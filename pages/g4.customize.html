@@ -82,6 +82,45 @@
     .gn-link.gn-bundle { border-color:#1a1a1a; color:#1a1a1a; display:none; }
     .gn-link.gn-bundle:hover { background:#1a1a1a; color:#fff; }
 </style>
+<style>
+  /* === BB currency + brand footer === */
+  .bb-ccy{display:flex;justify-content:center;margin:0 0 24px;}
+  .bb-ccy-btn{border:1px solid #1a1a1a;background:#fff;color:#666;padding:9px 16px;font-size:11px;letter-spacing:1.5px;cursor:pointer;font-family:inherit;transition:all .15s;}
+  .bb-ccy-btn:not(:last-child){border-right:none;}
+  .bb-ccy-btn:first-child{border-radius:2px 0 0 2px;}
+  .bb-ccy-btn:last-child{border-radius:0 2px 2px;}
+  .bb-ccy-btn.active{background:#1a1a1a;color:#fff;}
+  .bb-c{font-weight:500;}
+  .bb-brand-footer{text-align:center;margin-top:22px;padding-top:16px;border-top:1px solid #1a1a1a;}
+  .bb-brand-footer .bb-slogan{font-size:10px;letter-spacing:4px;color:#666;text-transform:uppercase;}
+  .bb-brand-footer .bb-sub{font-size:8px;letter-spacing:2px;color:#bbb;margin-top:6px;text-transform:uppercase;}
+</style>
+<script>
+(function(){
+  var RATE={usd:1,gbp:0.7585,eur:0.909};
+  var SYM={usd:'$',gbp:'£',eur:'€'};
+  var c=localStorage.getItem('bb_ccy_en')||'usd';
+  if(!RATE[c])c='usd';
+  window.BB_CCY=c;
+  window.bbMoneyFmt=function(usd){
+    var n=Math.round(Number(usd)*RATE[window.BB_CCY]);
+    return SYM[window.BB_CCY]+n.toLocaleString('en-US');
+  };
+  document.addEventListener('DOMContentLoaded',function(){
+    var nodes=document.querySelectorAll('.bb-c');
+    for(var i=0;i<nodes.length;i++){nodes[i].textContent=window.bbMoneyFmt(nodes[i].getAttribute('data-usd'));}
+    var btns=document.querySelectorAll('.bb-ccy-btn');
+    for(var j=0;j<btns.length;j++){btns[j].classList.toggle('active',btns[j].getAttribute('data-c')===window.BB_CCY);}
+    var bar=document.getElementById('bbCcyBar');
+    if(bar){bar.addEventListener('click',function(e){
+      var b=e.target.closest('.bb-ccy-btn');if(!b)return;
+      var nc=b.getAttribute('data-c');if(nc===window.BB_CCY)return;
+      localStorage.setItem('bb_ccy_en',nc);location.reload();
+    });}
+  });
+})();
+</script>
+
 </head>
 <body>
   <div class="page-frame">
@@ -89,10 +128,16 @@
       <div class="brand-name">BUFFALO BOXING</div>
       <div class="brand-series">Darwin Custom Series</div>
     </div>
+<div class="bb-ccy" id="bbCcyBar">
+      <button type="button" class="bb-ccy-btn" data-c="usd">USD</button>
+      <button type="button" class="bb-ccy-btn" data-c="gbp">GBP</button>
+      <button type="button" class="bb-ccy-btn" data-c="eur">EUR</button>
+    </div>
+
 
     <div class="step-nav" id="stepNav"><button type="button" class="step-nav-item" data-href="g1.size.html"><span class="sn-num">1</span>Size</button><button type="button" class="step-nav-item" data-href="g2.leather.html"><span class="sn-num">2</span>Leather</button><button type="button" class="step-nav-item" data-href="g3.color.html"><span class="sn-num">3</span>Color</button><button type="button" class="step-nav-item current" data-href="g4.customize.html"><span class="sn-num">4</span>Lettering</button><button type="button" class="step-nav-item" data-href="g5.result.html"><span class="sn-num">5</span>Result</button></div>
 <div class="page-title">Custom Lettering & Patterns / Customize</div>
-    <div class="current-price">Current Price <span id="currentPrice">$0 / £0</span></div>
+    <div class="current-price">Current Price <span id="currentPrice"><span class="bb-c" data-usd="0"></span></span></div>
 
     <!-- 01 Logo（先Style，后Craft/替换） -->
     <div class="section">
@@ -120,7 +165,7 @@
         </div>
 
         <div class="sub-box" id="textCustomBox" style="background:#fff;">
-          <span class="option-label">Custom Text (free for English letters and numbers; Chinese characters require a metal mold, +$5 / £4)</span>
+          <span class="option-label">Custom Text (free for English letters and numbers; Chinese characters require a metal mold, +<span class="bb-c" data-usd="5"></span>)</span>
           <input type="text" id="textLogoCustom" placeholder="Up to 25 characters; English letters, numbers and Chinese characters" maxlength="25">
 <div class="mem-text-cap" id="textLogoCustomMemCap" style="display:none;">Recent inputs · tap to fill in</div><div class="mem-text-row" id="textLogoCustomMemBox"></div>
           <span class="option-label">Font</span>
@@ -160,7 +205,7 @@
         <span class="option-label">Pattern Source</span>
         <div class="radio-group">
           <label class="radio-item"><input type="radio" name="logoReplace" value="no" checked> Keep Brand Logo</label>
-          <label class="radio-item"><input type="radio" name="logoReplace" value="yes"> Replace with Own Pattern <span class="price-tag">+$10 / £8</span></label>
+          <label class="radio-item"><input type="radio" name="logoReplace" value="yes"> Replace with Own Pattern <span class="price-tag">+<span class="bb-c" data-usd="10"></span></span></label>
         </div>
         <div class="note">Replacement requires a line art image. Gold Foil / Silver Foil / colored hot stamping are only available on Wild Buffalo Leather.</div>
       </div>
@@ -177,7 +222,7 @@
         <label class="radio-item"><input type="radio" name="leftEngFont" value="normal" checked> Regular</label>
         <label class="radio-item"><input type="radio" name="leftEngFont" value="cursive"> Cursive</label>
       </div>
-      <span class="option-label">Chinese Characters (Metal Mold, +$5 / £4, up to 10 characters)</span>
+      <span class="option-label">Chinese Characters (Metal Mold, +<span class="bb-c" data-usd="5"></span>, up to 10 characters)</span>
       <input type="text" id="leftCh" placeholder="Chinese characters, spaces and punctuation" maxlength="10">
 <div class="mem-text-cap" id="leftChMemCap" style="display:none;">Recent inputs · tap to fill in</div><div class="mem-text-row" id="leftChMemBox"></div>
       <div class="radio-group">
@@ -204,7 +249,7 @@
         <label class="radio-item"><input type="radio" name="rightEngFont" value="normal" checked> Regular</label>
         <label class="radio-item"><input type="radio" name="rightEngFont" value="cursive"> Cursive</label>
       </div>
-      <span class="option-label">Chinese Characters (Metal Mold, +$5 / £4, up to 10 characters)</span>
+      <span class="option-label">Chinese Characters (Metal Mold, +<span class="bb-c" data-usd="5"></span>, up to 10 characters)</span>
       <input type="text" id="rightCh" placeholder="Chinese characters, spaces and punctuation" maxlength="10">
 <div class="mem-text-cap" id="rightChMemCap" style="display:none;">Recent inputs · tap to fill in</div><div class="mem-text-row" id="rightChMemBox"></div>
       <div class="radio-group">
@@ -223,7 +268,7 @@
     <!-- 04 Small Patterns（可叠加多个） -->
     <div class="section">
       <div class="section-title">04 / Small Patterns</div>
-      <div class="note" style="margin:0 0 14px;">Each small pattern requires a line art image and can be stacked on multiple positions. Hot stamping +$5 / £4 per piece (Gold Foil / Silver Foil / Original, exclusive to Wild Buffalo Leather). Embroidery +$15-45 / £12-35 per piece; ask our team based on complexity.</div>
+      <div class="note" style="margin:0 0 14px;">Each small pattern requires a line art image and can be stacked on multiple positions. Hot stamping +<span class="bb-c" data-usd="5"></span> per piece (Gold Foil / Silver Foil / Original, exclusive to Wild Buffalo Leather). Embroidery +<span class="bb-c" data-usd="15"></span>–<span class="bb-c" data-usd="45"></span> per piece; ask our team based on complexity.</div>
       <div id="smallList"></div>
       <div class="empty-small" id="smallEmpty">No Small Patterns Added Yet</div>
       <button class="add-small-btn" id="addSmallBtn" type="button">+ Add a Small Pattern</button>
@@ -236,7 +281,7 @@
         <label class="radio-item"><input type="radio" name="handEmbroidery" value="no" checked> Not Added</label>
         <label class="radio-item"><input type="radio" name="handEmbroidery" value="yes"> Add Hand Back Embroidery (separate quote)</label>
       </div>
-      <div class="note">Requires a pattern. +$15-45 / £12-35 per piece based on complexity; contact our team for a quote. Not included in the automatic total.</div>
+      <div class="note">Requires a pattern. +<span class="bb-c" data-usd="15"></span>–<span class="bb-c" data-usd="45"></span> per piece based on complexity; contact our team for a quote. Not included in the automatic total.</div>
     </div>
 
     <div class="btn-group">
@@ -247,6 +292,11 @@
       <a class="gn-link" href="../index.html">Back to customizer home · add/change quantity</a>
       <a class="gn-link gn-bundle" id="gnBundle" href="../bundle.html">Back to Bundle Summary</a>
     </div>
+<div class="bb-brand-footer">
+      <div class="bb-slogan">CRAFT IS HUMAN</div>
+      <div class="bb-sub">BUFFALO BOXING</div>
+    </div>
+
     </div>
 
   <script>
@@ -392,14 +442,14 @@
       const inUse = usedHex.has(hex);
       const o = document.createElement('option');
       o.value = hex;
-      o.textContent = `${nm} · ${inUse ? 'Already used on the glove (free)' : 'New color (+$10 / £8)'}`;
+      o.textContent = `${nm} · ${inUse ? 'Already used on the glove (free)' : 'New color (+${bbMoney(10)})'}`;
       coloredSelect.appendChild(o);
     });
     function refreshColoredNote() {
       const hex = coloredSelect.value;
       coloredNote.textContent = usedHex.has(hex)
         ? 'This color is already used on the glove, so there is no extra charge for the logo.'
-        : 'This color is not used on the glove, so the logo adds +$10 / £8.';
+        : 'This color is not used on the glove, so the logo adds ' + '+' + bbMoney(10) + '.';
     }
     coloredSelect.addEventListener('change', () => { refreshColoredNote(); calc(); });
 
@@ -421,7 +471,7 @@
         const opts = POS_OPTIONS.map(([val, nm]) =>
           `<option value="${val}" ${item.pos === val ? 'selected' : ''}>${nm}</option>`).join('');
         const isHot = item.craft !== 'embroidery';
-        const title = isHot ? `Small Patterns ${idx + 1} · Hot Stamping (+$5 / £4)` : `Small Patterns ${idx + 1} · Embroidery (+$15–45 / £12–35)`;
+        const title = isHot ? `Small Patterns ${idx + 1} · Hot Stamping (+${bbMoney(5)})` : `Small Patterns ${idx + 1} · Embroidery (+${bbMoney(15)}–${bbMoney(45)})`;
         const printName = 'smallPrint' + idx;
         const originalRadio = isWild
           ? `<label class="radio-item"><input type="radio" name="${printName}" value="original" ${item.print === 'original' ? 'checked' : ''}> Original (exclusive to Wild Buffalo Leather)</label>`
@@ -434,7 +484,7 @@
                ${originalRadio}
              </div>
              <div class="note">Only simple line art images are supported.</div>`
-          : `<div class="note" style="margin-top:10px;">Embroidery is quoted based on pattern complexity, +$15–45 / £12–35 per piece. Contact our team to confirm; not included in the automatic total.</div>`;
+          : `<div class="note" style="margin-top:10px;">Embroidery is quoted based on pattern complexity, +${bbMoney(15)}–${bbMoney(45)} per piece. Contact our team to confirm; not included in the automatic total.</div>`;
         div.innerHTML =
           `<div class="small-item-head">
              <span class="small-item-title">${title}</span>
@@ -480,7 +530,7 @@
     const basePrice = parseInt(LS.get('basePrice'), 10) || 0;
     const colorExtra = parseInt(LS.get('colorExtra'), 10) || 0;
     const currentPriceEl = document.getElementById('currentPrice');
-    function bbMoney(usd){ return '$' + usd + ' / £' + Math.round(usd / 1.32); }
+    function bbMoney(usd){ return window.bbMoneyFmt(usd); }
 
     function calc() {
       let customExtra = 0;

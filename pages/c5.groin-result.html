@@ -52,6 +52,45 @@
     .gn-link.gn-bundle { border-color:#1a1a1a; color:#1a1a1a; display:none; }
     .gn-link.gn-bundle:hover { background:#1a1a1a; color:#fff; }
 </style>
+<style>
+  /* === BB currency + brand footer === */
+  .bb-ccy{display:flex;justify-content:center;margin:0 0 24px;}
+  .bb-ccy-btn{border:1px solid #1a1a1a;background:#fff;color:#666;padding:9px 16px;font-size:11px;letter-spacing:1.5px;cursor:pointer;font-family:inherit;transition:all .15s;}
+  .bb-ccy-btn:not(:last-child){border-right:none;}
+  .bb-ccy-btn:first-child{border-radius:2px 0 0 2px;}
+  .bb-ccy-btn:last-child{border-radius:0 2px 2px;}
+  .bb-ccy-btn.active{background:#1a1a1a;color:#fff;}
+  .bb-c{font-weight:500;}
+  .bb-brand-footer{text-align:center;margin-top:22px;padding-top:16px;border-top:1px solid #1a1a1a;}
+  .bb-brand-footer .bb-slogan{font-size:10px;letter-spacing:4px;color:#666;text-transform:uppercase;}
+  .bb-brand-footer .bb-sub{font-size:8px;letter-spacing:2px;color:#bbb;margin-top:6px;text-transform:uppercase;}
+</style>
+<script>
+(function(){
+  var RATE={usd:1,gbp:0.7585,eur:0.909};
+  var SYM={usd:'$',gbp:'£',eur:'€'};
+  var c=localStorage.getItem('bb_ccy_en')||'usd';
+  if(!RATE[c])c='usd';
+  window.BB_CCY=c;
+  window.bbMoneyFmt=function(usd){
+    var n=Math.round(Number(usd)*RATE[window.BB_CCY]);
+    return SYM[window.BB_CCY]+n.toLocaleString('en-US');
+  };
+  document.addEventListener('DOMContentLoaded',function(){
+    var nodes=document.querySelectorAll('.bb-c');
+    for(var i=0;i<nodes.length;i++){nodes[i].textContent=window.bbMoneyFmt(nodes[i].getAttribute('data-usd'));}
+    var btns=document.querySelectorAll('.bb-ccy-btn');
+    for(var j=0;j<btns.length;j++){btns[j].classList.toggle('active',btns[j].getAttribute('data-c')===window.BB_CCY);}
+    var bar=document.getElementById('bbCcyBar');
+    if(bar){bar.addEventListener('click',function(e){
+      var b=e.target.closest('.bb-ccy-btn');if(!b)return;
+      var nc=b.getAttribute('data-c');if(nc===window.BB_CCY)return;
+      localStorage.setItem('bb_ccy_en',nc);location.reload();
+    });}
+  });
+})();
+</script>
+
 </head>
 <body>
   <div class="page-frame">
@@ -59,6 +98,12 @@
       <div class="brand-name">BUFFALO BOXING</div>
       <div class="brand-series">Groin Guard · Darwin Custom</div>
     </div>
+<div class="bb-ccy" id="bbCcyBar">
+      <button type="button" class="bb-ccy-btn" data-c="usd">USD</button>
+      <button type="button" class="bb-ccy-btn" data-c="gbp">GBP</button>
+      <button type="button" class="bb-ccy-btn" data-c="eur">EUR</button>
+    </div>
+
 
     <div class="step-nav" id="stepNav"><button type="button" class="step-nav-item" data-href="c1.groin-size.html"><span class="sn-num">1</span>Data</button><button type="button" class="step-nav-item" data-href="c2.groin-leather.html"><span class="sn-num">2</span>Leather</button><button type="button" class="step-nav-item" data-href="c3.groin-color.html"><span class="sn-num">3</span>Color</button><button type="button" class="step-nav-item" data-href="c4.groin-customize.html"><span class="sn-num">4</span>Logo</button><button type="button" class="step-nav-item current" data-href="c5.groin-result.html"><span class="sn-num">5</span>Result</button></div>
 <div class="page-title">Plan Confirmation</div>
@@ -85,9 +130,9 @@
     </div>
 
     <div class="note">
-      1. Standard Cowhide includes 2 free colors; Wild Buffalo Leather includes 3. Each extra color: +$40 / £30.<br>
+      1. Standard Cowhide includes 2 free colors; Wild Buffalo Leather includes 3. Each extra color: +<span class="bb-c" data-usd="40"></span>.<br>
       2. Wild Buffalo Leather selection does not count toward the free color quota and is available on any area of the Groin Guard.<br>
-      3. New colored logo color +$10 / £8; replacing with own pattern +$10 / £8; front hot stamping +$5 / £4 per piece. Embroidery is quoted separately and not in the automatic total.<br>
+      3. New colored logo color +<span class="bb-c" data-usd="10"></span>; replacing with own pattern +<span class="bb-c" data-usd="10"></span>; front hot stamping +<span class="bb-c" data-usd="5"></span> per piece. Embroidery is quoted separately and not in the automatic total.<br>
       4. After copying, send the plan to our team to place the order. Final price is subject to our confirmation.
     </div>
 
@@ -105,6 +150,11 @@
       <a class="gn-link" href="../index.html">Back to customizer home · add/change quantity</a>
       <a class="gn-link gn-bundle" id="gnBundle" href="../bundle.html">Back to Bundle Summary</a>
     </div>
+<div class="bb-brand-footer">
+      <div class="bb-slogan">CRAFT IS HUMAN</div>
+      <div class="bb-sub">BUFFALO BOXING</div>
+    </div>
+
     </div>
 
   <script>
@@ -144,7 +194,7 @@
     const basePrice = parseInt(LS.get('basePrice'),10) || 0;
     const colorExtra = parseInt(LS.get('colorExtra'),10) || 0;
     const customExtra = parseInt(LS.get('customExtra'),10) || 0;
-    function bbMoney(usd){ return '$' + usd + ' / £' + Math.round(usd / 1.32); }
+    function bbMoney(usd){ return window.bbMoneyFmt(usd); }
     let areaColors = {};
     try { areaColors = JSON.parse(LS.get('areaColors')) || {}; } catch (e) {}
     let customOptions = {};
@@ -183,15 +233,15 @@
       if (lt === 'embroidery') main += ' (separate quote, not in the automatic total)';
       arr.push(['Logo Style', main]);
       if (lt === 'original' || lt === 'colored') {
-        arr.push(['Pattern Source', customOptions.logoReplace === 'yes' ? 'Replace with Own Pattern (+$10 / £8)' : 'Keep Brand Logo']);
+        arr.push(['Pattern Source', customOptions.logoReplace === 'yes' ? 'Replace with Own Pattern (' + '+' + bbMoney(10) + ')' : 'Keep Brand Logo']);
       }
       const gp = customOptions.groinPatterns || {};
       [['frontLeft','Front Left'],['frontRight','Front Right']].forEach(([key,nm]) => {
         const it = gp[key];
         let s;
         if (!it || !it.craft || it.craft === 'none') s = 'Not Added';
-        else if (it.craft === 'hot') s = 'Hot Stamping · ' + (PRINT_NAME[it.print] || 'Gold Foil') + ' (+$5 / £4)';
-        else s = 'Embroidery (+$15–45 / £12–35, contact our team, not in the automatic total)';
+        else if (it.craft === 'hot') s = 'Hot Stamping · ' + (PRINT_NAME[it.print] || 'Gold Foil') + ' (' + '+' + bbMoney(5) + ')';
+        else s = 'Embroidery (' + '+' + bbMoney(15) + '–' + bbMoney(45) + ', contact our team, not in the automatic total)';
         arr.push([nm, s]);
       });
       return arr;
